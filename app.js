@@ -50,11 +50,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 var router = {
     index: require('./routes/index'),
-    api: require('./routes/api')
+    api: require('./routes/api'),
+    crawler: require('./routes/crawler')
 };
 
 app.use('/', router.index);
 app.use('/api', router.api);
+app.use('/crawler', router.crawler);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
