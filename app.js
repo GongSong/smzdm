@@ -45,16 +45,6 @@ app.use((req, res, next) => {
   res.set('X-Response-Time', ms + 'ms');
 });
 
-
-//全局配置
-var config = require('./server/conf/session');
-
-app.use(session({
-  secret: config.sessionSecret,
-  resave: false,
-  saveUninitialized: true
-}));
-
 // view engine setup
 app.set('views', path.join(__dirname, 'server/views'));
 app.set('view engine', 'jade');
@@ -62,16 +52,10 @@ app.set('view engine', 'jade');
 /*START:router settings*/
 var router = {
   index: require('./server/routes/index'),
-  admin: require('./server/routes/admin'),
-  api: require('./server/routes/api'),
   coin:require('./server/routes/coin')
 };
 
 app.use('/', router.index);
-
-app.use('/admin', router.admin);
-
-app.use('/api', router.api);
 
 app.use('/coin',router.coin);
 
