@@ -1,10 +1,9 @@
 var express = require('express');
 var router = express.Router();
-var assertsDir = require('../conf/app').assertsDir;
 
-/* GET home page. */
+/* GET users listing. */
 router.get('/', function(req, res, next) {
-  res.sendFile(assertsDir + '/home.html');
+  res.send('respond with a resource');
 });
 
 module.exports = router;

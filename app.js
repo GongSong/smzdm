@@ -1,69 +1,33 @@
-var express = require('express'),
-  session = require('express-session'),
-  cors = require('cors'),
-  helmet = require('helmet'),
-  compression = require('compression'),
-  bodyParser = require('body-parser'),
-  path = require('path'),
-  favicon = require('serve-favicon'),
-  cookieParser = require('cookie-parser'),
-  app = express();
+var express = require('express');
+var path = require('path');
+var favicon = require('serve-favicon');
+var logger = require('morgan');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
 
-//security practices
-app.use(helmet());
+var index = require('./routes/index');
+var users = require('./routes/users');
 
-//全局cors则开启以下命令
-app.use(cors());
-
-//gzip压缩
-app.use(compression());
-
-//disable x-powered-by(security practices)
-app.disable('x-powered-by');
-
-app.use(require('less-middleware')(path.join(__dirname, 'public')));
-
-app.use('/', express.static(__dirname + '/public', {
-  maxAge: '10d'
-}));
-
-app.use(cookieParser());
-// see https://github.com/expressjs/body-parser
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-  extended: false
-}));
-
-// uncomment after placing your favicon in /public
-app.use(favicon(__dirname + '/public/favicon.ico'));
-
-//全局添加处理时间
-app.use((req, res, next) => {
-  var start = new Date();
-  next();
-  var ms = new Date() - start;
-  res.set('X-Response-Time', ms + 'ms');
-});
+var app = express();
 
 // view engine setup
-app.set('views', path.join(__dirname, 'server/views'));
+app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-/*START:router settings*/
-var router = {
-  index: require('./server/routes/index'),
-  coin:require('./server/routes/coin')
-};
+// uncomment after placing your favicon in /public
+//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', router.index);
-
-app.use('/coin',router.coin);
-
-/*END:router settings*/
+app.use('/', index);
+app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('页面不存在');
+  var err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
