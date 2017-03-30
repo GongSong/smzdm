@@ -4,15 +4,36 @@
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
-    <link rel="stylesheet" href="stylesheets/style.css">
+    <link rel="stylesheet" href="../stylesheets/style.css">
 </head>
 
 <body>
+    <h1>接口说明</h1>
     <ul>
-        <li>api1</li>
-        <li>api2</li>
-        <li>api3</li>
+        <li>
+            <a href="./shop/8vcj4vsg" target="_blank">1.商品列表</a>
+            <p>localhost:8000/crawler/shop/8vcj4vsg</p>
+        </li>
+        <li>
+            <a href="./sales/8vcj4vsg" target="_blank">2.商品销售详情</a>
+            <p>localhost:8000/crawler/sales/8vcj4vsg</p>
+            <p>备注：此处商店id数据未使用，直接从第1步读取保存的json数据</p>
+        </li>
+        <li>
+            <a href="./detail/8vcj4vsg" target="_blank">3.所有商品销售记录</a>
+            <p>localhost:8000/crawler/detail/8vcj4vsg</p>
+            <p>备注：该接口会请求大量数据，慎用。此处商店id数据未使用，直接从第1步读取保存的json数据</p>
+        </li>
     </ul>
+
+    <h1>后续工作</h1>
+    <ol>
+        <li>数据入库，mysql</li>
+        <li>将crawler配置为 有赞 及 中国金币 两种模式</li>
+        <li>加入其它几家有赞微店的店铺id</li>
+        <li>对单家商铺，每天抓取一次 接口2 数据并做数据库更新操作</li>
+        <li>对接口3数据按最后一笔交易订单时间信息，取新增的数据入库操作</li>
+    </ol>
 </body>
 
 </html>

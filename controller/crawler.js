@@ -1,61 +1,118 @@
-var https = require('https');
-var cheerio = require('cheerio');
+var axios = require('axios');
+var querystring = require('querystring');
+var parser = require('./util/htmlParser');
 
-function htmlParser(html) {
-    var $ = cheerio.load(html);
-    var goods = [];
-    if ($('li').hasClass('text-center empty-list')) {
-        return goods;
+var spiderSetting = require('./util/spiderSetting');
+
+// 获取商品主表信息
+async function getGoodsById(alias, page = 1) {
+    console.log('正在抓取第' + page + '页');
+    let config = {
+        method: 'get',
+        url: 'https://h5.youzan.com/v2/showcase/tag',
+        params: {
+            alias,
+            page
+        }
     }
-    $('.js-goods-card.goods-card.card').each(function(idx, e) {
-        let goodElement = { alias: '', goodId: '', title: '', price: '', priceTaobao: '', imgSrc: '', isVirtual: '' };
-        $(this).find($('.js-goods-buy.buy-response')).each(function(i, element) {
-            goodElement.title = $(this).attr('data-title');
-            goodElement.alias = $(this).attr('data-alias');
-            goodElement.price = parseFloat($(this).attr('data-price'));
-            goodElement.goodId = parseInt($(this).attr('data-id'));
-            goodElement.isVirtual = parseInt($(this).attr('data-isvirtual'));
-        });
-        goodElement.imgSrc = $(this).find($('.goods-photo.js-goods-lazy')).data('src');
-        let txt = $(this).find($('.goods-price-taobao')).text();
-        goodElement.priceTaobao = (txt === null || txt.length === 0) ? 0 : parseFloat(txt.substr(3, txt.length - 3));
-        goods.push(goodElement);
-    });
-    return goods;
+    return await axios(config).then(res => {
+        let goodItem = parser.goodsList(res.data);
+        if (goodItem.length == 0) {
+            return [];
+        }
+        return getGoodsById(alias, page + 1).then(res => [...goodItem, ...res]);
+    }).catch(e => console.log(e));
 }
 
-async function page_filter(res, shopid, page = 1) {
-    console.log('request for page ' + page);
-    let url = 'https://h5.youzan.com/v2/showcase/tag?alias=' + shopid + '&page=' + page;
-    https.get(url, function(response) {
-        var html = '';
-        response.on('data', function(data) {
-            html += data;
-        });
-        response.on('end', function() {
-            let result = htmlParser(html);
-            if (result.length === 0) {
-                console.log('没有更多结果');
-                console.log('end');
-                res.json(result);
-                res.end();
-                return '没有更多结果';
-            } else {
-                console.log('response end for page ' + page);
-                page_filter(res, shopid, (page + 1));
-                return 'response end for page ' + page;
-            }
+// 获取商品列表
+function getGoodsList(req, res) {
+    // 8vcj4vsg
+    let shopid = req.params.id;
+    getGoodsById(shopid).then(response => {
+        res.json(response);
+    });
+}
+
+//获取单件商品总库存及总销量
+async function getSaleDetail(item) {
+    let config = {
+        method: 'get',
+        url: 'https://h5.youzan.com/v2/goods/' + item.alias,
+        headers: spiderSetting.headers
+    };
+
+    return await axios(config).then(res => {
+        let data = parser.goodsDetail(res.data);
+        data = Object.assign(data, item);
+        return data;
+    });
+}
+
+// 获取销售详情
+function getSaleInfo(req, res) {
+
+    let shopid = req.params.id;
+    // 此时使用缓存数据，不再重新拉取店铺商品列表
+
+    let goods = require('./data/goodsList.json');
+    let data = goods.map(item => {
+        return getSaleDetail({
+            alias: item.alias,
+            goodId: item.goodId
         })
     });
+
+    Promise.all(data).then(item => {
+        res.json(item);
+    })
 }
 
-function getRecordById(req, res) { //8vcj4vsg
-    console.log('started');
+//获取单条商品销售记录
+async function getItemSaleDetail(alias, page = 1) {
+    let config = {
+        method: 'get',
+        url: 'https://h5.youzan.com/v2/trade/order/orderitemlist.json',
+        params: {
+            alias,
+            page
+        },
+        headers: spiderSetting.headers
+    }
+    return await axios(config).then(res => {
+        let saleItem = res.data.data.list;
+        if (saleItem.length == 0) {
+            return [];
+        }
+        return getItemSaleDetail(alias, page + 1).then(res => [...saleItem, ...res]);
+    }).catch(e => console.log(e));
+}
+
+async function handleSaleDetail(item) {
+    return await getItemSaleDetail(item.alias).then(response => {
+        item.data = response;
+        return item;
+    });
+}
+
+// 获取单件商品销售详情
+function getSaleDetailById(req, res) {
     let shopid = req.params.id;
-    page_filter(res, shopid).then(v => console.log(v),
-        e => console.log(e));
+    // 此时使用缓存数据，不再重新拉取店铺商品列表
+    let goods = require('./data/goodsList.json');
+    let data = goods.map(item => {
+        return handleSaleDetail({
+            alias: item.alias,
+            goodId: item.goodId
+        });
+    });
+
+    Promise.all(data).then(item => {
+        res.json(item);
+    });
 }
 
 module.exports = {
-    getRecordById
+    getGoodsList,
+    getSaleInfo,
+    getSaleDetailById
 };
