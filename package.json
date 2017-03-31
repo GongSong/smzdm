@@ -6,6 +6,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "axios": "^0.15.3",
     "body-parser": "~1.17.1",
     "cheerio": "^0.22.0",
     "cookie-parser": "~1.4.3",
@@ -21,6 +22,7 @@
     "eslint": "^3.18.0",
     "helmet": "^3.5.0",
     "less-middleware": "^2.2.0",
-    "mysql": "^2.13.0"
+    "mysql": "^2.13.0",
+    "winston": "^2.3.1"
   }
 }

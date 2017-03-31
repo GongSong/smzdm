@@ -1,12 +1,13 @@
+let query = require('../schema/mysql.js')
+let sql = require('../schema/sql.js')
 
-let dataHandler = require('./dataHandler');
-
-function getGoodsData(req,res){
-  dataHandler.handleGoodsData().then(data=>{
-    res.send(data);
-  });
+function getGoodsData (req, res) {
+  query('select * from yz_goods', function (result) {
+    let string = JSON.stringify(result)
+    json = JSON.parse(string)
+    res.send(string);
+  })
 }
 
 module.exports = {
-  getGoodsData
-};
+getGoodsData}

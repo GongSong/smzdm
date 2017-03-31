@@ -1,22 +1,24 @@
-var mysql = require('mysql')
-var config = require('config').mysql
+let mysql = require('mysql')
+let config = require('./config').mysql
+let logger = require('winston')
 
-var pool = mysql.createPool(config)
+let pool = mysql.createPool(config)
+let errorHandle = (errInfo, param = 'none') => {
+  if (errInfo) {
+    logger.error('Error occured.', {
+      time: new Date().toLocaleString(),
+      pid: process.pid,
+      param,
+    errInfo})
+  }
+}
 
 function query (sql, callback) {
   pool.getConnection((err, conn) => {
-
-    conn.query(sql.insert, (err, result) => {
-      if (err) {
-        callback(err)
-      }else {
-        conn.query(sql, function (qerr, vals, fields) {
-          // 释放连接  
-          conn.release()
-          // 事件驱动回调  
-          callback(qerr, vals, fields)
-        })
-      }
+    conn.query(sql, (err, result) => {
+      errorHandle(err, sql)
+      conn.release()
+      callback(result)
     })
   })
 }
