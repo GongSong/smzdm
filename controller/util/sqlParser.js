@@ -4,9 +4,9 @@ let getNow = require('./common').getNow;
 
 function handleGoodsData(obj) {
     let url = sql.insert.yz_goods
-
+    let rec_date = getNow()
     let sqlValues = obj.data.map(item => {
-        return `('${item.alias}',${item.goodId},'${item.title}',${item.price},${item.priceTaobao},'${item.imgSrc}','${item.isVirtual}','${obj.shopName}')`
+        return `('${item.alias}',${item.goodId},'${item.title}',${item.price},${item.priceTaobao},'${item.imgSrc}','${item.isVirtual}','${obj.shopName}','${rec_date}')`
     })
     url = url.replace('?', sqlValues.join(','))
     return url
