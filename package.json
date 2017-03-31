@@ -20,6 +20,7 @@
     "compression": "^1.6.2",
     "eslint": "^3.18.0",
     "helmet": "^3.5.0",
-    "less-middleware": "^2.2.0"
+    "less-middleware": "^2.2.0",
+    "mysql": "^2.13.0"
   }
 }
