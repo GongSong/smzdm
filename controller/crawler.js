@@ -55,6 +55,13 @@ function getSaleInfo(req, res) {
     // 此时使用缓存数据，不再重新拉取店铺商品列表
 
     let goods = require('./data/goodsList.json');
+
+    // 数据测试
+    // goods = [{
+    //     "alias": "3nqefbegxt5aj",
+    //     "goodId": 328309274
+    // }];
+
     let data = goods.map(item => {
         return getSaleDetail({
             alias: item.alias,
