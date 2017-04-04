@@ -23,6 +23,7 @@ $RECYCLE.BIN/
 
 # OSX
 # =========================
+launch.json
 
 .DS_Store
 .AppleDouble
