@@ -1,0 +1,32 @@
+[
+    {
+        "taskid": 1,
+        "description": "上币商品列表",
+        "multiPage": true,
+        "httpConfig": {
+            "method": "get",
+            "url": "http://detail.youzan.com/show/goods/newest",
+            "params": {
+                "alias": "3nqefbegxt5aj",
+                "loopParam": "p"
+            }
+        },
+        "template": "../template/newestGoods_youzan_8vcj4vsg.xslt",
+        "input":"string"
+    },
+    {
+        "taskid": 2,
+        "description": "上币商品详情",
+        "multiPage": false,
+        "httpConfig": {
+            "method": "get",
+            "url": "https://h5.youzan.com/v2/trade/order/orderitemlist.json",
+            "params": {
+                "alias": "$alias",
+                "loopParam": "page"
+            }
+        },
+        "template":"",
+        "input":"json"
+    }
+]
