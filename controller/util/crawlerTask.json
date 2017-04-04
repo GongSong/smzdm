@@ -1,32 +1,73 @@
 [
     {
-        "taskid": 1,
-        "description": "上币商品列表",
-        "multiPage": true,
-        "httpConfig": {
-            "method": "get",
-            "url": "http://detail.youzan.com/show/goods/newest",
-            "params": {
-                "alias": "3nqefbegxt5aj",
-                "loopParam": "p"
+        "task": {
+            "taskid": 1,
+            "description": "上币商品列表",
+            "crawler": {
+                "multiPage": true,
+                "httpConfig": {
+                    "method": "get",
+                    "url": "http://detail.youzan.com/show/goods/newest",
+                    "params": {
+                        "alias": "3nqefbegxt5aj",
+                        "loopParam": "p",
+                        "beginning": 1
+                    }
+                }
+            },
+            "process": {
+                "template": "../template/newestGoods_youzan_8vcj4vsg.xslt",
+                "input": "string"
+            },
+            "persist": {
+                "procedure": ""
             }
-        },
-        "template": "../template/newestGoods_youzan_8vcj4vsg.xslt",
-        "input":"string"
+        }
     },
     {
-        "taskid": 2,
-        "description": "上币商品详情",
-        "multiPage": false,
-        "httpConfig": {
-            "method": "get",
-            "url": "https://h5.youzan.com/v2/trade/order/orderitemlist.json",
-            "params": {
-                "alias": "$alias",
-                "loopParam": "page"
+        "task": {
+            "taskid": 2,
+            "description": "上币商品详情",
+            "crawler": {
+                "multiPage": false,
+                "httpConfig": {
+                    "method": "get",
+                    "url": "https://h5.youzan.com/v2/trade/order/orderitemlist.json",
+                    "params": {
+                        "alias": "$alias",
+                        "loopParam": "page",
+                        "beginning": 1
+                    }
+                }
+            },
+            "process": {
+                "template": "",
+                "input": "json"
+            },
+            "persist": {
+                "procedure": ""
             }
-        },
-        "template":"",
-        "input":"json"
+        }
+    },
+    {
+        "task": {
+            "taskid": 3,
+            "description": "沈币商品列表首页",
+            "crawler": {
+                "multiPage": false,
+                "httpConfig": {
+                    "method": "get",
+                    "url": "http://www.symint615.com/Item/lists/sid/2022030.html",
+                    "header": "spiderSetting.headers.wfx"
+                }
+            },
+            "process": {
+                "template": "../template/symint615_2022030.xslt",
+                "input": "string"
+            },
+            "persist": {
+                "procedure": ""
+            }
+        }
     }
 ]

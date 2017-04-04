@@ -1,134 +1,29 @@
 var axios = require('axios');
 var querystring = require('querystring');
-var parser = require('./util/htmlParser');
+var parser = require('./util/xmlParser');
+var tasks = require('./util/crawlerTask.json');
 
 var spiderSetting = require('./util/spiderSetting');
-
-// 获取商品主表信息
-async function getGoodsById(alias, page = 1) {
-    console.log('正在抓取第' + page + '页');
-    let config = {
-        method: 'get',
-        url: 'https://h5.youzan.com/v2/showcase/tag',
-        params: {
-            alias,
-            page
-        }
-    }
-    return await axios(config).then(res => {
-        let goodItem = parser.goodsList(res.data);
-        if (goodItem.length == 0) {
-            return [];
-        }
-        return getGoodsById(alias, page + 1).then(res => [...goodItem, ...res]);
-    }).catch(e => console.log(e));
-}
-
-// 获取商品列表
-function getGoodsList(req, res) {
-    // 8vcj4vsg
-    let shopid = req.params.id;
-    getGoodsById(shopid).then(response => {
-        res.json(response);
-    });
-}
-
-//获取单件商品总库存及总销量
-async function getSaleDetail(item) {
-    let config = {
-        method: 'get',
-        url: 'https://h5.youzan.com/v2/goods/' + item.alias,
-        headers: spiderSetting.headers
-    };
-
-    return await axios(config).then(res => {
-        let data = parser.goodsDetail(res.data);
-        data = Object.assign(data, item);
-        return data;
-    });
-}
-
-// 获取销售详情
-function getSaleInfo(req, res) {
-
-    let shopid = req.params.id;
-    // 此时使用缓存数据，不再重新拉取店铺商品列表
-
-    let goods = require('./data/goodsList.json');
-    let data = goods.map(item => {
-        return getSaleDetail({
-            alias: item.alias,
-            goodId: item.goodId
-        })
-    });
-
-    Promise.all(data).then(item => {
-        res.json(item);
-    })
-}
-
-//获取单条商品销售记录
-async function getItemSaleDetail(alias, page = 1) {
-    let config = {
-        method: 'get',
-        url: 'https://h5.youzan.com/v2/trade/order/orderitemlist.json',
-        params: {
-            alias,
-            page
-        },
-        headers: spiderSetting.headers
-    }
-    return await axios(config).then(res => {
-        let saleItem = res.data.data.list;
-        if (saleItem.length == 0) {
-            return [];
-        }
-        return getItemSaleDetail(alias, page + 1).then(res => [...saleItem, ...res]);
-    }).catch(e => console.log(e));
-}
-
-async function handleSaleDetail(item) {
-    return await getItemSaleDetail(item.alias).then(response => {
-        item.data = response;
-        return item;
-    });
-}
-
-// 获取单件商品销售详情
-function getSaleDetailById(req, res) {
-    let shopid = req.params.id;
-    // 此时使用缓存数据，不再重新拉取店铺商品列表
-    let goods = require('./data/goodsList.json');
-    let data = goods.map(item => {
-        return handleSaleDetail({
-            alias: item.alias,
-            goodId: item.goodId
-        });
-    });
-
-    Promise.all(data).then(item => {
-        res.json(item);
-    });
-}
 
 // 测试使用xslt转换html为json输出
 async function getGoodsByXslt(alias, page = 1) {
     console.log('xslt:正在抓取第' + page + '页');
     let config = {
         method: 'get',
-        url: 'http://detail.youzan.com/show/goods/newest',
+        url: 'http://www.symint615.com/Item/lists/sid/2022030.html',
         params: {
-            alias,
             p: page
-        }
+        },
+        headers: spiderSetting.headers.wfx
     };
     return await axios(config).then(res => {
-        let goods = parser.goodsListByXslt(res.data, '/template/newestGoods_youzan_8vcj4vsg.xslt');
+        // return res.data;
+        let goods = parser.goodsListByXslt(res.data, '/template/symint615_2022030.xslt');
         if (goods.length === 0) {
             return [];
         }
-
-        return getGoodsByXslt(alias, page + 1).then(res => [...goods, ...res]);
+        return goods;
+        // return getGoodsByXslt(alias, page + 1).then(res => [...goods, ...res]);
     }).catch(e => console.log(e));
 }
 
@@ -141,9 +36,35 @@ function getGoodsListByXslt(req, res) {
     });
 }
 
+// step1：数据抓取
+async function crawlData(taskid) {
+    // 此处需要替换为JSON的map对象的查找方法。
+    let task = JSON.stringify(tasks[taskid - 1]);
+    console.log('1. \n' + task);
+    return tasks[taskid - 1];
+}
+
+// step2: 数据整理
+async function processData(rawData) {
+    console.log('2. \n' + JSON.stringify(rawData));
+    return rawData;
+}
+
+// step3: 数据持久化
+async function persistData(objData) {
+    console.log('3. \n' + JSON.stringify(objData));
+    return objData;
+}
+
+// 执行任务
+function processTask(req, res) {
+    let taskid = req.params.id;
+    // 按步骤先后执行：数据抓取 -> 数据处理 -> 持久化 -> 反馈
+    // 由于nodejs的异步处理机制和单线程机制，会造成阻塞。
+    crawlData(taskid).then(v1 => processData(v1).then(v2 => persistData(v2).then(v3 => res.json(v3))));
+}
+
 module.exports = {
-    getGoodsList,
-    getSaleInfo,
-    getSaleDetailById,
-    getGoodsListByXslt
+    getGoodsListByXslt,
+    processTask
 };
