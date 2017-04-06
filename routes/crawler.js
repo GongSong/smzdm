@@ -33,4 +33,10 @@ router.get('/wfx/shop', function(req, res) {
 router.get('/wfx/comment', function(req, res) {
     crawler.wfx.getComment(req, res);
 });
+
+// ccGold
+router.get('/ccgold/shop', function(req, res) {
+    crawler.ccgold.getGoodsList(req, res);
+});
+
 module.exports = router;

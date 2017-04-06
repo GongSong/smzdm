@@ -140,8 +140,51 @@ let wfx = {
     }
 };
 
+let ccgold = {
+    goodsList(html, cate_id) {
+        let options = {
+            html,
+            parentNode: '.box-shadow',
+            children: [{
+                node: 'img',
+                name: 'img',
+                formatter(el) {
+                    return el.data('original');
+                }
+            }, {
+                node: '.li-t',
+                name: 'title'
+            }, {
+                node: '.li-c',
+                name: 'company'
+            }, {
+                node: '.li-price .f-30',
+                name: 'price'
+            }, {
+                node: 'a',
+                name: 'goodsId',
+                formatter(el) {
+                    console.log(el.attr('href').split('goods_id='));
+                    return el.attr('href').split('goods_id=')[1].split('&')[0];
+                }
+            }, {
+                node: 'a',
+                name: 'url',
+                formatter(el) {
+                    return el.attr('href')
+                }
+            }],
+            formatter(item) {
+                item.cate_id = cate_id;
+                return item;
+            }
+        }
+        return util.parseHTML(options);
+    }
+}
 
 module.exports = {
     youzan,
-    wfx
+    wfx,
+    ccgold
 }
