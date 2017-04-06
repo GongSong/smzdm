@@ -4,7 +4,7 @@ var parser = require('../util/htmlParser');
 var spiderSetting = require('../util/spiderSetting');
 
 // 获取商品主表信息
-async function getgoodsFlagByCat(page = 1) {
+async function getgoodsListByCat(page = 1) {
     console.log('正在抓取第' + page + '页');
     let config = {
         method: 'get',
@@ -20,13 +20,13 @@ async function getgoodsFlagByCat(page = 1) {
         if (goodItem.length == 0) {
             return [];
         }
-        return getgoodsFlagByCat(page + 1).then(res => [...goodItem, ...res]);
+        return getgoodsListByCat(page + 1).then(res => [...goodItem, ...res]);
     }).catch(e => console.log(e));
 }
 
 // 获取商品列表
 function getgoodsFlag(req, res) {
-    getgoodsFlagByCat().then(response => {
+    getgoodsListByCat().then(response => {
         res.json(response);
     });
 }
