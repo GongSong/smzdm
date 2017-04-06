@@ -39,4 +39,8 @@ router.get('/ccgold/shop', function(req, res) {
     crawler.ccgold.getGoodsList(req, res);
 });
 
+router.get('/ccgold/detail', function(req, res) {
+    crawler.ccgold.getGoodsDetail(req, res);
+});
+
 module.exports = router;
