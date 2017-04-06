@@ -32,11 +32,11 @@ function getGoodsList(req, res) {
 }
 
 async function getGoodsDetailById(goods, page) {
-    console.log('正在抓取第' + page + '页');
     if (page == goods.length) {
         return [];
     }
     let id = goods[page].goodsId;
+    console.log('正在抓取第' + page + '页,id=' + id);
     let config = {
         method: 'get',
         url: 'http://www.ccgold.cn/shop/index.php',

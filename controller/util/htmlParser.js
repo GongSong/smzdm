@@ -147,21 +147,6 @@ let ccgold = {
             html,
             parentNode: '.box-shadow',
             children: [{
-                node: 'img',
-                name: 'img',
-                formatter(el) {
-                    return el.data('original');
-                }
-            }, {
-                node: '.li-t',
-                name: 'title'
-            }, {
-                node: '.li-c',
-                name: 'company'
-            }, {
-                node: '.li-price .f-30',
-                name: 'price'
-            }, {
                 node: 'a',
                 name: 'goodsId',
                 formatter(el) {
@@ -173,12 +158,7 @@ let ccgold = {
                 formatter(el) {
                     return el.attr('href')
                 }
-            }],
-            formatter(item) {
-                item.rec_date = rec_date;
-                item.cate_id = cate_id;
-                return item;
-            }
+            }]
         }
         return util.parseHTML(options);
     },
