@@ -3,7 +3,7 @@ var router = express.Router();
 var dirname = __dirname.replace('routes', 'public');
 
 var crawler = require('../controller/crawler');
-var xcrawler = require('../controller/xcrawler');
+// var xcrawler = require('../controller/xcrawler');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -30,14 +30,14 @@ router.get('/wfx/shop', function(req, res) {
     crawler.wfx.getGoodsList(req, res);
 })
 
-//店铺商品by XSLT
-router.get('/xshop/:id', function(req, res) {
-    xcrawler.getGoodsListByXslt(req, res);
-});
+// //店铺商品by XSLT
+// router.get('/xshop/:id', function(req, res) {
+//     xcrawler.getGoodsListByXslt(req, res);
+// });
 
-//以任务的方式执行抓取
-router.get('/task/:id',function(req,res){
-    xcrawler.processTask(req,res);
-});
+// //以任务的方式执行抓取
+// router.get('/task/:id',function(req,res){
+//     xcrawler.processTask(req,res);
+// });
 
 module.exports = router;

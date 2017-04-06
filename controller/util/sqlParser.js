@@ -46,8 +46,19 @@ function handleSaleDetailData(saleInfo) {
     return url
 }
 
+function handleWfxStockData(obj) {
+    let url = sql.insert.wfx_stock
+    let rec_date = getNow()
+    let sqlValues = obj.data.map(item => {
+        return `(${item.category_id},${item.item_id},'${item.title}',${item.status},${item.num},${item.original_price},${item.price},${item.sales_volume},'${item.pic_url}','${item.link_item}','${rec_date}')`
+    })
+    url = url.replace('?', sqlValues.join(','))
+    return url
+}
+
 module.exports = {
     handleSaleDetailData,
     handleStockData,
-    handleGoodsData
+    handleGoodsData,
+    handleWfxStockData
 }
