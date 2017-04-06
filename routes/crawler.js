@@ -29,4 +29,8 @@ router.get('/wfx/shop', function(req, res) {
     crawler.wfx.getGoodsList(req, res);
 })
 
+// 微分销评论
+router.get('/wfx/comment', function(req, res) {
+    crawler.wfx.getComment(req, res);
+});
 module.exports = router;

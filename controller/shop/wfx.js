@@ -1,7 +1,8 @@
-var axios = require('axios');
-var parser = require('../util/htmlParser');
+let axios = require('axios');
+let parser = require('../util/htmlParser');
 
-var spiderSetting = require('../util/spiderSetting');
+let spiderSetting = require('../util/spiderSetting');
+let dbResult = require('../db/wfx');
 
 // 获取商品主表信息
 async function getGoodsById(url, page = 2) {
@@ -70,6 +71,36 @@ function getGoodsList(req, res) {
     });
 }
 
+function getCommentById(id) {
+    let url = 'http://www.symint615.com/Item/detail_ajax';
+    // 'pid=0&bid=0'
+    let config = {
+        method: 'get',
+        url,
+        params: {
+            // p: 2,
+            id,
+            pid: 0,
+            bid: 0
+        },
+        headers: spiderSetting.headers.wfx
+    }
+    axios(config).then(result => {
+        console.log(result.data);
+    })
+
+}
+
+function getComment(req, res) {
+    dbResult.getGoodList(req, res, (data) => {
+        // data.map(item => {
+        //     console.log(item);
+        // });
+        getCommentById(data[0].item_id);
+        res.send(data);
+    })
+}
 module.exports = {
-    getGoodsList
+    getGoodsList,
+    getComment
 };
