@@ -31,6 +31,37 @@ function getGoodsList(req, res) {
     });
 }
 
+async function getGoodsDetailById(goods, page) {
+    if (page == goods.length) {
+        return [];
+    }
+    let id = goods[page].goodsId;
+    console.log('正在抓取第' + page + '页,id=' + id);
+    let config = {
+        method: 'get',
+        url: 'http://www.ccgold.cn/shop/index.php',
+        params: {
+            url: 'goods',
+            fun: 'index',
+            goods_id: id
+        }
+    }
+
+    return await axios(config).then(res => {
+        let goodItem = parser.ccgold.goodsDetail(res.data, id);
+        return getGoodsDetailById(goods, page + 1).then(res => [...goodItem, ...res]);
+    }).catch(e => console.log(e));
+}
+
+function getGoodsDetail(req, res) {
+    let goods = require('../data/ccgoldGoodsList.json');
+
+    getGoodsDetailById(goods, 0).then(response => {
+        res.json(response);
+    });
+}
+
 module.exports = {
-    getGoodsList
+    getGoodsList,
+    getGoodsDetail
 };

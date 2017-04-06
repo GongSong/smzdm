@@ -142,29 +142,14 @@ let wfx = {
 
 let ccgold = {
     goodsList(html, cate_id) {
+        let rec_date = util.getNow();
         let options = {
             html,
             parentNode: '.box-shadow',
             children: [{
-                node: 'img',
-                name: 'img',
-                formatter(el) {
-                    return el.data('original');
-                }
-            }, {
-                node: '.li-t',
-                name: 'title'
-            }, {
-                node: '.li-c',
-                name: 'company'
-            }, {
-                node: '.li-price .f-30',
-                name: 'price'
-            }, {
                 node: 'a',
                 name: 'goodsId',
                 formatter(el) {
-                    console.log(el.attr('href').split('goods_id='));
                     return el.attr('href').split('goods_id=')[1].split('&')[0];
                 }
             }, {
@@ -173,9 +158,50 @@ let ccgold = {
                 formatter(el) {
                     return el.attr('href')
                 }
+            }]
+        }
+        return util.parseHTML(options);
+    },
+    goodsDetail(html, goodsId) {
+        let rec_date = util.getNow();
+        let options = {
+            html,
+            parentNode: '.detail-container',
+            children: [{
+                node: '.con-fangDaIMg img',
+                name: 'img',
+                formatter(el) {
+                    return el.data('original');
+                }
+            }, {
+                node: '.shop-name',
+                name: 'shop_name'
+            }, {
+                node: '.thing-name',
+                name: 'good_name'
+            }, {
+                node: '.thing-price-huo',
+                name: 'price',
+                formatter(el) {
+                    return el.text().replace('￥', '').trim()
+                }
+            }, {
+                node: '.spec-item.thing-chi-span.on',
+                name: 'weight'
+            }, {
+                node: '#shy',
+                name: 'stock'
+            }, {
+                node: '.num-ku',
+                name: 'sale_num',
+                formatter(el) {
+                    console.log(el.text().split('销售量'));
+                    return el.text().split('销售量')[1];
+                }
             }],
             formatter(item) {
-                item.cate_id = cate_id;
+                item.rec_date = rec_date;
+                item.goods_id = goodsId;
                 return item;
             }
         }
