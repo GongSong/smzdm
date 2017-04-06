@@ -3,7 +3,6 @@ var router = express.Router();
 var dirname = __dirname.replace('routes', 'public');
 
 var crawler = require('../controller/crawler');
-// var xcrawler = require('../controller/xcrawler');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
