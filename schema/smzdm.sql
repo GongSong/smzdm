@@ -113,11 +113,27 @@ CREATE TABLE `smzdm`.`ccgold_goods` (
 	`good_id` int NOT NULL COMMENT '电商系统商品编号',
 	`good_name` varchar(255) COMMENT '商品名称',
 	`good_cate` smallint COMMENT '商品分类',
-	--`weight` double COMMENT '重量',
-	`price` double COMMENT '价格',
 	`img_src` varchar(255),
 	`shop_name` varchar(255),
 	`rec_date` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '记录日期',
 	PRIMARY KEY (`id`)
 ) ENGINE=`InnoDB` DEFAULT CHARACTER SET utf8 COMMENT='某电商商品列表';
 
+-- ----------------------------
+-- Table structure for ccgold_goods_detail
+-- ----------------------------
+DROP TABLE IF EXISTS `ccgold_goods_detail`;
+CREATE TABLE `smzdm`.`ccgold_goods_detail` (
+	`id` int NOT NULL AUTO_INCREMENT,
+	`good_id` int NOT NULL COMMENT '电商系统商品编号',
+	`good_name` varchar(255) NOT NULL COMMENT '商品名称',
+	`good_cate` smallint COMMENT '商品分类',
+	`weight` double COMMENT '重量',
+	`price` double COMMENT '价格',
+	`inventory` int COMMENT '库存',
+	`sales` int COMMENT '销量',
+	`freight` double COMMENT '运费',
+	`shop_name` varchar(255) COMMENT '店铺名',
+	`rec_date` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '记录日期',
+	PRIMARY KEY (`id`)
+) ENGINE=`InnoDB` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci COMMENT='某电商商品详情';
