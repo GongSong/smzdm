@@ -34,7 +34,7 @@ CREATE TABLE `wfx_stock` (
   `rec_date` datetime DEFAULT NULL COMMENT '爬取日期',
   PRIMARY KEY (`id`),
   KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=119 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT '微分销商品详情';
 
 -- ----------------------------
 -- Table structure for wfx_item_marketing
@@ -58,16 +58,16 @@ CREATE TABLE `yz_goods` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `alias` varchar(15) DEFAULT NULL COMMENT '电商系统商品编号/代号',
   `goodId` int(11) DEFAULT NULL COMMENT '电商系统商品编号',
-  `title` varchar(100) DEFAULT NULL ,
-  `price` float(11,0) unsigned zerofill DEFAULT NULL,
-  `priceTaobao` float(11,0) unsigned zerofill DEFAULT NULL,
-  `imgSrc` varchar(255) DEFAULT NULL,
-  `isVirtual` varchar(255) DEFAULT NULL,
-  `shopName` varchar(255) DEFAULT NULL,
-  `rec_date` datetime DEFAULT NULL,
+  `title` varchar(100) DEFAULT NULL COMMENT '商品名',
+  `price` float(11,0) unsigned zerofill DEFAULT NULL COMMENT '商品价格',
+  `priceTaobao` float(11,0) unsigned zerofill DEFAULT NULL COMMENT '淘宝对应商品价格',
+  `imgSrc` varchar(255) DEFAULT NULL COMMENT '商品图片地址',
+  `isVirtual` varchar(255) DEFAULT NULL COMMENT '是否虚拟商品',
+  `shopName` varchar(255) DEFAULT NULL COMMENT '店铺名称',
+  `rec_date` datetime DEFAULT NULL COMMENT '记录日期',
   PRIMARY KEY (`id`),
   FULLTEXT KEY `aliax` (`alias`)
-) ENGINE=InnoDB AUTO_INCREMENT=193 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=193 DEFAULT CHARSET=utf8 COMMENT '有赞商品详情';
 
 -- ----------------------------
 -- Table structure for yz_stock
@@ -75,16 +75,16 @@ CREATE TABLE `yz_goods` (
 DROP TABLE IF EXISTS `yz_stock`;
 CREATE TABLE `yz_stock` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `alias` varchar(15) DEFAULT NULL,
-  `goodId` int(11) DEFAULT NULL,
-  `sales` int(11) DEFAULT NULL,
-  `stock` int(11) DEFAULT NULL,
-  `freight` varchar(255) DEFAULT NULL,
-  `rec_date` datetime DEFAULT NULL,
-  `shopName` varchar(255) DEFAULT NULL,
+  `alias` varchar(15) DEFAULT NULL COMMENT '电商系统商品编号/代号',
+  `goodId` int(11) DEFAULT NULL COMMENT '电商系统商品编号',
+  `sales` int(11) DEFAULT NULL COMMENT '销售量',
+  `stock` int(11) DEFAULT NULL COMMENT '库存',
+  `freight` varchar(255) DEFAULT NULL COMMENT '运费',
+  `rec_date` datetime DEFAULT NULL COMMENT '记录日期',
+  `shopName` varchar(255) DEFAULT NULL COMMENT '店铺名称',
   PRIMARY KEY (`id`),
   FULLTEXT KEY `alias` (`alias`)
-) ENGINE=InnoDB AUTO_INCREMENT=129 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=129 DEFAULT CHARSET=utf8 COMMENT '有赞商品库存';
 
 -- ----------------------------
 -- Table structure for yz_trade_record
@@ -103,3 +103,21 @@ CREATE TABLE `yz_trade_record` (
   KEY `update_time` (`update_time`),
   FULLTEXT KEY `alias` (`alias`)
 ) ENGINE=InnoDB AUTO_INCREMENT=15367 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for ccgold_goods
+-- ----------------------------
+DROP TABLE IF EXISTS `ccgold_goods`;
+CREATE TABLE `smzdm`.`ccgold_goods` (
+	`id` int NOT NULL AUTO_INCREMENT,
+	`good_id` int NOT NULL COMMENT '电商系统商品编号',
+	`good_name` varchar(255) COMMENT '商品名称',
+	`good_cate` smallint COMMENT '商品分类',
+	--`weight` double COMMENT '重量',
+	`price` double COMMENT '价格',
+	`img_src` varchar(255),
+	`shop_name` varchar(255),
+	`rec_date` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '记录日期',
+	PRIMARY KEY (`id`)
+) ENGINE=`InnoDB` DEFAULT CHARACTER SET utf8 COMMENT='某电商商品列表';
+
