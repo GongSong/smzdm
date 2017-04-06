@@ -84,9 +84,29 @@ function getCommentById(id) {
             bid: 0
         },
         headers: spiderSetting.headers.wfx
-    }
+    };
+
     axios(config).then(result => {
-        console.log(result.data);
+        let obj = result.data;
+        // 系统维护升级时，输出为网页数据
+        if (typeof obj != 'object') {
+            console.log('wfx系统维护中,数据采集失败...');
+            return;
+        }
+
+        let html = obj.data;
+        let info = parser.wfx.shareInfo(html);
+        let commentInfo = parser.wfx.commentInfo(html);
+
+        info.item_id = id;
+        commentInfo.item_id = id;
+
+        console.log(info);
+
+        // 此处需处理评论内容为空的逻辑
+        console.log(commentInfo);
+    }).catch(e => {
+        console.log(e);
     })
 
 }
@@ -96,6 +116,8 @@ function getComment(req, res) {
         // data.map(item => {
         //     console.log(item);
         // });
+
+        // 以第一第数据为测试数据
         getCommentById(data[0].item_id);
         res.send(data);
     })

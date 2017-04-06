@@ -1,4 +1,5 @@
 let util = require('./common');
+let cheerio = require('cheerio');
 
 let youzan = {
     goodsList(html) {
@@ -104,6 +105,36 @@ let wfx = {
                 obj.rec_date = rec_date;
                 return obj;
             }
+        }
+        return util.parseHTML(options);
+    },
+    shareInfo(html) {
+        let rec_date = util.getNow();
+        let $ = cheerio.load(html);
+        let dom = $('.otherinfo').eq(1).find('span');
+        let freight = dom.eq(1).text().replace(/\r\n/g, '').replace('运费:', '').replace('¥', '').trim();
+        let score = dom.eq(2).text().replace(/\r\n/g, '').replace('赠送积分', '').trim();
+        let share = $('.shareinfo').text().replace('点赞', '').replace('次', '');
+        return {
+            freight,
+            score,
+            share
+        }
+    },
+    commentInfo(html) {
+        let options = {
+            html,
+            parentNode: '.eva_box',
+            children: [{
+                node: 'h2',
+                name: 'content'
+            }, {
+                node: '.comment_time span',
+                name: 'user'
+            }, {
+                node: '.comment_time b',
+                name: 'comment_time'
+            }]
         }
         return util.parseHTML(options);
     }
