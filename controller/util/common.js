@@ -63,7 +63,9 @@ function getNow(type = 1) {
 function parseHTML(options) {
     let $ = cheerio.load(options.html);
     let data = [];
-    let parentNode = $(options.parentNode);
+    let nodeIdx = (Reflect.has(options, 'nodeIdx')) ? options.nodeIdx : 0;
+
+    let parentNode = $(options.parentNode).eq(nodeIdx);
 
     if (parentNode.length === 0) {
         return data;

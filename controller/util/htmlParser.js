@@ -167,6 +167,7 @@ let ccgold = {
         let options = {
             html,
             parentNode: '.detail-container',
+            nodeIdx: 0,
             children: [{
                 node: '.con-fangDaIMg img',
                 name: 'img',
@@ -195,8 +196,7 @@ let ccgold = {
                 node: '.num-ku',
                 name: 'sale_num',
                 formatter(el) {
-                    console.log(el.text().split('销售量'));
-                    return el.text().split('销售量')[1];
+                    return el.text().split('销售量')[1].trim();
                 }
             }],
             formatter(item) {
