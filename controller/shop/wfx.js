@@ -4,6 +4,16 @@ let parser = require('../util/htmlParser');
 let spiderSetting = require('../util/spiderSetting');
 let dbResult = require('../db/wfx');
 
+let util = require('../util/common');
+
+// 载入模块
+var Segment = require('segment');
+// 创建实例
+var segment = new Segment();
+// 使用默认的识别模块及字典，载入字典文件需要1秒，仅初始化时执行一次即可
+segment.useDefault();
+segment.loadSynonymDict('synonym.txt');
+
 // 获取商品主表信息
 async function getGoodsById(url, page = 2) {
     console.log('正在抓取第' + page + '页');
@@ -20,7 +30,6 @@ async function getGoodsById(url, page = 2) {
         // 如果当前页无数据或小于每页最大产品数量10，则表示下一页无数据
         if (goodItem.length == 0 || goodItem.length < 10) {
             return goodItem;
-            return [];
         }
         return getGoodsById(url, page + 1).then(res => [...goodItem, ...res]);
     }).catch(e => console.log(e));
@@ -30,6 +39,7 @@ function formatterData(obj, keys) {
     // 删除无用数据
     keys.forEach(key => Reflect.deleteProperty(obj, key));
 
+    obj.rec_date = util.getNow();
     // 数据清洗
     if (obj.sales_volume == null) {
         obj.sales_volume = 0;
@@ -71,14 +81,13 @@ function getGoodsList(req, res) {
     });
 }
 
-function getCommentById(id) {
+function getDetailById(id) {
     let url = 'http://www.symint615.com/Item/detail_ajax';
     // 'pid=0&bid=0'
     let config = {
         method: 'get',
         url,
         params: {
-            // p: 2,
             id,
             pid: 0,
             bid: 0
@@ -86,43 +95,115 @@ function getCommentById(id) {
         headers: spiderSetting.headers.wfx
     };
 
-    axios(config).then(result => {
+    return axios(config).then(result => {
         let obj = result.data;
         // 系统维护升级时，输出为网页数据
         if (typeof obj != 'object') {
             console.log('wfx系统维护中,数据采集失败...');
             return;
         }
-
         let html = obj.data;
         let info = parser.wfx.shareInfo(html);
-        let commentInfo = parser.wfx.commentInfo(html);
-
         info.item_id = id;
-        commentInfo.item_id = id;
-
-        console.log(info);
-
-        // 此处需处理评论内容为空的逻辑
-        console.log(commentInfo);
+        return info;
     }).catch(e => {
         console.log(e);
     })
+}
 
+function getDetail(req, res) {
+    dbResult.getGoodList(req, res, (data) => {
+        let promises = data.map(item => getDetailById(item.item_id));
+        Promise.all(promises)
+            .then(result => {
+                res.send(result);
+            })
+    })
+}
+
+async function getCommentById(item_id, page = 1) {
+
+    console.log('正在抓取第' + page + '页');
+    let url = 'http://www.symint615.com/Item/getItemComment';
+    let config = {
+        method: 'get',
+        url,
+        params: {
+            item_id,
+            p: page
+        },
+        headers: spiderSetting.headers.wfx
+    };
+
+    return await axios(config).then(res => {
+        let comments = res.data;
+        // 如果当前页无数据或小于每页最大产品数量10，则表示下一页无数据
+        if (typeof comments.data.length == 0) {
+            return [];
+        } else if (comments.data.length < 10) {
+            return parser.wfx.commentInfo(comments.data);
+        }
+        return getCommentById(item_id, page + 1)
+            .then(res => {
+                // 2017年接口升级后，第2页以后的评论返回结果非标准json格式，即内容没在 res.data中，而是直接返回 array结果。
+                if (typeof res.data != 'undefined') {
+                    res = res.data.data;
+                }
+                return parser.wfx.commentInfo([...comments.data, ...res]);
+            });
+    }).catch(e => console.log(e));
 }
 
 function getComment(req, res) {
-    dbResult.getGoodList(req, res, (data) => {
-        // data.map(item => {
-        //     console.log(item);
-        // });
 
-        // 以第一第数据为测试数据
-        getCommentById(data[0].item_id);
-        res.send(data);
+    let testMode = false;
+
+    dbResult.getGoodList(req, res, (data) => {
+        if (!testMode) {
+            let promises = data.map(item => getCommentById(item.item_id));
+            Promise.all(promises)
+                .then(result => {
+                    // 去除空数据
+                    let arr = [];
+                    result.forEach(item => {
+                        if (JSON.stringify(item) != '[]') {
+                            arr.push(item);
+                        }
+                    })
+                    res.send(arr);
+                })
+        } else {
+            getCommentById(data[7].item_id).then(result => {
+                res.send(result);
+            })
+        }
     })
 }
+
+function splitComment(req, res) {
+    let data = require('../data/wfx_comment.json');
+    let result = [];
+    data.forEach(comments => {
+        if (comments == null) {
+            return;
+        }
+        comments.forEach(item => {
+            let segText = segment.doSegment(item.detail, {
+                stripPunctuation: true
+            });
+            result.push(Object.assign(util.handleWordSegment(segText), {
+                item_id: item.item_id,
+                detail: item.detail
+            }));
+        });
+    });
+
+    res.send(result);
+}
+
 module.exports = {
     getGoodsList,
-    getComment
+    getDetail,
+    getComment,
+    splitComment
 };

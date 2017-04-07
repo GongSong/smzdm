@@ -1,0 +1,101 @@
+{
+  "status": 1,
+  "is_try": 0,
+  "data": [{
+    "order_show_id": "2298655",
+    "order_item_id": "2999211",
+    "type": "1",
+    "type_id": "2746608",
+    "detail": "\u4ea7\u54c1\u8d28\u91cf\u597d\uff0c\u505a\u5de5\u7cbe\u7ec6\uff01\u53ef\u662f\u4fdd\u62a4\u5957\u4e0d\u77e5\u4ec0\u4e48\u539f\u56e0\u6709\u4e00\u70b9\u6a21\u7cca\u3002",
+    "status": "1",
+    "create_time": "2017-04-01 22:02",
+    "user_name": null,
+    "item_group_id": null,
+    "dc_shop": "2022030",
+    "describe_star": "\/PublicMob\/images\/star_appraise5.png",
+    "logistics_star": "\/PublicMob\/images\/star_appraise5.png",
+    "service_star": "\/PublicMob\/images\/star_appraise5.png",
+    "is_anonymous": "0",
+    "comment": {
+      "comlist": {
+        "detail": "\u4ea7\u54c1\u8d28\u91cf\u597d\uff0c\u505a\u5de5\u7cbe\u7ec6\uff01\u53ef\u662f\u4fdd\u62a4\u5957\u4e0d\u77e5\u4ec0\u4e48\u539f\u56e0\u6709\u4e00\u70b9\u6a21\u7cca\u3002",
+        "type": "1",
+        "create_time": "1491055333",
+        "status": "1",
+        "describe_star": null,
+        "logistics_star": null,
+        "service_star": null,
+        "is_anonymous": "0"
+      },
+      "imglist": []
+    },
+    "mobile": "\u4e09***\u751f",
+    "head_portrait": "http:\/\/wx.qlogo.cn\/mmopen\/PiajxSqBRaEKTdcd0DrZYqjxcbnoib8SWrt0e8LobzzcrZWG8qqIrS1iau5jH1NpLhJ3nnzMAHvPYH58jcFgwWuE34FYewZDJnMEMLwCaE9te8\/0",
+    "sku_name": null,
+    "reply": null
+  }, {
+    "order_show_id": "2298610",
+    "order_item_id": "2999018",
+    "type": "1",
+    "type_id": "2746608",
+    "detail": "\u7269\u6d41\u548c\u53d1\u8d27\u90fd\u5f88\u5feb\uff0c\u8bc1\u4e66\u548c\u53d1\u7968\u90fd\u6709\uff0c\u662f\u6b63\u54c1\uff0c\u597d\u8bc4\uff0c\u503c\u5f97\u4fe1\u8d56\u3002",
+    "status": "1",
+    "create_time": "2017-03-28 18:05",
+    "user_name": null,
+    "item_group_id": null,
+    "dc_shop": "2022030",
+    "describe_star": "\/PublicMob\/images\/star_appraise5.png",
+    "logistics_star": "\/PublicMob\/images\/star_appraise5.png",
+    "service_star": "\/PublicMob\/images\/star_appraise5.png",
+    "is_anonymous": "0",
+    "comment": {
+      "comlist": {
+        "detail": "\u7269\u6d41\u548c\u53d1\u8d27\u90fd\u5f88\u5feb\uff0c\u8bc1\u4e66\u548c\u53d1\u7968\u90fd\u6709\uff0c\u662f\u6b63\u54c1\uff0c\u597d\u8bc4\uff0c\u503c\u5f97\u4fe1\u8d56\u3002",
+        "type": "1",
+        "create_time": "1490695546",
+        "status": "1",
+        "describe_star": null,
+        "logistics_star": null,
+        "service_star": null,
+        "is_anonymous": "0"
+      },
+      "imglist": ["http:\/\/img.wxfenxiao.com\/7a\/d7\/2022030\/2017-03\/58da3562b0981.jpg@!w640", "http:\/\/img.wxfenxiao.com\/7a\/d7\/2022030\/2017-03\/58da357a9b0df.jpg@!w640"]
+    },
+    "mobile": "\u9b4f***\u4e1c",
+    "head_portrait": "http:\/\/wx.qlogo.cn\/mmopen\/oCh8uDoNXG36HkrkHzYSSQtdtlcwDbt3amSAbp7pTSwE5CvTpHPx1l9icOSaQslLjtBo9ibNp7z1e3ibwvxyEgYYrVdERS4K6iaa\/0",
+    "sku_name": null,
+    "reply": "\u8c22\u8c22\u60a8\u7684\u652f\u6301\uff0c\u795d\u60a8\u8d2d\u7269\u6109\u5feb\u3002"
+  }, {
+    "order_show_id": "2298592",
+    "order_item_id": "2998925",
+    "type": "1",
+    "type_id": "2746608",
+    "detail": "\u7269\u6d41\u4e0e\u53d1\u8d27\u90fd\u5f88\u5feb\uff0c\u53ca\u65f6\u9001\u8d27\uff0c\u8bc1\u4e66\u7f16\u53f7\u5f88\u597d\uff0c\u7eaa\u5ff5\u5e01\u7cbe\u81f4\uff0c\u6709\u6b63\u89c4\u53d1\u7968\uff0c\u662f\u6b63\u54c1\uff0c\u597d\u8bc4\u3002",
+    "status": "1",
+    "create_time": "2017-03-24 18:37",
+    "user_name": null,
+    "item_group_id": null,
+    "dc_shop": "2022030",
+    "describe_star": "\/PublicMob\/images\/star_appraise5.png",
+    "logistics_star": "\/PublicMob\/images\/star_appraise5.png",
+    "service_star": "\/PublicMob\/images\/star_appraise5.png",
+    "is_anonymous": "0",
+    "comment": {
+      "comlist": {
+        "detail": "\u7269\u6d41\u4e0e\u53d1\u8d27\u90fd\u5f88\u5feb\uff0c\u53ca\u65f6\u9001\u8d27\uff0c\u8bc1\u4e66\u7f16\u53f7\u5f88\u597d\uff0c\u7eaa\u5ff5\u5e01\u7cbe\u81f4\uff0c\u6709\u6b63\u89c4\u53d1\u7968\uff0c\u662f\u6b63\u54c1\uff0c\u597d\u8bc4\u3002",
+        "type": "1",
+        "create_time": "1490351923",
+        "status": "1",
+        "describe_star": null,
+        "logistics_star": null,
+        "service_star": null,
+        "is_anonymous": "0"
+      },
+      "imglist": []
+    },
+    "mobile": "\u9648***\u6b66",
+    "head_portrait": "http:\/\/wx.qlogo.cn\/mmopen\/nw1UFnM98YEP6SW1ibkCK6siaOJuyx8pS9GDNGr4zOTqoblc1bTojK9KDdYia1ul0gUdiaEfmIS52ic9pm6N9W6OazDaqibp0mOicbJ\/0",
+    "sku_name": null,
+    "reply": "\u8c22\u8c22\u60a8\u7684\u652f\u6301\uff0c\u795d\u60a8\u8d2d\u7269\u6109\u5feb\u3002"
+  }]
+}

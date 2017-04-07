@@ -29,9 +29,19 @@ router.get('/wfx/shop', function(req, res) {
     crawler.wfx.getGoodsList(req, res);
 })
 
+// 微分销页面详情
+router.get('/wfx/detail', function(req, res) {
+    crawler.wfx.getDetail(req, res);
+});
+
 // 微分销评论
 router.get('/wfx/comment', function(req, res) {
     crawler.wfx.getComment(req, res);
+});
+
+// 微分销评论分割
+router.get('/wfx/comment/split', function(req, res) {
+    crawler.wfx.splitComment(req, res);
 });
 
 // ccGold
