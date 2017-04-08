@@ -70,7 +70,29 @@
     "create_time": "2016-07-26 19:32",
     "mobile": "雨***林",
     "reply": null
-  }], null, [{
+  }],
+  [{
+    "item_id": "2514428",
+    "detail": "产品不错，很精致\r\n",
+    "order_show_id": "2297581",
+    "order_item_id": "2992568",
+    "type": "1",
+    "status": "1",
+    "create_time": "2017-01-12 17:34",
+    "mobile": "天***勤",
+    "reply": null
+  }, {
+    "item_id": "2514428",
+    "detail": "不错，以后每年都来",
+    "order_show_id": "2294878",
+    "order_item_id": "2980769",
+    "type": "1",
+    "status": "1",
+    "create_time": "2016-11-11 21:19",
+    "mobile": "M***爷",
+    "reply": null
+  }],
+  [{
     "item_id": "2525132",
     "detail": "很精致。",
     "order_show_id": "2295104",
@@ -1649,77 +1671,6 @@
     "reply": null
   }],
   [{
-    "item_id": "2740510",
-    "detail": "为什没有发票一起的",
-    "order_show_id": "2295804",
-    "order_item_id": "2988158",
-    "type": "1",
-    "status": "1",
-    "create_time": "2016-12-14 11:10",
-    "mobile": "z***n",
-    "reply": null
-  }, {
-    "item_id": "2740510",
-    "detail": "漂亮",
-    "order_show_id": "2295232",
-    "order_item_id": "2984025",
-    "type": "1",
-    "status": "1",
-    "create_time": "2016-11-23 21:40",
-    "mobile": "福***临",
-    "reply": null
-  }, {
-    "item_id": "2740510",
-    "detail": "挺好，贵了点吧！",
-    "order_show_id": "2295102",
-    "order_item_id": "2981247",
-    "type": "1",
-    "status": "1",
-    "create_time": "2016-11-18 23:17",
-    "mobile": "S***飞",
-    "reply": null
-  }, {
-    "item_id": "2740510",
-    "detail": "好就一个字，我只说一次",
-    "order_show_id": "2294887",
-    "order_item_id": "2979767",
-    "type": "1",
-    "status": "1",
-    "create_time": "2016-11-12 08:45",
-    "mobile": "爱***念",
-    "reply": null
-  }, {
-    "item_id": "2740510",
-    "detail": "好！",
-    "order_show_id": "2294779",
-    "order_item_id": "2978802",
-    "type": "1",
-    "status": "1",
-    "create_time": "2016-11-09 10:14",
-    "mobile": "悠***悠",
-    "reply": null
-  }, {
-    "item_id": "2740510",
-    "detail": "送给朋友的， 他很喜欢，其实我也很喜欢……",
-    "order_show_id": "2294749",
-    "order_item_id": "2980080",
-    "type": "1",
-    "status": "1",
-    "create_time": "2016-11-08 09:20",
-    "mobile": "若***丶",
-    "reply": null
-  }, {
-    "item_id": "2740510",
-    "detail": "挺好的 喜欢 ",
-    "order_show_id": "2294734",
-    "order_item_id": "2978044",
-    "type": "1",
-    "status": "1",
-    "create_time": "2016-11-07 11:10",
-    "mobile": "i***丽",
-    "reply": null
-  }],
-  [{
     "item_id": "2740512",
     "detail": "东西不错，就是有点贵！而且百分之17的税率都让消费者承担！",
     "order_show_id": "2298112",
@@ -1934,7 +1885,8 @@
     "create_time": "2017-01-12 17:35",
     "mobile": "天***勤",
     "reply": null
-  }], null, [{
+  }],
+  [{
     "item_id": "2740517",
     "detail": "(σ′▽‵)′▽‵)σ",
     "order_show_id": "2297659",
@@ -2368,7 +2320,79 @@
     "create_time": "2016-12-06 09:18",
     "mobile": "孙***颖",
     "reply": null
-  }], null, [{
+  }],
+  [{
+    "item_id": "2740532",
+    "detail": "好漂亮，物流极快，夾日收货。",
+    "order_show_id": "2295832",
+    "order_item_id": "2989130",
+    "type": "1",
+    "status": "1",
+    "create_time": "2016-12-16 12:32",
+    "mobile": "強***強",
+    "reply": null
+  }, {
+    "item_id": "2740532",
+    "detail": "挺好的，快，信誉很好，值得信任。",
+    "order_show_id": "2295803",
+    "order_item_id": "2987825",
+    "type": "1",
+    "status": "1",
+    "create_time": "2016-12-14 10:26",
+    "mobile": "风***铃",
+    "reply": null
+  }, {
+    "item_id": "2740532",
+    "detail": "相当不错，溢价适中，号码也不错。",
+    "order_show_id": "2295737",
+    "order_item_id": "2987783",
+    "type": "1",
+    "status": "1",
+    "create_time": "2016-12-10 23:19",
+    "mobile": "壮***壮",
+    "reply": null
+  }, {
+    "item_id": "2740532",
+    "detail": "不见发票能邮过来吗？",
+    "order_show_id": "2295146",
+    "order_item_id": "2981213",
+    "type": "1",
+    "status": "1",
+    "create_time": "2016-11-20 20:53",
+    "mobile": "钓***手",
+    "reply": "您好，发票我们和产品是一起邮寄过去的"
+  }, {
+    "item_id": "2740532",
+    "detail": "太好了",
+    "order_show_id": "2294917",
+    "order_item_id": "2981031",
+    "type": "1",
+    "status": "1",
+    "create_time": "2016-11-13 16:09",
+    "mobile": "沧***海",
+    "reply": null
+  }, {
+    "item_id": "2740532",
+    "detail": "好，币已收到，这个刻字币很漂亮，有纪念意义。",
+    "order_show_id": "2294695",
+    "order_item_id": "2978504",
+    "type": "1",
+    "status": "1",
+    "create_time": "2016-11-06 17:08",
+    "mobile": "远***山",
+    "reply": null
+  }, {
+    "item_id": "2740532",
+    "detail": "亲，精美的金币已收到，包装完好，金、银币品相完美，发货时小盒子上缠了很厚汽泡腹，防撞又防水;最关键的证明贵重物品合法来源的发票也随货一起寄过来了*^_^*非常开心，希望多些这样能多为客户着想的藏品供应商，给我们带来更多福利，赞一个，品质优秀，非常完美!",
+    "order_show_id": "2294668",
+    "order_item_id": "2978626",
+    "type": "1",
+    "status": "1",
+    "create_time": "2016-11-05 19:31",
+    "mobile": "宏***金",
+    "reply": null
+  }],
+  [{
     "item_id": "2740698",
     "detail": "很精美\r\n",
     "order_show_id": "2295359",
@@ -2603,7 +2627,19 @@
     "create_time": "2016-11-05 20:02",
     "mobile": "远***山",
     "reply": null
-  }], null, [{
+  }],
+  [{
+    "item_id": "2740713",
+    "detail": "很好",
+    "order_show_id": "2294971",
+    "order_item_id": "2981711",
+    "type": "1",
+    "status": "1",
+    "create_time": "2016-11-15 11:31",
+    "mobile": "邮***票",
+    "reply": null
+  }],
+  [{
     "item_id": "2740714",
     "detail": "很好很精致，值得收藏，送礼用也很好，新颖。快递很给力，到货特别快。总之一切都很满意，赞",
     "order_show_id": "2297556",
@@ -2724,77 +2760,6 @@
     "status": "1",
     "create_time": "2017-03-24 18:37",
     "mobile": "陈***武",
-    "reply": "谢谢您的支持，祝您购物愉快。"
-  }],
-  [{
-    "item_id": "2746626",
-    "detail": "是正品，物流超快！",
-    "order_show_id": "2298668",
-    "order_item_id": "2999362",
-    "type": "1",
-    "status": "1",
-    "create_time": "2017-04-06 15:35",
-    "mobile": "大***中",
-    "reply": null
-  }, {
-    "item_id": "2746626",
-    "detail": "价格优惠，发货及时，物流快。赞！",
-    "order_show_id": "2298664",
-    "order_item_id": "2999310",
-    "type": "1",
-    "status": "1",
-    "create_time": "2017-04-06 14:35",
-    "mobile": "O***O",
-    "reply": null
-  }, {
-    "item_id": "2746626",
-    "detail": "发票书写有点错误，希望节后店家能重新发来发票，谢谢！",
-    "order_show_id": "2298657",
-    "order_item_id": "2999123",
-    "type": "1",
-    "status": "1",
-    "create_time": "2017-04-04 21:30",
-    "mobile": "泉***墨",
-    "reply": "您好，发票已经重新寄回"
-  }, {
-    "item_id": "2746626",
-    "detail": "说好的证书不是4，她偏偏来个4",
-    "order_show_id": "2298635",
-    "order_item_id": "2999178",
-    "type": "1",
-    "status": "1",
-    "create_time": "2017-03-31 13:49",
-    "mobile": "酒***无",
-    "reply": "您好，我们货品都是随机发的，号码无法确定哦"
-  }, {
-    "item_id": "2746626",
-    "detail": "银币精致，发票，证书，盒子齐全！非常非常满意！发货快，物流服务好！是一次愉快的购物",
-    "order_show_id": "2298633",
-    "order_item_id": "2999212",
-    "type": "1",
-    "status": "1",
-    "create_time": "2017-03-31 11:50",
-    "mobile": "会***鱼",
-    "reply": "谢谢您的支持，祝您购物愉快。"
-  }, {
-    "item_id": "2746626",
-    "detail": "实物比图片漂亮多了，很喜欢，价格也比较公允！建议这次购买的有其他未上市的吉祥文化币的优先购买权，能成套收藏，谢谢！",
-    "order_show_id": "2298627",
-    "order_item_id": "2999169",
-    "type": "1",
-    "status": "1",
-    "create_time": "2017-03-31 09:45",
-    "mobile": "风***格",
-    "reply": "谢谢您的支持，祝您购物愉快。"
-  }, {
-    "item_id": "2746626",
-    "detail": "很漂亮很精致，难得抢到一枚，就必须晒一下。",
-    "order_show_id": "2298619",
-    "order_item_id": "2999115",
-    "type": "1",
-    "status": "1",
-    "create_time": "2017-03-29 13:09",
-    "mobile": "J***严",
     "reply": "谢谢您的支持，祝您购物愉快。"
   }]
 ]

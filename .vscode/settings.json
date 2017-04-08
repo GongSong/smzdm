@@ -6,5 +6,6 @@
         "html",
         "vue"
     ],
-    "standardFormat.formatOnSave": false
-  }
+    "standardFormat.formatOnSave": false,
+    "python.linting.pylintEnabled": false
+}

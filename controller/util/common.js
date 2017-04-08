@@ -1,5 +1,7 @@
 let cheerio = require('cheerio');
 let POSTAG = require('segment').POSTAG;
+let axios = require('axios');
+let headers = require('./spiderSetting');
 
 function jsRight(sr, rightn) {
     return sr.substring(sr.length - rightn, sr.length)
@@ -107,16 +109,18 @@ function parseHTML(options) {
 }
 
 function handleWordSegment(wordList) {
-    let words = wordList = wordList.map(item => {
+    let words = wordList.map(item => {
         return {
             ps: POSTAG.chsName(item.p).split(' ')[0],
             w: item.w
         };
-    })
+    });
+
     let comment = [];
     if (words[0].ps.includes('形容词')) {
         comment.push(words[0].w);
     }
+
     for (var i = 1; i < words.length; i++) {
         var item = words[i];
         if (item.ps.includes('形容词')) {
@@ -138,8 +142,44 @@ function handleWordSegment(wordList) {
     };
 }
 
+async function getNegativeWords(content) {
+    let dat = { "content": content };
+    let config = {
+        method: 'post',
+        url: 'http://nlp.qq.com/public/wenzhi/api/common_api1469449716.php',
+        data: {
+            api: 12,
+            body_data: JSON.stringify(dat)
+        },
+        headers: headers.headers.tencent
+    };
+
+    return await axios(config).catch(e => console.log(e));
+
+    // var dat = { "content": '我买的是1盎司的，而里面的包装盒却是个1／2盎司的，我是无语了' };
+    // $.ajax({
+    //     async: true,
+    //     type: 'post',
+    //     url: '/public/wenzhi/api/common_api1469449716.php',
+    //     dataType: 'json',
+    //     data: {
+    //         'api': '12',
+    //         'body_data': JSON.stringify(dat)
+    //     },
+    //     success: function(data) {
+    //         var negative = (Math.round(data["negative"] * 100)).toString() + "%";
+    //         var positive = (Math.round(data["positive"] * 100)).toString() + "%";
+    //         var ret_neg = "负面 " + negative;
+    //         var ret_pos = "正面 " + positive;
+    //         console.log(ret_neg);
+    //         console.log(ret_pos);
+    //     }
+    // });
+}
+
 module.exports = {
     getNow,
     parseHTML,
-    handleWordSegment
+    handleWordSegment,
+    getNegativeWords
 }

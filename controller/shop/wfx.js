@@ -166,6 +166,9 @@ function getComment(req, res) {
                     // 去除空数据
                     let arr = [];
                     result.forEach(item => {
+                        if (item == null) {
+                            return;
+                        }
                         if (JSON.stringify(item) != '[]') {
                             arr.push(item);
                         }
@@ -184,9 +187,6 @@ function splitComment(req, res) {
     let data = require('../data/wfx_comment.json');
     let result = [];
     data.forEach(comments => {
-        if (comments == null) {
-            return;
-        }
         comments.forEach(item => {
             let segText = segment.doSegment(item.detail, {
                 stripPunctuation: true
