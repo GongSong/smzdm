@@ -13,7 +13,7 @@ File Encoding         : 65001
 Date: 2017-04-06 21:49:43
 */
 
-SET FOREIGN_KEY_CHECKS=0;
+SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
 -- Table structure for wfx_stock
