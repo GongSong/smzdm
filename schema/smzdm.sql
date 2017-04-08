@@ -34,7 +34,7 @@ CREATE TABLE `wfx_stock` (
   `rec_date` datetime DEFAULT NULL COMMENT '爬取日期',
   PRIMARY KEY (`id`),
   KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT '微分销商品详情';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT '微分销商品详情';
 
 -- ----------------------------
 -- Table structure for wfx_item_marketing
@@ -48,7 +48,7 @@ CREATE TABLE `wfx_item_marketing` (
   `points` int(11) DEFAULT NULL COMMENT '赠送积分',
   `postage` int(11) DEFAULT NULL COMMENT '邮资',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='微分销商品营销数据'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='微分销商品营销数据';
 
 -- ----------------------------
 -- Table structure for yz_goods
@@ -67,7 +67,7 @@ CREATE TABLE `yz_goods` (
   `rec_date` datetime DEFAULT NULL COMMENT '记录日期',
   PRIMARY KEY (`id`),
   FULLTEXT KEY `aliax` (`alias`)
-) ENGINE=InnoDB AUTO_INCREMENT=193 DEFAULT CHARSET=utf8 COMMENT '有赞商品详情';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT '有赞商品详情';
 
 -- ----------------------------
 -- Table structure for yz_stock
@@ -84,7 +84,7 @@ CREATE TABLE `yz_stock` (
   `shopName` varchar(255) DEFAULT NULL COMMENT '店铺名称',
   PRIMARY KEY (`id`),
   FULLTEXT KEY `alias` (`alias`)
-) ENGINE=InnoDB AUTO_INCREMENT=129 DEFAULT CHARSET=utf8 COMMENT '有赞商品库存';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT '有赞商品库存';
 
 -- ----------------------------
 -- Table structure for yz_trade_record
@@ -92,17 +92,17 @@ CREATE TABLE `yz_stock` (
 DROP TABLE IF EXISTS `yz_trade_record`;
 CREATE TABLE `yz_trade_record` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `alias` varchar(15) DEFAULT NULL,
-  `goodId` int(11) DEFAULT NULL,
-  `nickname` varchar(15) DEFAULT NULL,
-  `item_num` int(11) DEFAULT NULL,
-  `item_price` double DEFAULT NULL,
-  `update_time` datetime DEFAULT NULL,
-  `shopName` varchar(255) DEFAULT NULL,
+  `alias` varchar(15) DEFAULT NULL COMMENT '电商系统商品编号/代号',
+  `goodId` int(11) DEFAULT NULL COMMENT '电商系统商品编号',
+  `nickname` varchar(15) DEFAULT NULL COMMENT '昵称',
+  `item_num` int(11) DEFAULT NULL COMMENT '成交数量',
+  `item_price` double DEFAULT NULL COMMENT '成交单价',
+  `update_time` datetime DEFAULT NULL COMMENT '成交时间',
+  `shopName` varchar(255) DEFAULT NULL COMMENT '店铺名',
   PRIMARY KEY (`id`),
   KEY `update_time` (`update_time`),
   FULLTEXT KEY `alias` (`alias`)
-) ENGINE=InnoDB AUTO_INCREMENT=15367 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT '有赞店铺交易记录';
 
 -- ----------------------------
 -- Table structure for ccgold_goods
