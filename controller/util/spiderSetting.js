@@ -30,7 +30,6 @@ let headers = {
         "X-Requested-With": "XMLHttpRequest"
     }
 }
-
 module.exports = {
     headers
 }

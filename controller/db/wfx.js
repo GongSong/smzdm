@@ -28,13 +28,13 @@ function getGoodList(req, res, next) {
 
 function setCommentData(req, res) {
     let comment = require('../data/wfx_comment.json');
-    let text = '我买的是1盎司的，而里面的包装盒却是个1／2盎司的，我是无语了';
-    util.getNegativeWords(text).then(res => {
-        console.log(res);
-        console.log(res.data);
-    })
 
-    res.json({ text });
+    let item = comment[0][0];
+    util.getNegativeWords(item.detail).then(obj => {
+        obj.text = item.detail;
+        obj.item_id = item.item_id;
+        res.json(obj);
+    })
 }
 
 module.exports = {

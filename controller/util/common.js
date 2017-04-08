@@ -1,7 +1,8 @@
 let cheerio = require('cheerio');
 let POSTAG = require('segment').POSTAG;
-let axios = require('axios');
-let headers = require('./spiderSetting');
+let nlp = require('./nlp');
+
+let querystring = require('querystring');
 
 function jsRight(sr, rightn) {
     return sr.substring(sr.length - rightn, sr.length)
@@ -142,39 +143,22 @@ function handleWordSegment(wordList) {
     };
 }
 
-async function getNegativeWords(content) {
-    let dat = { "content": content };
-    let config = {
-        method: 'post',
-        url: 'http://nlp.qq.com/public/wenzhi/api/common_api1469449716.php',
-        data: {
-            api: 12,
-            body_data: JSON.stringify(dat)
-        },
-        headers: headers.headers.tencent
-    };
+function getNegativeWordsByTencentApi(content) {
+    console.log(npl.tencentAuth('我买的是1盎司的，而里面的包装盒却是个1／2盎司的，我是无语了'));
+}
 
-    return await axios(config).catch(e => console.log(e));
+function getNegativeWords(content) {
 
-    // var dat = { "content": '我买的是1盎司的，而里面的包装盒却是个1／2盎司的，我是无语了' };
-    // $.ajax({
-    //     async: true,
-    //     type: 'post',
-    //     url: '/public/wenzhi/api/common_api1469449716.php',
-    //     dataType: 'json',
-    //     data: {
-    //         'api': '12',
-    //         'body_data': JSON.stringify(dat)
-    //     },
-    //     success: function(data) {
-    //         var negative = (Math.round(data["negative"] * 100)).toString() + "%";
-    //         var positive = (Math.round(data["positive"] * 100)).toString() + "%";
-    //         var ret_neg = "负面 " + negative;
-    //         var ret_pos = "正面 " + positive;
-    //         console.log(ret_neg);
-    //         console.log(ret_pos);
-    //     }
-    // });
+    let postData = querystring.stringify({
+        'api': nlp.apiList.TextSentiment,
+        'body_data': JSON.stringify({ content })
+    })
+
+    return new Promise((resolve, reject) => {
+        nlp.tencentNLPAnaly(postData, data => {
+            resolve(data);
+        });
+    });
 }
 
 module.exports = {
