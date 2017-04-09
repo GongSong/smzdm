@@ -56,9 +56,45 @@ function handleWfxStockData(obj) {
     return url
 }
 
+/**
+ * 整理微分销评论数据插入表的sql
+ * @param {*} obj 入参以json格式传入
+ */
+function handleWfxCommentList(obj){
+    let url = sql.insert.wfx_comment_list;
+    let sqlValues = `(${obj.item_id},${obj.order_item_id},'${obj.detail}','${obj.create_time}')`;
+    url = url.replace('?',sqlValues);
+    return url;
+}
+
+/**
+ * 整理微分销评论自然语言分析插入表的sql
+ * @param {*} obj 入参一json格式传入
+ */
+function handleWfxCommentNlp(obj){
+    let url = sql.insert.wfx_comment_nlp;
+    let sqlValues = `(${obj.item_id},${obj.commentid},${obj.negative},${obj.positive})`;
+    url = url.replace('?',sqlValues);
+    return url;
+}
+
+/**
+ * 整理微分销评论分词插入表的sql
+ * @param {*} obj 入参一json格式传入
+ */
+function handleWfxCommentSeg(obj){
+    let url = sql.insert.wfx_comment_seg;
+    let sqlValues = `(${obj.item_id},${obj.commentid},${obj.word})`;
+    url = url.replace('?',sqlValues);
+    return url;
+}
+
 module.exports = {
     handleSaleDetailData,
     handleStockData,
     handleGoodsData,
-    handleWfxStockData
+    handleWfxStockData,
+    handleWfxCommentList,
+    handleWfxCommentNlp,
+    handleWfxCommentSeg
 }
