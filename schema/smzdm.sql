@@ -181,9 +181,9 @@ CREATE TABLE `wfx_comment_nlp` (
 `negative`  double NOT NULL COMMENT '负面得分' ,
 `positive`  double NOT NULL COMMENT '正面得分' ,
 PRIMARY KEY (`id`),
-INDEX `idx_wfx_comment_item` (`item_id`) USING BTREE ,
-INDEX `idx_wfx_comment_neg` (`negative`) USING BTREE ,
-INDEX `idx_wfx_comment_post` (`positive`) USING BTREE 
+INDEX `idx_wfx_commentnlp_item` (`item_id`) USING BTREE ,
+INDEX `idx_wfx_commentnlp_neg` (`negative`) USING BTREE ,
+INDEX `idx_wfx_commentnlp_post` (`positive`) USING BTREE 
 )
 ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
