@@ -36,8 +36,9 @@ let settings = {
         goodList: 'http://item.chinagoldcoin.net/product_detail_141.html',
         goodDetail: 'http://item.chinagoldcoin.net/product_detail_141.html',
         detailAPI: 'http://item.chinagoldcoin.net/getDetail?_t=1490989744719&detail_id=141',
-        commennt: 'http://www.chinagoldcoin.net/views/newDetail/detail/new-more-pj.jsp?pageNo=10&pageCount=100&pageSize=4&goodsId=141&type=all',
-        saleDetail: 'http://www.chinagoldcoin.net/views/newDetail/detail/new-more-buy.jsp?pageNo=10&pageCount=26234&pageSize=1000&goodsId=121'
+        comment: 'http://www.chinagoldcoin.net/views/newDetail/detail/new-more-pj.jsp?pageNo=10&pageCount=100&pageSize=4&goodsId=141&type=all',
+        saleDetail: 'http://www.chinagoldcoin.net/views/newDetail/detail/new-more-buy.jsp?pageNo=10&pageCount=26234&pageSize=1000&goodsId=121',
+        commentUrl: 'http://www.chinagoldcoin.net/views/newDetail/detail/more-zx.jsp?goodsId=121'
     }
 }
 module.exports = {

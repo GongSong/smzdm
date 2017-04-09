@@ -237,8 +237,39 @@ let ccgold = {
     }
 }
 
+let cncoin = {
+    goodsDetail(html) {
+        let $ = cheerio.load(html);
+        let goodInfo = {
+            year: '',
+            material: '',
+            weight: '',
+            theme: ''
+        };
+        $('#spsx tr td').each((i, item) => {
+            let text = $(item).text().replace(/\t/g, '').replace(/\r\n/g, '').split(':');
+            switch (text[0]) {
+                case '年份':
+                    goodInfo.year = text[1];
+                    break;
+                case '材质':
+                    goodInfo.material = text[1];
+                    break;
+                case '规格':
+                    goodInfo.weight = text[1];
+                    break;
+                case '题材':
+                    goodInfo.theme = text[1];
+                    break;
+            }
+        })
+        return goodInfo;
+    },
+}
+
 module.exports = {
     youzan,
     wfx,
-    ccgold
+    ccgold,
+    cncoin
 }

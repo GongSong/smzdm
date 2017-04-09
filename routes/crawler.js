@@ -55,8 +55,24 @@ router.get('/ccgold/shop', function(req, res) {
     crawler.ccgold.getGoodsList(req, res);
 });
 
+// ccGold
 router.get('/ccgold/detail', function(req, res) {
     crawler.ccgold.getGoodsDetail(req, res);
+});
+
+// cncoin商品列表
+router.get('/cncoin/shop', function(req, res) {
+    crawler.cncoin.getGoodsList(req, res);
+});
+
+// cncoin商品属性
+router.get('/cncoin/detail', function(req, res) {
+    crawler.cncoin.getDetail(req, res);
+});
+
+// cncoin交易记录
+router.get('/cncoin/trade', function(req, res) {
+    crawler.cncoin.getTradeRecord(req, res);
 });
 
 module.exports = router;
