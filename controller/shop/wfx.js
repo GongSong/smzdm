@@ -183,33 +183,87 @@ function getComment(req, res) {
     })
 }
 
-function splitComment(req, res) {
+// 用node-segment分词并做词性处理
+function splitCommentBySegment(req, res) {
     let data = require('../data/wfx_comment.json');
     let result = [];
-    // data.forEach(comments => {
-    //     comments.forEach(item => {
-    //         let segText = segment.doSegment(item.detail, {
-    //             stripPunctuation: true
-    //         });
-    //         result.push(Object.assign(util.handleWordSegment(segText), {
-    //             item_id: item.item_id,
-    //             detail: item.detail
-    //         }));
-    //     });
-    // });
-    let item = data[0][0];
-    util.wordSegment(item.detail).then(response => {
-        res.send({
-            segtext: response.tokens,
-            detail: item.detail
-        });
-    })
 
+    data.forEach(comment => {
+        comment.forEach(item => {
+            let segText = segment.doSegment(item.detail, {
+                stripPunctuation: true
+            });
+            result.push(Object.assign(util.handleWordSegment(segText), {
+                item_id: item.item_id,
+                detail: item.detail
+            }));
+        });
+    });
+
+    res.json(result);
+}
+
+async function splitComment(req, res) {
+    let data = require('../data/wfx_comment.json');
+    let result = [];
+
+    data.forEach(comment => {
+        comment.forEach(item => {
+            result.push(item);
+        });
+    });
+
+    let comments = [];
+
+    // 按序号依次读取数据，降低接口请求频次，必要时应增加延时
+    // 用for循环同步执行，即在await完成之后才执行 i++
+    // 用forEach/map等遍历函数，其回调函数不能是 async函数，无法在其中使用await,数据将被异步执行
+    for (let i = 0; i < result.length; i++) {
+        let item = result[i];
+        await util.wordSegment(item.detail).then(response => {
+            comments.push({
+                detail: item.detail,
+                item_id: item.item_id,
+                tokens: response.tokens,
+                combtokens: response.combtokens,
+                comment_id: item.order_item_id
+            });
+        })
+        console.log('第' + i + '条数据读取完毕\n');
+    }
+    res.json(comments);
+}
+
+async function getCommentScore(req, res) {
+    let data = require('../data/wfx_comment.json');
+    let result = [];
+
+    data.forEach(comment => {
+        comment.forEach(item => {
+            result.push(item);
+        });
+    });
+
+    let scores = [];
+
+    for (let i = 0; i < result.length; i++) {
+        let item = result[i];
+        await util.getNegativeWords(item.detail).then(obj => {
+            obj.text = item.detail;
+            obj.item_id = item.item_id;
+            obj.comment_id = item.order_item_id;
+            scores.push(obj);
+            console.log(obj);
+        })
+        console.log('第' + i + '条数据读取完毕\n');
+    }
+    res.json(scores);
 }
 
 module.exports = {
     getGoodsList,
     getDetail,
     getComment,
-    splitComment
+    splitComment,
+    getCommentScore
 };

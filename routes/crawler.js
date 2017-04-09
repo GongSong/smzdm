@@ -44,6 +44,12 @@ router.get('/wfx/comment/split', function(req, res) {
     crawler.wfx.splitComment(req, res);
 });
 
+// 评论得分
+router.get('/wfx/comment/score', function(req, res) {
+    crawler.wfx.getCommentScore(req, res);
+});
+
+
 // ccGold
 router.get('/ccgold/shop', function(req, res) {
     crawler.ccgold.getGoodsList(req, res);

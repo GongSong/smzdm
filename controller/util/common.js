@@ -148,9 +148,9 @@ function wordSegment(content) {
     let postData = querystring.stringify({
         api: nlp.apiList.LexicalAnalysis,
         body_data: JSON.stringify({
-            code: 2097152, // 0x20000
+            code: 0x200000, // 2097152, // 0x20000
             type: 1,
-            text: content
+            text: content.replace(/ /g, '')
         })
     });
 
@@ -169,7 +169,7 @@ function getNegativeWords(content) {
 
     let postData = querystring.stringify({
         'api': nlp.apiList.TextSentiment,
-        'body_data': JSON.stringify({ content })
+        'body_data': JSON.stringify({ content: content.replace(/ /g, '') })
     })
 
     return new Promise((resolve, reject) => {

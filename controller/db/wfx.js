@@ -26,19 +26,87 @@ function getGoodList(req, res, next) {
     })
 }
 
+//  评论数据入库
 function setCommentData(req, res) {
-    let comment = require('../data/wfx_comment.json');
+    let data = require('../data/wfx_comment.json');
+    let result = [];
+    data.forEach(comment => {
+        comment.forEach(item => {
+            Reflect.deleteProperty(item, 'type');
+            Reflect.deleteProperty(item, 'status');
+            Reflect.deleteProperty(item, 'order_show_id');
+            result.push(item);
+        });
+    });
 
-    let item = comment[0][0];
-    util.getNegativeWords(item.detail).then(obj => {
-        obj.text = item.detail;
-        obj.item_id = item.item_id;
-        res.json(obj);
-    })
+    // 添加将评论结果入库逻辑
+    res.json(result);
+}
+
+//  评论分词结果入库
+function setCommentSplitData(req, res) {
+    let comment = require('../data/wfx_comments_split.json');
+    let tokens = [],
+        combtokens = [];
+    comment.forEach((item, i) => {
+        if (!Reflect.has(item, 'tokens')) {
+            console.log('第' + i + '条token数据未读取，id:' + item.comment_id);
+            return;
+        }
+        let oneToken = item.tokens.map(token => {
+            return {
+                item_id: item.item_id,
+                comment_id: item.comment_id,
+                word: token.word,
+                wtype: token.wtype
+            };
+        });
+        tokens.push(oneToken);
+
+        if (!Reflect.has(item, 'combtokens')) {
+            console.log('第' + i + '条combtokens数据未读取，id:' + item.comment_id);
+            return;
+        }
+        item.combtokens.forEach(token => {
+            if (token == null) {
+                return;
+            }
+            combtokens.push({
+                item_id: item.item_id,
+                comment_id: item.comment_id,
+                word: token.word
+            });
+        });
+    });
+
+    // 添加入库逻辑
+    res.json({
+        combtokens, // 表单一
+        tokens // 表单二
+    });
+}
+
+// 评分分数入库
+function setCommentScore(req, res) {
+    let comment = require('../data/wfx_comments_score.json');
+
+    let score = comment.map(item => {
+        return {
+            item_id: item.item_id,
+            comment_id: item.comment_id,
+            negative: item.negative,
+            positive: item.positive
+        }
+    });
+
+    // 添加入库逻辑
+    res.json(score);
 }
 
 module.exports = {
     setStockData,
     getGoodList,
-    setCommentData
+    setCommentData,
+    setCommentSplitData,
+    setCommentScore
 }
