@@ -159,7 +159,7 @@ CREATE TABLE `wfx_comment_list` (
 `id`  bigint NOT NULL AUTO_INCREMENT ,
 `item_id`  int NOT NULL COMMENT '商品编号' ,
 `order_item_id`  int NOT NULL COMMENT '订单编号' ,
-`comment`  varchar(255) NULL COMMENT '评论内容' ,
+`detail`  varchar(255) NULL COMMENT '评论内容' ,
 `create_time`  datetime NOT NULL COMMENT '评论时间' ,
 PRIMARY KEY (`id`),
 INDEX `idx_wfx_comment_item` (`item_id`) USING BTREE ,

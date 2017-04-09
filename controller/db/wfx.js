@@ -10,7 +10,7 @@ function setStockData(req, res) {
         data: arr
     }
     let sqlStr = sqlParser.handleWfxStockData(spiderData)
-    query(sqlStr, function(result) {
+    query(sqlStr, function (result) {
         let str = JSON.stringify(result)
         res.send(str)
     })
@@ -19,11 +19,18 @@ function setStockData(req, res) {
 // 从mysql取数
 function getGoodList(req, res, next) {
     let sqlStr = sql.query.wfx_itemid_list
-    query(sqlStr, function(result) {
+    query(sqlStr, function (result) {
         let data = JSON.stringify(result)
         data = JSON.parse(data);
         next(data);
     })
+}
+
+async function insertData(sql) {
+    return await query(sql, function (result) {
+        let string = JSON.stringify(result)
+        return string;
+    });
 }
 
 //  评论数据入库
@@ -31,16 +38,34 @@ function setCommentData(req, res) {
     let data = require('../data/wfx_comment.json');
     let result = [];
     data.forEach(comment => {
+        let itemid = undefined;
         comment.forEach(item => {
+            let _itemid = Reflect.get(item, 'item_id');
+            if (itemid === undefined && _itemid != undefined) {
+                itemid = _itemid;
+            }
+            if (_itemid === undefined && itemid != undefined) {
+                Reflect.set(item, 'item_id', itemid);
+            }
             Reflect.deleteProperty(item, 'type');
             Reflect.deleteProperty(item, 'status');
             Reflect.deleteProperty(item, 'order_show_id');
+            Reflect.deleteProperty(item, 'mobile');
             result.push(item);
         });
     });
 
     // 添加将评论结果入库逻辑
-    res.json(result);
+    let promises = result.forEach((comment, i) => {
+        console.log('正在插入第' + (i + 1) + '条数据');
+        let sqlStr = sqlParser.handleWfxCommentList(comment);
+        return insertData(sqlStr);
+    });
+    Promise.all(promises).then(item => {
+        res.json({
+            msg: '所有数据插入完毕'
+        });
+    });
 }
 
 //  评论分词结果入库
