@@ -150,3 +150,23 @@ CREATE TABLE `smzdm`.`ccgold_goods_detail` (
 ) ENGINE=`InnoDB` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci COMMENT='某电商商品详情';
 ALTER TABLE `ccgold_goods_detail`
 ADD INDEX `idx_ccgold_good_recdate_2` (`good_id`, `rec_date`) USING BTREE ;
+
+-- ----------------------------
+-- table wfx_comment_list
+-- ----------------------------
+drop TABLE if EXISTS `wfx_comment_list`;
+CREATE TABLE `wfx_comment_list` (
+`id`  bigint NOT NULL AUTO_INCREMENT ,
+`item_id`  int NOT NULL COMMENT '商品编号' ,
+`order_item_id`  int NOT NULL COMMENT '订单编号' ,
+`comment`  varchar(255) NULL COMMENT '评论内容' ,
+`create_time`  datetime NOT NULL COMMENT '评论时间' ,
+PRIMARY KEY (`id`),
+INDEX `idx_wfx_comment_item` (`item_id`) USING BTREE ,
+INDEX `idx_wfx_comment_order` (`order_item_id`) USING BTREE ,
+INDEX `idx_wfx_comment_date` (`create_time`) USING BTREE 
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
+COMMENT='微分销订单评论';
+
