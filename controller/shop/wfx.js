@@ -186,19 +186,25 @@ function getComment(req, res) {
 function splitComment(req, res) {
     let data = require('../data/wfx_comment.json');
     let result = [];
-    data.forEach(comments => {
-        comments.forEach(item => {
-            let segText = segment.doSegment(item.detail, {
-                stripPunctuation: true
-            });
-            result.push(Object.assign(util.handleWordSegment(segText), {
-                item_id: item.item_id,
-                detail: item.detail
-            }));
+    // data.forEach(comments => {
+    //     comments.forEach(item => {
+    //         let segText = segment.doSegment(item.detail, {
+    //             stripPunctuation: true
+    //         });
+    //         result.push(Object.assign(util.handleWordSegment(segText), {
+    //             item_id: item.item_id,
+    //             detail: item.detail
+    //         }));
+    //     });
+    // });
+    let item = data[0][0];
+    util.wordSegment(item.detail).then(response => {
+        res.send({
+            segtext: response.tokens,
+            detail: item.detail
         });
-    });
+    })
 
-    res.send(result);
 }
 
 module.exports = {

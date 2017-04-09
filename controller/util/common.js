@@ -143,6 +143,24 @@ function handleWordSegment(wordList) {
     };
 }
 
+function wordSegment(content) {
+
+    let postData = querystring.stringify({
+        api: nlp.apiList.LexicalAnalysis,
+        body_data: JSON.stringify({
+            code: 2097152, // 0x20000
+            type: 1,
+            text: content
+        })
+    });
+
+    return new Promise((resolve, reject) => {
+        nlp.tencentNLPAnaly(postData, data => {
+            resolve(data);
+        });
+    });
+}
+
 function getNegativeWordsByTencentApi(content) {
     console.log(npl.tencentAuth('我买的是1盎司的，而里面的包装盒却是个1／2盎司的，我是无语了'));
 }
@@ -165,5 +183,6 @@ module.exports = {
     getNow,
     parseHTML,
     handleWordSegment,
-    getNegativeWords
+    getNegativeWords,
+    wordSegment
 }

@@ -17,17 +17,9 @@ let headers = {
         "Host": "www.symint615.com"
     },
     tencent: {
-        "Accept": "application/json, text/javascript, */*; q=0.01",
-        "Accept-Encoding": "gzip, deflate",
-        "Accept-Language": "zh-CN,zh;q=0.8",
-        "Connection": "keep-alive",
         "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
         "Cookie": "pgv_pvi=2208498688; pgv_si=s9238280192",
-        "Host": "nlp.qq.com",
-        "Origin": "http://nlp.qq.com",
-        "Referer": "http://nlp.qq.com/semantic.cgi",
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36",
-        "X-Requested-With": "XMLHttpRequest"
+        "Referer": "http://nlp.qq.com/semantic.cgi"
     }
 }
 module.exports = {

@@ -89,7 +89,14 @@ function tencentNLPAnaly(postData, callback) {
 }
 
 let apiList = {
-    TextSentiment: 12
+    TextSentiment: 12,
+    LexicalAnalysis: 2
+        /*
+            http://nlp.qq.com/help.cgi?topic=api#analysis
+            code:text的编码(0x00200000== utf-8) 目前文智统一输入为utf-8
+            type:0为基础粒度版分词，倾向于将句子切分的更细，在搜索场景使用为佳。
+                 1为混合粒度版分词，倾向于保留更多基本短语不被切分开。
+        */
 };
 
 module.exports = {
