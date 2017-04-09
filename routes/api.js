@@ -34,4 +34,12 @@ router.get('/wfx/comment', function(req, res, next) {
     wfx.setCommentData(req, res);
 });
 
+router.get('/wfx/comment/split', function(req, res, next) {
+    wfx.setCommentSplitData(req, res);
+});
+
+router.get('/wfx/comment/score', function(req, res, next) {
+    wfx.setCommentScore(req, res);
+});
+
 module.exports = router;
