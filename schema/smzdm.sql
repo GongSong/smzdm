@@ -171,19 +171,19 @@ DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
 COMMENT='微分销订单评论';
 
 -- ---------------------------------
--- table wfx_commentsplit_nlp
+-- table wfx_comment_nlp
 -- ---------------------------------
-drop TABLE if EXISTS `wfx_commentsplit_nlp`;
-CREATE TABLE `wfx_commentsplit_nlp` (
+drop TABLE if EXISTS `wfx_comment_nlp`;
+CREATE TABLE `wfx_comment_nlp` (
 `id`  bigint NOT NULL AUTO_INCREMENT ,
 `item_id`  int NOT NULL COMMENT '商品编号' ,
 `comment_id`  int NOT NULL COMMENT '评论编号' ,
 `negative`  double NOT NULL COMMENT '负面得分' ,
 `positive`  double NOT NULL COMMENT '正面得分' ,
 PRIMARY KEY (`id`),
-INDEX `idx_wfx_commentsplit_item` (`item_id`) USING BTREE ,
-INDEX `idx_wfx_commentsplit_neg` (`negative`) USING BTREE ,
-INDEX `idx_wfx_commentsplit_post` (`positive`) USING BTREE 
+INDEX `idx_wfx_comment_item` (`item_id`) USING BTREE ,
+INDEX `idx_wfx_comment_neg` (`negative`) USING BTREE ,
+INDEX `idx_wfx_comment_post` (`positive`) USING BTREE 
 )
 ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
