@@ -189,3 +189,20 @@ ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
 COMMENT='微分销评论自然语言分析';
 
+-- -------------------------------
+-- table wfx_comment_seg
+-- -------------------------------
+DROP TABLE if EXISTS `wfx_comment_seg`;
+CREATE TABLE `wfx_comment_seg` (
+`id`  bigint NOT NULL AUTO_INCREMENT ,
+`item_id`  int NOT NULL COMMENT '商品编号' ,
+`comment_id`  int NOT NULL COMMENT '评论编号' ,
+`word`  varchar(20) NOT NULL COMMENT '词语' ,
+PRIMARY KEY (`id`),
+INDEX `idx_wfx_commentseg_item` (`item_id`) USING BTREE ,
+INDEX `idx_wfx_commentseg_comment` (`comment_id`) USING BTREE ,
+INDEX `idx_wfx_commentseg_word` (`word`) USING HASH 
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
+COMMENT='微分销评论分词';
