@@ -141,7 +141,7 @@ async function getCommentById(item_id, page = 1) {
         if (typeof comments.data.length == 0) {
             return [];
         } else if (comments.data.length < 10) {
-            return parser.wfx.commentInfo(comments.data);
+            return parser.wfx.commentInfo(comments.data, item_id);
         }
         return getCommentById(item_id, page + 1)
             .then(res => {
@@ -149,7 +149,7 @@ async function getCommentById(item_id, page = 1) {
                 if (typeof res.data != 'undefined') {
                     res = res.data.data;
                 }
-                return parser.wfx.commentInfo([...comments.data, ...res]);
+                return parser.wfx.commentInfo([...comments.data, ...res], item_id);
             });
     }).catch(e => console.log(e));
 }

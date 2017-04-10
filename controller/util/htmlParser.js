@@ -148,11 +148,11 @@ let wfx = {
     //     }
     //     return util.parseHTML(options);
     // }
-    commentInfo(comments) {
+    commentInfo(comments, item_id) {
         // 除首页外，其它页无头像信息
         return comments.map(json => {
             return {
-                item_id: json.type_id,
+                item_id,
                 detail: json.detail,
                 order_show_id: json.order_show_id,
                 order_item_id: json.order_item_id,
