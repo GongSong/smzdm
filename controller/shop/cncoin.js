@@ -237,18 +237,6 @@ async function getComment(startId = 1) {
     }
 }
 
-function readCommentFromDisk(i) {
-
-    let content = 'Comment';
-    let fileName = util.getMainContent() + '/controller/data/cncoin' + content + '/itemid_' + i + '.json';
-
-    let str = fs.readFileSync(fileName, 'utf-8');
-    let comment = JSON.parse(str);
-    console.log(typeof comment);
-    console.log(comment);
-
-}
-
 async function getCommentDetail(goodsId) {
     let records = await getCommentById(goodsId);
     let loopTimes = Math.ceil(records.count / PAGESIZE);
@@ -316,6 +304,17 @@ async function splitComment(req, res) {
         console.log('第' + i + '条数据读取完毕\n');
     }
     res.json(comments);
+}
+
+function readCommentFromDisk(i) {
+
+    let content = 'Comment';
+    let fileName = util.getMainContent() + '/controller/data/cncoin' + content + '/itemid_' + i + '.json';
+
+    let str = fs.readFileSync(fileName, 'utf-8');
+    let comment = JSON.parse(str);
+    console.log(typeof comment);
+    console.log(comment);
 }
 
 // async function getCommentScore(req, res) {
