@@ -84,7 +84,7 @@ function handleWfxCommentNlp(obj){
  */
 function handleWfxCommentSeg(obj){
     let url = sql.insert.wfx_comment_seg;
-    let sqlValues = `(${obj.item_id},${obj.comment_id},'${obj.word}','${obj.wtype}')`;
+    let sqlValues = `(${obj.item_id},${obj.comment_id},'${obj.word}','${obj.wtype}',${obj.pos})`;
     url = url.replace('?',sqlValues);
     return url;
 }

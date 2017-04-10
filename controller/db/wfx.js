@@ -88,7 +88,8 @@ function setCommentSplitData(req, res) {
                 item_id: item.item_id,
                 comment_id: item.comment_id,
                 word: token.word,
-                wtype: token.wtype
+                wtype: token.wtype,
+                pos: token.pos
             };
         });
         oneToken.forEach((v,i) =>{
@@ -109,7 +110,8 @@ function setCommentSplitData(req, res) {
                 item_id: item.item_id,
                 comment_id: item.comment_id,
                 word: token.word,
-                wtype: COMBTOKEN_TYPE
+                wtype: COMBTOKEN_TYPE,
+                pos:token.pos
             });
         });
     });
