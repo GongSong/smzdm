@@ -179,10 +179,18 @@ function getNegativeWords(content) {
     });
 }
 
+// 程序主目录
+function getMainContent() {
+    let PROGRAM_NAME = 'smzdm';
+    let str = process.cwd().split(PROGRAM_NAME)[0] + PROGRAM_NAME;
+    return str.replace(/\\/g, '/');
+}
+
 module.exports = {
     getNow,
     parseHTML,
     handleWordSegment,
     getNegativeWords,
-    wordSegment
+    wordSegment,
+    getMainContent
 }

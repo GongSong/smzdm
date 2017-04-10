@@ -265,6 +265,14 @@ let cncoin = {
         })
         return goodInfo;
     },
+    comment(comments, id) {
+        return comments.map(item => {
+            // 去除所有html 标签
+            item.replyContent = item.replyContent.replace(/<[^>]+>/g, "");
+            item.item_id = id;
+            return item;
+        });
+    }
 }
 
 module.exports = {

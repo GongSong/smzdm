@@ -70,9 +70,9 @@ router.get('/cncoin/detail', function(req, res) {
     crawler.cncoin.getDetail(req, res);
 });
 
-// cncoin交易记录
-router.get('/cncoin/trade', function(req, res) {
-    crawler.cncoin.getTradeRecord(req, res);
+// cncoin
+router.get('/cncoin/comment', function(req, res) {
+    crawler.cncoin.getComment(req, res);
 });
 
 module.exports = router;

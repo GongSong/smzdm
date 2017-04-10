@@ -20,23 +20,21 @@ function asyncStorageNum() {
 
 }
 
-// 同步交易记录
-function asyncTradeRecord() {
-    cncoin.getTradeRecord();
-}
-
-// 同步评论信息
-function asyncComment() {
-
-}
-
 async function init() {
     await dbInit();
     await dbDataInit();
 }
 
 async function asyncData() {
-    await asyncTradeRecord();
+
+    // 同步交易记录
+    // await cncoin.getTradeRecord();
+
+    // 同步评论信息
+    // await cncoin.getQuestion();
+
+    // 分割评论信息
+    // await cncoin.splitComment();
 }
 
 module.exports = {

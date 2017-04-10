@@ -87,41 +87,19 @@ async function getDetail(req, res) {
     res.json(goodsInfo);
 }
 
-async function getRecordDetail(goodsId, pageNo = 1) {
-    let recordCount = await getTradeRecordById(goodsId);
-    let loopTimes = Math.ceil(recordCount / PAGESIZE);
-
-    let recordList = [];
-
-    for (var i = 1; i <= loopTimes; i++) {
-        let record = await getTradeRecordById(goodsId, i, loopTimes);
-        recordList = [...recordList, ...record];
-    }
-
-    return recordList;
-}
-
 // 获取交易记录
-// 将url换为http://www.chinagoldcoin.net/views/newDetail/detail/new-more-zx.jsp?pageNo=3&pageSize=20&goodsId=68 时则获取评论记录
 function getTradeRecordById(goodsId, pageNo = 0, loopTimes = 0) {
 
     console.log(`正在抓取，商品id：${goodsId},页码:${pageNo}/${loopTimes}`);
-
-    let params = {
-        goodsId,
-        pageNo,
-        pageSize: PAGESIZE
-    };
-
-    let url = 'http://www.chinagoldcoin.net/views/newDetail/detail/new-more-buy.jsp'
-
     let config = {
         method: 'get',
-        url,
-        params,
+        url: 'http://www.chinagoldcoin.net/views/newDetail/detail/new-more-buy.jsp',
+        params: {
+            goodsId,
+            pageNo,
+            pageSize: PAGESIZE
+        }
     }
-
-    let data = [];
 
     return axios(config).then(res => {
         let record = res.data[0];
@@ -146,131 +124,93 @@ function getTradeRecordById(goodsId, pageNo = 0, loopTimes = 0) {
 // 由于任务较多，该函数仅在task中启动，不在浏览器中显示（否则会因请求超时再次加载）
 
 async function getTradeRecord(startId = 1) {
+    saveData2Content('Record', getTradeRecordById);
+}
+
+// 根据id获取单件商品数据列表
+async function getDataList(goodsId, detailFunc, pageNo = 1) {
+    let recordCount = await detailFunc(goodsId);
+    let loopTimes = Math.ceil(recordCount / PAGESIZE);
+
+    let recordList = [];
+
+    for (var i = 1; i <= loopTimes; i++) {
+        let record = await detailFunc(goodsId, i, loopTimes);
+        recordList = [...recordList, ...record];
+    }
+
+    return recordList;
+}
+
+//将对应数据存到指定目录
+async function saveData2Content(content, detailFunc, startId = 1) {
     let goodsList = require('../data/cncoinGoodsList.json');
     let MAX_NUM = goodsList.length;
     let recordInfo = [];
 
     for (let i = startId; i <= MAX_NUM; i++) {
-        let record = await getRecordDetail(i);
-        let fileName = process.cwd() + '\\controller\\data\\cncoinRecord\\itemid_' + i + '.json';
+        let record = await getDataList(i, detailFunc);
+        let fileName = util.getMainContent() + '/controller/data/cncoin' + content + '/itemid_' + i + '.json';
         fs.writeFileSync(fileName, JSON.stringify(record), 'utf8');
-        console.log('第' + i + '项数据写入完毕\n');
+        console.log(content + ':第' + i + '项数据写入完毕\n');
     }
-    console.log('cncoin全部交易记录数据写入完成');
 }
 
-// async function getCommentById(item_id, page = 1) {
+// 获取咨询信息
+function getQuestionById(goodsId, pageNo = 0, loopTimes = 0) {
 
-//     console.log('正在抓取第' + page + '页');
-//     let url = 'http://www.symint615.com/Item/getItemComment';
-//     let config = {
-//         method: 'get',
-//         url,
-//         params: {
-//             item_id,
-//             p: page
-//         },
-//         headers: spiderSetting.headers.wfx
-//     };
+    console.log(`正在抓取，商品id：${goodsId},页码:${pageNo}/${loopTimes}`);
 
-//     return await axios(config).then(res => {
-//         let comments = res.data;
-//         // 如果当前页无数据或小于每页最大产品数量10，则表示下一页无数据
-//         if (typeof comments.data.length == 0) {
-//             return [];
-//         } else if (comments.data.length < 10) {
-//             return parser.wfx.commentInfo(comments.data);
-//         }
-//         return getCommentById(item_id, page + 1)
-//             .then(res => {
-//                 // 2017年接口升级后，第2页以后的评论返回结果非标准json格式，即内容没在 res.data中，而是直接返回 array结果。
-//                 if (typeof res.data != 'undefined') {
-//                     res = res.data.data;
-//                 }
-//                 return parser.wfx.commentInfo([...comments.data, ...res]);
-//             });
-//     }).catch(e => console.log(e));
-// }
+    let config = {
+        method: 'get',
+        url: 'http://www.chinagoldcoin.net/views/newDetail/detail/new-more-zx.jsp',
+        params: {
+            goodsId,
+            pageNo,
+            pageSize: PAGESIZE
+        }
+    }
 
-// function getComment(req, res) {
+    return axios(config).then(res => {
+        let record = res.data[0];
+        // 如果只是获取评论总数
+        if (pageNo == 0) {
+            return record.count;
+        }
+        // 获取评论详情，需要做字段转换
+        return parser.cncoin.comment(record.recordList, goodsId);
+    })
+}
 
-//     let testMode = false;
+async function getQuestion(startId = 1) {
+    saveData2Content('Question', getQuestionById);
+}
 
-//     dbResult.getGoodList(req, res, (data) => {
-//         if (!testMode) {
-//             let promises = data.map(item => getCommentById(item.item_id));
-//             Promise.all(promises)
-//                 .then(result => {
-//                     // 去除空数据
-//                     let arr = [];
-//                     result.forEach(item => {
-//                         if (item == null) {
-//                             return;
-//                         }
-//                         if (JSON.stringify(item) != '[]') {
-//                             arr.push(item);
-//                         }
-//                     })
-//                     res.send(arr);
-//                 })
-//         } else {
-//             getCommentById(data[7].item_id).then(result => {
-//                 res.send(result);
-//             })
-//         }
-//     })
-// }
+async function splitComment(req, res) {
+    let data = require('../data/cncoinGoodsList.json');
+    let idList = data.map(item => item.item_id);
 
-// // 用node-segment分词并做词性处理
-// function splitCommentBySegment(req, res) {
-//     let data = require('../data/wfx_comment.json');
-//     let result = [];
+    let result = [];
+    let comments = [];
 
-//     data.forEach(comment => {
-//         comment.forEach(item => {
-//             let segText = segment.doSegment(item.detail, {
-//                 stripPunctuation: true
-//             });
-//             result.push(Object.assign(util.handleWordSegment(segText), {
-//                 item_id: item.item_id,
-//                 detail: item.detail
-//             }));
-//         });
-//     });
-
-//     res.json(result);
-// }
-
-// async function splitComment(req, res) {
-//     let data = require('../data/wfx_comment.json');
-//     let result = [];
-
-//     data.forEach(comment => {
-//         comment.forEach(item => {
-//             result.push(item);
-//         });
-//     });
-
-//     let comments = [];
-
-//     // 按序号依次读取数据，降低接口请求频次，必要时应增加延时
-//     // 用for循环同步执行，即在await完成之后才执行 i++
-//     // 用forEach/map等遍历函数，其回调函数不能是 async函数，无法在其中使用await,数据将被异步执行
-//     for (let i = 0; i < result.length; i++) {
-//         let item = result[i];
-//         await util.wordSegment(item.detail).then(response => {
-//             comments.push({
-//                 detail: item.detail,
-//                 item_id: item.item_id,
-//                 tokens: response.tokens,
-//                 combtokens: response.combtokens,
-//                 comment_id: item.order_item_id
-//             });
-//         })
-//         console.log('第' + i + '条数据读取完毕\n');
-//     }
-//     res.json(comments);
-// }
+    // 按序号依次读取数据，降低接口请求频次，必要时应增加延时
+    // 用for循环同步执行，即在await完成之后才执行 i++
+    // 用forEach/map等遍历函数，其回调函数不能是 async函数，无法在其中使用await,数据将被异步执行
+    for (let i = 0; i < result.length; i++) {
+        let item = result[i];
+        await util.wordSegment(item.detail).then(response => {
+            comments.push({
+                detail: item.detail,
+                item_id: item.item_id,
+                tokens: response.tokens,
+                combtokens: response.combtokens,
+                comment_id: item.order_item_id
+            });
+        })
+        console.log('第' + i + '条数据读取完毕\n');
+    }
+    res.json(comments);
+}
 
 // async function getCommentScore(req, res) {
 //     let data = require('../data/wfx_comment.json');
@@ -301,7 +241,8 @@ async function getTradeRecord(startId = 1) {
 module.exports = {
     getGoodsList,
     getDetail,
-    getTradeRecord
+    getTradeRecord,
+    getQuestion
     // getComment,
     // splitComment,
     // getCommentScore
