@@ -3,6 +3,9 @@ let sqlParser = require('../util/sqlParser')
 let sql = require('../../schema/sql.js')
 let util = require('../util/common')
 
+var COMBTOKEN_TYPE = '短语';
+var IGNORE_TYPE = '标点符号';
+
 // 从json取数据
 function setStockData(req, res) {
     let arr = require('../data/wfx_shenyang.json')
@@ -51,19 +54,22 @@ function setCommentData(req, res) {
             Reflect.deleteProperty(item, 'status');
             Reflect.deleteProperty(item, 'order_show_id');
             Reflect.deleteProperty(item, 'mobile');
-            result.push(item);
+            if (itemid != undefined) {
+                result.push(item);
+            }
         });
     });
 
     // 添加将评论结果入库逻辑
-    let promises = result.forEach((comment, i) => {
+    let promises = [];
+    result.forEach((comment, i) => {
         console.log('正在插入第' + (i + 1) + '条数据');
         let sqlStr = sqlParser.handleWfxCommentList(comment);
-        return insertData(sqlStr);
+        promises.push(insertData(sqlStr));
     });
     Promise.all(promises).then(item => {
         res.json({
-            msg: '所有数据插入完毕'
+            msg: '共' + promises.length + ' 条数据插入完毕'
         });
     });
 }
@@ -71,8 +77,7 @@ function setCommentData(req, res) {
 //  评论分词结果入库
 function setCommentSplitData(req, res) {
     let comment = require('../data/wfx_comments_split.json');
-    let tokens = [],
-        combtokens = [];
+    let tokens = [];
     comment.forEach((item, i) => {
         if (!Reflect.has(item, 'tokens')) {
             console.log('第' + i + '条token数据未读取，id:' + item.comment_id);
@@ -86,7 +91,11 @@ function setCommentSplitData(req, res) {
                 wtype: token.wtype
             };
         });
-        tokens.push(oneToken);
+        oneToken.forEach((v,i) =>{
+            if(v.wtype !== IGNORE_TYPE){
+                tokens.push(v);
+            }
+        });
 
         if (!Reflect.has(item, 'combtokens')) {
             console.log('第' + i + '条combtokens数据未读取，id:' + item.comment_id);
@@ -96,18 +105,29 @@ function setCommentSplitData(req, res) {
             if (token == null) {
                 return;
             }
-            combtokens.push({
+            tokens.push({
                 item_id: item.item_id,
                 comment_id: item.comment_id,
-                word: token.word
+                word: token.word,
+                wtype: COMBTOKEN_TYPE
             });
         });
     });
 
     // 添加入库逻辑
-    res.json({
-        combtokens, // 表单一
-        tokens // 表单二
+    let promises = [];
+    tokens.forEach((v, i) => {
+        console.log('正在插入第' + (i + 1) + '条数据');
+        let sqlStr = sqlParser.handleWfxCommentSeg(v);
+        if (Reflect.get(v, 'item_id') !== undefined) {
+            promises.push(insertData(sqlStr));
+        }
+
+    });
+    Promise.all(promises).then(item => {
+        res.json({
+            msg: '共 ' + promises.length + ' 条数据插入完毕'
+        });
     });
 }
 
@@ -125,7 +145,21 @@ function setCommentScore(req, res) {
     });
 
     // 添加入库逻辑
-    res.json(score);
+    let promises = [];
+    score.forEach((v, i) => {
+        console.log('正在插入第' + (i + 1) + '条数据');
+        let sqlStr = sqlParser.handleWfxCommentNlp(v);
+        if (Reflect.get(v, 'item_id') !== undefined) {
+            // console.log(sqlStr);
+            promises.push(insertData(sqlStr));
+        }
+    });
+
+    Promise.all(promises).then(item => {
+        res.json({
+            msg: '共 ' + promises.length + ' 条数据插入完毕'
+        });
+    });
 }
 
 module.exports = {

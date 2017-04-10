@@ -73,7 +73,7 @@ function handleWfxCommentList(obj){
  */
 function handleWfxCommentNlp(obj){
     let url = sql.insert.wfx_comment_nlp;
-    let sqlValues = `(${obj.item_id},${obj.commentid},${obj.negative},${obj.positive})`;
+    let sqlValues = `(${obj.item_id},${obj.comment_id},${obj.negative},${obj.positive})`;
     url = url.replace('?',sqlValues);
     return url;
 }
@@ -84,7 +84,7 @@ function handleWfxCommentNlp(obj){
  */
 function handleWfxCommentSeg(obj){
     let url = sql.insert.wfx_comment_seg;
-    let sqlValues = `(${obj.item_id},${obj.commentid},${obj.word})`;
+    let sqlValues = `(${obj.item_id},${obj.comment_id},'${obj.word}','${obj.wtype}')`;
     url = url.replace('?',sqlValues);
     return url;
 }

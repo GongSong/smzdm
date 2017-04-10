@@ -78,6 +78,7 @@ function tencentNLPAnaly(postData, callback) {
             result += chunk;
         });
         res.on('end', function() {
+            result = result.replace(/ /g,'');
             result = JSON.parse(result);
             callback(result);
         });

@@ -1,414 +1,439 @@
-[{
-  "freight": "23",
-  "score": "17800",
-  "share": "21",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:58",
-  "item_id": 2513979
-}, {
-  "freight": 0,
-  "score": "5980",
-  "share": "6",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2514168
-}, {
-  "freight": "23",
-  "score": "24",
-  "share": "25",
-  "remark": "(满15件包邮)",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2514249
-}, {
-  "freight": "23",
-  "score": "320",
-  "share": "11",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2514345
-}, {
-  "freight": "23",
-  "score": "300",
-  "share": "25",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2514416
-}, {
-  "freight": "23",
-  "score": "198",
-  "share": "14",
-  "remark": "(满2件包邮)",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2514428
-}, {
-  "freight": "23",
-  "score": "5180",
-  "share": "8",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2514431
-}, {
-  "freight": "198件",
-  "score": "¥23  \r\n                            (满3件包邮)",
-  "share": "66",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:58",
-  "item_id": 2525132
-}, {
-  "freight": "23",
-  "score": "350",
-  "share": "148",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:58",
-  "item_id": 2585596
-}, {
-  "freight": 0,
-  "score": "288",
-  "share": "19",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2730266
-}, {
-  "freight": "23",
-  "score": "315",
-  "share": "37",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2730270
-}, {
-  "freight": "23",
-  "score": "855",
-  "share": "19",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2730272
-}, {
-  "freight": "23",
-  "score": "168",
-  "share": "74",
-  "remark": "(满2件包邮)",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2733613
-}, {
-  "freight": 0,
-  "score": "520",
-  "share": "54",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2735420
-}, {
-  "freight": "23",
-  "score": "138",
-  "share": "36",
-  "remark": "(满3件包邮)",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2735421
-}, {
-  "freight": "23",
-  "score": "450",
-  "share": "14",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2735422
-}, {
-  "freight": "23",
-  "score": "218",
-  "share": "103",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2737843
-}, {
-  "freight": "23",
-  "score": "4200",
-  "share": "51",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2738517
-}, {
-  "freight": "23",
-  "score": "500",
-  "share": "29",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2738519
-}, {
-  "freight": "23",
-  "score": "920",
-  "share": "4",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2739243
-}, {
-  "freight": "23",
-  "score": "199",
-  "share": "3",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2739244
-}, {
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2739245,
-  "freight": 0,
-  "score": 0,
-  "share": 0,
-  "remark": "下架"
-}, {
-  "freight": "23",
-  "score": "199",
-  "share": "0",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2739247
-}, {
-  "freight": "23",
-  "score": "950",
-  "share": "18",
-  "remark": "(满1件包邮)",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2739270
-}, {
-  "freight": "23",
-  "score": "368",
-  "share": "7",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2739311
-}, {
-  "freight": 0,
-  "score": "418",
-  "share": "67",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2739467
-}, {
-  "freight": 0,
-  "score": "350",
-  "share": "27",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2739469
-}, {
-  "freight": 0,
-  "score": "1180",
-  "share": "26",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:58",
-  "item_id": 2739470
-}, {
-  "freight": "23",
-  "score": "98",
-  "share": "37",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2739471
-}, {
-  "freight": 0,
-  "score": "9800",
-  "share": "49",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2739472
-}, {
-  "freight": "23.00",
-  "score": "185",
-  "share": "155",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:58",
-  "item_id": 2739994
-}, {
-  "freight": "23",
-  "score": "1280",
-  "share": "93",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2740245
-}, {
-  "freight": "23",
-  "score": "255",
-  "share": "44",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2740509
-}, {
-  "freight": "23",
-  "score": "340",
-  "share": "43",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2740510
-}, {
-  "freight": "23",
-  "score": "169",
-  "share": "55",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:59",
-  "item_id": 2740512
-}, {
-  "freight": "23",
-  "score": "198",
-  "share": "23",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2740515
-}, {
-  "freight": "23",
-  "score": "8000",
-  "share": "14",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2740516
-}, {
-  "freight": "23",
-  "score": "428",
-  "share": "10",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2740517
-}, {
-  "freight": "23",
-  "score": "528",
-  "share": "9",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2740518
-}, {
-  "freight": "23",
-  "score": "168",
-  "share": "85",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:58",
-  "item_id": 2740519
-}, {
-  "freight": "23",
-  "score": "16800",
-  "share": "75",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2740526
-}, {
-  "freight": "23",
-  "score": "205",
-  "share": "67",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:58",
-  "item_id": 2740527
-}, {
-  "freight": "23",
-  "score": "500",
-  "share": "14",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2740532
-}, {
-  "freight": "23.00",
-  "score": "120",
-  "share": "84",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:58",
-  "item_id": 2740698
-}, {
-  "freight": 0,
-  "score": "1080",
-  "share": "12",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2740713
-}, {
-  "freight": "23.00",
-  "score": "163",
-  "share": "42",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2740714
-}, {
-  "freight": 0,
-  "score": "3430",
-  "share": "23",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2740715
-}, {
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2740716,
-  "freight": 0,
-  "score": 0,
-  "share": 0,
-  "remark": "下架"
-}, {
-  "freight": 0,
-  "score": "350",
-  "share": "18",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2740717
-}, {
-  "freight": 0,
-  "score": "1380",
-  "share": "29",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2745555
-}, {
-  "freight": 0,
-  "score": "1100",
-  "share": "9",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2745871
-}, {
-  "freight": 0,
-  "score": "5200",
-  "share": "10",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2745872
-}, {
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2746078,
-  "freight": 0,
-  "score": 0,
-  "share": 0,
-  "remark": "下架"
-}, {
-  "freight": 0,
-  "score": "940",
-  "share": "11",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2746079
-}, {
-  "freight": 0,
-  "score": "2200",
-  "share": "7",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2746181
-}, {
-  "freight": "23",
-  "score": "260",
-  "share": "19",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2746184
-}, {
-  "freight": 0,
-  "score": "345",
-  "share": "6",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2746185
-}, {
-  "freight": 0,
-  "score": "3180",
-  "share": "44",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:57",
-  "item_id": 2746608
-}, {
-  "freight": 0,
-  "score": "600",
-  "share": "16",
-  "remark": "",
-  "rec_date": "2017-04-07 23:15:58",
-  "item_id": 2746626
-}]
+[
+    {
+        "freight": "23",
+        "score": "17800",
+        "share": "21",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2513979
+    },
+    {
+        "freight": "23",
+        "score": "17800",
+        "share": "21",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2513979
+    },
+    {
+        "freight": 0,
+        "score": "5980",
+        "share": "6",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2514168
+    },
+    {
+        "freight": 0,
+        "score": "5980",
+        "share": "6",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2514168
+    },
+    {
+        "freight": "23",
+        "score": "24",
+        "share": "25",
+        "remark": "(满15件包邮)",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2514249
+    },
+    {
+        "freight": "23",
+        "score": "24",
+        "share": "25",
+        "remark": "(满15件包邮)",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2514249
+    },
+    {
+        "freight": "23",
+        "score": "320",
+        "share": "11",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2514345
+    },
+    {
+        "freight": "23",
+        "score": "320",
+        "share": "11",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2514345
+    },
+    {
+        "freight": "23",
+        "score": "300",
+        "share": "25",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2514416
+    },
+    {
+        "freight": "23",
+        "score": "300",
+        "share": "25",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2514416
+    },
+    {
+        "freight": "23",
+        "score": "198",
+        "share": "14",
+        "remark": "(满2件包邮)",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2514428
+    },
+    {
+        "freight": "23",
+        "score": "198",
+        "share": "14",
+        "remark": "(满2件包邮)",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2514428
+    },
+    {
+        "freight": "23",
+        "score": "5180",
+        "share": "8",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2514431
+    },
+    {
+        "freight": "23",
+        "score": "5180",
+        "share": "8",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2514431
+    },
+    {
+        "freight": "198件",
+        "score": "¥23  \r\n                            (满3件包邮)",
+        "share": "66",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2525132
+    },
+    {
+        "freight": "198件",
+        "score": "¥23  \r\n                            (满3件包邮)",
+        "share": "66",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2525132
+    },
+    {
+        "freight": "23",
+        "score": "350",
+        "share": "148",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2585596
+    },
+    {
+        "freight": "23",
+        "score": "350",
+        "share": "148",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2585596
+    },
+    {
+        "freight": 0,
+        "score": "288",
+        "share": "19",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2730266
+    },
+    {
+        "freight": 0,
+        "score": "288",
+        "share": "19",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2730266
+    },
+    {
+        "freight": "23",
+        "score": "315",
+        "share": "37",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2730270
+    },
+    {
+        "freight": "23",
+        "score": "855",
+        "share": "19",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2730272
+    },
+    {
+        "freight": "23",
+        "score": "168",
+        "share": "74",
+        "remark": "(满2件包邮)",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2733613
+    },
+    {
+        "freight": 0,
+        "score": "520",
+        "share": "54",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2735420
+    },
+    null,
+    {
+        "freight": "23",
+        "score": "450",
+        "share": "14",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2735422
+    },
+    null,
+    {
+        "freight": "23",
+        "score": "500",
+        "share": "29",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2738519
+    },
+    {
+        "freight": "23",
+        "score": "920",
+        "share": "4",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2739243
+    },
+    {
+        "freight": "23",
+        "score": "199",
+        "share": "3",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2739244
+    },
+    {
+        "freight": "23",
+        "score": "596",
+        "share": "9",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2739245
+    },
+    null,
+    {
+        "freight": "23",
+        "score": "950",
+        "share": "18",
+        "remark": "(满1件包邮)",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2739270
+    },
+    {
+        "freight": "23",
+        "score": "368",
+        "share": "7",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2739311
+    },
+    {
+        "freight": 0,
+        "score": "418",
+        "share": "67",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2739467
+    },
+    {
+        "freight": 0,
+        "score": "350",
+        "share": "27",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2739469
+    },
+    {
+        "freight": 0,
+        "score": "1180",
+        "share": "26",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2739470
+    },
+    {
+        "freight": "23",
+        "score": "98",
+        "share": "37",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2739471
+    },
+    {
+        "freight": "23.00",
+        "score": "185",
+        "share": "155",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2739994
+    },
+    null,
+    {
+        "freight": "23",
+        "score": "255",
+        "share": "44",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2740509
+    },
+    {
+        "freight": "23",
+        "score": "340",
+        "share": "43",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2740510
+    },
+    {
+        "freight": "23",
+        "score": "169",
+        "share": "55",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2740512
+    },
+    {
+        "freight": "23",
+        "score": "198",
+        "share": "23",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2740515
+    },
+    {
+        "freight": "23",
+        "score": "8000",
+        "share": "14",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2740516
+    },
+    {
+        "freight": "23",
+        "score": "428",
+        "share": "10",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2740517
+    },
+    {
+        "freight": "23",
+        "score": "528",
+        "share": "9",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2740518
+    },
+    {
+        "freight": "23",
+        "score": "168",
+        "share": "85",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2740519
+    },
+    {
+        "freight": "23",
+        "score": "205",
+        "share": "67",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2740527
+    },
+    {
+        "freight": "23",
+        "score": "500",
+        "share": "14",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2740532
+    },
+    {
+        "freight": "23.00",
+        "score": "120",
+        "share": "84",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2740698
+    },
+    {
+        "freight": 0,
+        "score": "1080",
+        "share": "12",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2740713
+    },
+    null,
+    {
+        "freight": 0,
+        "score": "3430",
+        "share": "23",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2740715
+    },
+    {
+        "freight": 0,
+        "score": "5154",
+        "share": "4",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2740716
+    },
+    {
+        "freight": 0,
+        "score": "350",
+        "share": "18",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2740717
+    },
+    {
+        "freight": 0,
+        "score": "1100",
+        "share": "9",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2745871
+    },
+    {
+        "freight": 0,
+        "score": "5200",
+        "share": "10",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2745872
+    },
+    {
+        "freight": "23.00",
+        "score": "10",
+        "share": "6",
+        "remark": "",
+        "rec_date": "2017-04-10 23:09:43",
+        "item_id": 2746078
+    }
+]

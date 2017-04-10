@@ -198,10 +198,12 @@ CREATE TABLE `wfx_comment_seg` (
 `item_id`  int NOT NULL COMMENT '商品编号' ,
 `comment_id`  int NOT NULL COMMENT '评论编号' ,
 `word`  varchar(20) NOT NULL COMMENT '词语' ,
+`word_type` varchar(10) COMMENT '词语（词组）类型',
 PRIMARY KEY (`id`),
 INDEX `idx_wfx_commentseg_item` (`item_id`) USING BTREE ,
 INDEX `idx_wfx_commentseg_comment` (`comment_id`) USING BTREE ,
-INDEX `idx_wfx_commentseg_word` (`word`) USING HASH 
+INDEX `idx_wfx_commentseg_word` (`word`) USING HASH,
+INDEX `idx_wfx_commentseg_type` (`word_type`) USING HASH 
 )
 ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
