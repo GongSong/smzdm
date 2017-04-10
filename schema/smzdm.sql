@@ -121,8 +121,8 @@ CREATE TABLE `smzdm`.`ccgold_goods` (
 	`good_id` int NOT NULL COMMENT '电商系统商品编号',
 	`good_name` varchar(255) COMMENT '商品名称',
 	`good_cate` smallint COMMENT '商品分类',
-	`img_src` varchar(255),
-	`shop_name` varchar(255),
+	`img_src` varchar(255) COMMENT '图片链接地址',
+	`shop_name` varchar(255) COMMENT '店铺名',
 	`rec_date` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '记录日期',
 	PRIMARY KEY (`id`)
 ) ENGINE=`InnoDB` DEFAULT CHARACTER SET utf8 COMMENT='某电商商品列表';
