@@ -178,12 +178,118 @@ function getQuestionById(goodsId, pageNo = 0, loopTimes = 0) {
             return record.count;
         }
         // 获取评论详情，需要做字段转换
-        return parser.cncoin.comment(record.recordList, goodsId);
+        return parser.cncoin.question(record.recordList, goodsId);
     })
 }
 
 async function getQuestion(startId = 1) {
     saveData2Content('Question', getQuestionById);
+}
+
+// id:68/72/121 的用户评论信息无法读取
+async function getBadListComment(id) {
+    let typeList = ['middle', 'bad', 'image']; // good,all
+
+    let result = await getCommentById(id, 0, 0, 'middle');
+
+    let data = [];
+
+    for (let i = 1; i < 3; i++) {
+        let item = await getCommentById(id, 1, 0, typeList[i]);
+        data = [...data, ...item];
+    }
+    result.data = data;
+    return result;
+}
+
+async function handleSpecialComment() {
+    let idList = [68, 72, 121];
+    let content = 'Comment';
+    for (let i = 0; i < 3; i++) {
+        let result = await getBadListComment(idList[i]);
+        let fileName = util.getMainContent() + '/controller/data/cncoin' + content + '/itemid_' + idList[i] + '.json';
+        fs.writeFileSync(fileName, JSON.stringify(result), 'utf8');
+    }
+    console.log('数据读取完成');
+}
+
+async function getComment(startId = 1) {
+
+    let goodsList = require('../data/cncoinGoodsList.json');
+    let MAX_NUM = goodsList.length;
+    let recordInfo = [];
+
+    let content = 'Comment';
+
+    /**
+     * id =68 (5059条);id=72 (2741条);id= 121 (1318条)
+     * 读取中评、差评、有晒单（好评无法读取）
+     * good,middle,bad,image
+     */
+    for (let i = startId; i <= MAX_NUM; i++) {
+        if (i == 68 || i == 72 || i == 121) {
+            // 第68号无法读取出来
+            return;
+        }
+        let record = await getCommentDetail(i);
+        let fileName = util.getMainContent() + '/controller/data/cncoin' + content + '/itemid_' + i + '.json';
+        fs.writeFileSync(fileName, JSON.stringify(record), 'utf8');
+    }
+}
+
+function readCommentFromDisk(i) {
+
+    let content = 'Comment';
+    let fileName = util.getMainContent() + '/controller/data/cncoin' + content + '/itemid_' + i + '.json';
+
+    let str = fs.readFileSync(fileName, 'utf-8');
+    let comment = JSON.parse(str);
+    console.log(typeof comment);
+    console.log(comment);
+
+}
+
+async function getCommentDetail(goodsId) {
+    let records = await getCommentById(goodsId);
+    let loopTimes = Math.ceil(records.count / PAGESIZE);
+
+    let recordList = [];
+
+    for (var i = 1; i <= loopTimes; i++) {
+        let record = await getCommentById(goodsId, i, loopTimes);
+        recordList = [...recordList, ...record];
+    }
+    records.data = recordList;
+    return records;
+}
+
+function getCommentById(goodsId, pageNo = 0, loopTimes = 0, type = 'all') {
+
+    console.log(`正在抓取，商品id：${goodsId},页码:${pageNo}/${loopTimes}`);
+
+    let config = {
+        method: 'get',
+        url: 'http://www.chinagoldcoin.net/views/newDetail/detail/new-more-pj.jsp',
+        params: {
+            goodsId,
+            pageNo,
+            pageSize: PAGESIZE,
+            type
+        }
+    };
+
+    return axios(config).then(res => {
+        let record = res.data[0];
+        // 如果只是获取评论总数
+        if (pageNo == 0) {
+            Reflect.deleteProperty(record, 'goodsIdV');
+            Reflect.deleteProperty(record, 'recordList');
+            record.item_id = goodsId;
+            return record;
+        }
+        // 获取评论详情，需要做字段转换
+        return parser.cncoin.comment(record.recordList, goodsId);
+    })
 }
 
 async function splitComment(req, res) {
@@ -242,8 +348,9 @@ module.exports = {
     getGoodsList,
     getDetail,
     getTradeRecord,
-    getQuestion
-    // getComment,
+    getQuestion,
+    getComment,
+    handleSpecialComment,
     // splitComment,
     // getCommentScore
 };

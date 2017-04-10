@@ -265,12 +265,26 @@ let cncoin = {
         })
         return goodInfo;
     },
-    comment(comments, id) {
-        return comments.map(item => {
+    question(questions, id) {
+        return questions.map(item => {
             // 去除所有html 标签
             item.replyContent = item.replyContent.replace(/<[^>]+>/g, "");
             item.item_id = id;
             return item;
+        });
+    },
+    comment(content, id) {
+        return content.map(obj => {
+            let account = obj.accountOn;
+            Reflect.deleteProperty(obj, 'essence');
+            Reflect.deleteProperty(obj, 'image_list');
+            Reflect.deleteProperty(obj, 'replyInfosByList');
+            Reflect.deleteProperty(obj, 'accountOn');
+            Reflect.deleteProperty(obj, 'image_num');
+            Reflect.deleteProperty(obj, 'like_Number');
+            obj.item_id = id;
+            obj.account = account;
+            return obj;
         });
     }
 }
