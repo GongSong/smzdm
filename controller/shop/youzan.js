@@ -53,7 +53,7 @@ function getSaleInfo(req, res) {
     let shopid = req.params.id;
     // 此时使用缓存数据，不再重新拉取店铺商品列表
 
-    let goods = require('./data/goodsList.json');
+    let goods = require('../data/goodsList.json');
 
     // 数据测试
     // goods = [{
@@ -104,7 +104,7 @@ async function handleSaleDetail(item) {
 function getSaleDetailById(req, res) {
     let shopid = req.params.id;
     // 此时使用缓存数据，不再重新拉取店铺商品列表
-    let goods = require('./data/goodsList.json');
+    let goods = require('../data/goodsList.json');
     let data = goods.map(item => {
         return handleSaleDetail({
             alias: item.alias,

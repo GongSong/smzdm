@@ -1,4 +1,8 @@
 let cheerio = require('cheerio');
+let POSTAG = require('segment').POSTAG;
+let nlp = require('./nlp');
+
+let querystring = require('querystring');
 
 function jsRight(sr, rightn) {
     return sr.substring(sr.length - rightn, sr.length)
@@ -105,7 +109,80 @@ function parseHTML(options) {
     return data;
 }
 
+function handleWordSegment(wordList) {
+    let words = wordList.map(item => {
+        return {
+            ps: POSTAG.chsName(item.p).split(' ')[0],
+            w: item.w
+        };
+    });
+
+    let comment = [];
+    if (words[0].ps.includes('形容词')) {
+        comment.push(words[0].w);
+    }
+
+    for (var i = 1; i < words.length; i++) {
+        var item = words[i];
+        if (item.ps.includes('形容词')) {
+            if (words[i - 1].ps.includes('副词')) {
+                comment.push(words[i - 1].w + item.w);
+            } else {
+                comment.push(item.w);
+            }
+        } else if (item.ps.includes('名词') || item.ps.includes('动词')) {
+            if (item.w.length > 1) {
+                comment.push(item.w);
+            }
+        }
+
+    }
+    return {
+        comment,
+        words
+    };
+}
+
+function wordSegment(content) {
+
+    let postData = querystring.stringify({
+        api: nlp.apiList.LexicalAnalysis,
+        body_data: JSON.stringify({
+            code: 0x200000, // 2097152, // 0x20000
+            type: 1,
+            text: content.replace(/ /g, '')
+        })
+    });
+
+    return new Promise((resolve, reject) => {
+        nlp.tencentNLPAnaly(postData, data => {
+            resolve(data);
+        });
+    });
+}
+
+function getNegativeWordsByTencentApi(content) {
+    console.log(npl.tencentAuth('我买的是1盎司的，而里面的包装盒却是个1／2盎司的，我是无语了'));
+}
+
+function getNegativeWords(content) {
+
+    let postData = querystring.stringify({
+        'api': nlp.apiList.TextSentiment,
+        'body_data': JSON.stringify({ content: content.replace(/ /g, '') })
+    })
+
+    return new Promise((resolve, reject) => {
+        nlp.tencentNLPAnaly(postData, data => {
+            resolve(data);
+        });
+    });
+}
+
 module.exports = {
     getNow,
-    parseHTML
+    parseHTML,
+    handleWordSegment,
+    getNegativeWords,
+    wordSegment
 }

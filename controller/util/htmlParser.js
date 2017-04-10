@@ -112,31 +112,59 @@ let wfx = {
         let rec_date = util.getNow();
         let $ = cheerio.load(html);
         let dom = $('.otherinfo').eq(1).find('span');
-        let freight = dom.eq(1).text().replace(/\r\n/g, '').replace('运费:', '').replace('¥', '').trim();
-        let score = dom.eq(2).text().replace(/\r\n/g, '').replace('赠送积分', '').trim();
-        let share = $('.shareinfo').text().replace('点赞', '').replace('次', '');
+        let freight = dom.eq(1).find('em').text().replace('¥', '').trim();
+        let score = dom.eq(2).find('em').text().trim();
+        let share = $('.shareinfo span').text();
+        let remark = '';
+        if (freight == '(包邮)') {
+            freight = 0;
+        } else if (freight.includes('\r\n')) {
+            remark = freight.split('\r\n')[1].trim();
+            freight = freight.split('\r\n')[0].trim();
+        }
         return {
             freight,
             score,
-            share
+            share,
+            remark,
+            rec_date
         }
     },
-    commentInfo(html) {
-        let options = {
-            html,
-            parentNode: '.eva_box',
-            children: [{
-                node: 'h2',
-                name: 'content'
-            }, {
-                node: '.comment_time span',
-                name: 'user'
-            }, {
-                node: '.comment_time b',
-                name: 'comment_time'
-            }]
-        }
-        return util.parseHTML(options);
+    // 2017-04-07 symint615升级详情页面，调整评论接口
+    // commentInfo(html) {
+    //     let options = {
+    //         html,
+    //         parentNode: '.eva_box',
+    //         children: [{
+    //             node: 'h2',
+    //             name: 'content'
+    //         }, {
+    //             node: '.comment_time span',
+    //             name: 'user'
+    //         }, {
+    //             node: '.comment_time b',
+    //             name: 'comment_time'
+    //         }]
+    //     }
+    //     return util.parseHTML(options);
+    // }
+    commentInfo(comments) {
+        // 除首页外，其它页无头像信息
+        return comments.map(json => {
+            return {
+                item_id: json.type_id,
+                detail: json.detail,
+                order_show_id: json.order_show_id,
+                order_item_id: json.order_item_id,
+                type: json.type,
+                status: json.status,
+                create_time: json.create_time,
+                mobile: json.mobile,
+                // portrait: json.head_portrait,
+                // user_openid: json.head_portrait.split('/mmopen/')[1].split('/')[0],
+                reply: json.reply
+            };
+        });
     }
 };
 
@@ -209,8 +237,39 @@ let ccgold = {
     }
 }
 
+let cncoin = {
+    goodsDetail(html) {
+        let $ = cheerio.load(html);
+        let goodInfo = {
+            year: '',
+            material: '',
+            weight: '',
+            theme: ''
+        };
+        $('#spsx tr td').each((i, item) => {
+            let text = $(item).text().replace(/\t/g, '').replace(/\r\n/g, '').split(':');
+            switch (text[0]) {
+                case '年份':
+                    goodInfo.year = text[1];
+                    break;
+                case '材质':
+                    goodInfo.material = text[1];
+                    break;
+                case '规格':
+                    goodInfo.weight = text[1];
+                    break;
+                case '题材':
+                    goodInfo.theme = text[1];
+                    break;
+            }
+        })
+        return goodInfo;
+    },
+}
+
 module.exports = {
     youzan,
     wfx,
-    ccgold
+    ccgold,
+    cncoin
 }

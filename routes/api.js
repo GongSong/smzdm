@@ -22,12 +22,24 @@ router.get('/youzan/setStockData', function(req, res, next) {
     youzan.setStockData(req, res);
 });
 
-router.get('/youzan/setSaleDetail', function(req, res) {
+router.get('/youzan/detail', function(req, res) {
     youzan.setSaleDetail(req, res);
 })
 
-router.get('/wfx/setStockData', function(req, res, next) {
+router.get('/wfx/stock', function(req, res, next) {
     wfx.setStockData(req, res);
+});
+
+router.get('/wfx/comment', function(req, res, next) {
+    wfx.setCommentData(req, res);
+});
+
+router.get('/wfx/comment/split', function(req, res, next) {
+    wfx.setCommentSplitData(req, res);
+});
+
+router.get('/wfx/comment/score', function(req, res, next) {
+    wfx.setCommentScore(req, res);
 });
 
 module.exports = router;

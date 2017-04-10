@@ -49,3 +49,6 @@ Temporary Items
 .apdisk
 node_modules
 doc
+
+# 交易记录
+cncoinRecord

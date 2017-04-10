@@ -15,8 +15,21 @@ let headers = {
         "X-Requested-With": "XMLHttpRequest",
         "Upgrade-Insecure-Requests": 1,
         "Host": "www.symint615.com"
+    },
+    tencent: {
+        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+        "Cookie": "pgv_pvi=2208498688; pgv_si=s9238280192",
+        "Referer": "http://nlp.qq.com/semantic.cgi"
+    },
+    cncoin: {
+        Accept: "application/json, text/javascript, */*; q=0.01",
+        Host: "item.chinagoldcoin.net",
+        "User-Agent": "Mozilla / 5.0(Windows NT 10.0; WOW64) AppleWebKit / 537.36(KHTML, like Gecko) Chrome / 56.0 .2924 .87 Safari / 537.36",
+        "X-Requested-With": "XMLHttpRequest"
     }
 }
+
+
 
 module.exports = {
     headers
