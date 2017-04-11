@@ -127,15 +127,16 @@ async function getStorageBit(step, id, startNum = 0) {
 }
 
 
-function test1() {
-    let num = 1;
-
-    let url = 'http://www.chinagoldcoin.net/views/contents/shop/goods/goods_limit_cart_ajax.jsp'
+function test1(req, res) {
+    let http = require('http');
+    let querystring = require('querystring');
+    var postData = querystring.stringify({
+        goodId: 68, goodsNum: req.params.num, source: 1
+    });
     let config = {
         method: 'POST',
         host: 'www.chinagoldcoin.net',
         path: '/views/contents/shop/goods/goods_limit_cart_ajax.jsp',
-        data: { goodId: 68, goodsNum: 1, source: 1 },
         headers: {
             'Host': 'www.chinagoldcoin.net',
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:50.0) Gecko/20100101 Firefox/50.0',
@@ -149,25 +150,25 @@ function test1() {
             'Connection': 'keep-alive'
         }
     };
-
+    console.log(config);
     let request = http.request(config, (response) => {
         let result = '';
-        res.on('data', (chunk) => {
+        response.on('data', (chunk) => {
             console.log(`BODY: ${chunk}`);
             result += chunk;
         });
-        res.on('end', () => {
-            // res.send(result);
-            // res.end();
-            // 此处在控制台输出结果
-            console.log(result);
+        response.on('end', () => {
+            res.send(result);
+            res.end();
             console.log('No more data in response.');
         });
     });
-
     request.on('error', (e) => {
         console.log(`problem with request: ${e.message}`);
     });
+
+    request.write(postData);
+    request.end();
 
 }
 
