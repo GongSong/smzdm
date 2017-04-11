@@ -300,20 +300,20 @@ async function splitComment() {
 
         for (let j = 0; j < commentCount; j++) {
             let item = comments.data[j];
-            await util.wordSegment(item.content).then(response => {
-                    results.push({
-                        detail: item.content,
-                        item_id: item.item_id,
-                        tokens: response.tokens,
-                        combtokens: response.combtokens,
-                        comment_id: item.comment_id
-                    });
-                    console.log(`商品${i},第${j+1}/${commentCount}条评论分词完毕\n`);
-                }).catch(e => {
-                    console.log(e);
-                })
-                // 延迟1000ms读取接口 | 通过  try...catch 后可不用延迟对接口的调用
-                // await util.sleep(1000);
+            await util.wordSegment(item.detail).then(response => {
+                comments.push({
+                    detail: item.content,
+                    item_id: item.item_id,
+                    tokens: response.tokens,
+                    combtokens: response.combtokens,
+                    comment_id: item.comment_id
+                });
+                console.log(`商品${i},第${j + 1}/${commentCount}条评论分词完毕\n`);
+            }).catch(e => {
+                console.log(e);
+            });
+            // 延迟1000ms读取接口 | 通过  try...catch 后可不用延迟对接口的调用
+            // await util.sleep(1000);
         }
         saveJson2Disk('CommentSeg', results, i);
         console.log(`第${i}/${MAX_NUM}条数据读取完毕\n`);
@@ -422,6 +422,46 @@ async function getCommentScore(req, res) {
         console.log('第' + i + '条数据读取完毕\n');
     }
     res.json(scores);
+}
+
+function test1(req, res) {
+    let url = 'http://www.chinagoldcoin.net/views/contents/shop/goods/goods_limit_cart_ajax.jsp'
+    let config = {
+        method: 'POST',
+        host: 'www.chinagoldcoin.net',
+        path: '/views/contents/shop/goods/goods_limit_cart_ajax.jsp',
+        data: { goodId: 68, goodsNum: req.params.num, source: 1 },
+        headers: {
+            'Host': 'www.chinagoldcoin.net',
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:50.0) Gecko/20100101 Firefox/50.0',
+            'Accept': '*/*',
+            'Accept-Language': 'zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3',
+            'Accept-Encoding': 'gzip, deflate',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-Requested-With': 'XMLHttpRequest',
+            'Referer': 'http://www.chinagoldcoin.net/views/pages/cart.jsp',
+            'Cookie': '__utma=119523675.229289344.1491834268.1491834268.1491923072.2; __utmz=119523675.1491923072.2.2.utmcsr=item.chinagoldcoin.net|utmccn=(referral)|utmcmd=referral|utmcct=/product_detail_118.html; __utmv=119523675.0; Hm_lvt_79551d2592621515873edbfb6d98c7c6=1491834268,1491921860; foregroundSN=2404C41146F65041307B4FE30C6A8E02-n1; lua_nickname=; Hm_lpvt_79551d2592621515873edbfb6d98c7c6=1491923089; pgv_pvi=9884649472; pgv_si=s2699280384; __utmb=119523675.5.10.1491923072; __utmc=119523675; CARTGOODS=Id%3A118%2Csrc%3A1%2CNum%3A999%26',
+            'Connection': 'keep-alive'
+        }
+    };
+
+    let http = require('http');
+    let request = http.request(config, (response) => {
+        let result = '';
+        res.on('data', (chunk) => {
+            console.log(`BODY: ${chunk}`);
+            result += chunk;
+        });
+        res.on('end', () => {
+            res.send(result);
+            res.end();
+            console.log('No more data in response.');
+        });
+    });
+    request.on('error', (e) => {
+        console.log(`problem with request: ${e.message}`);
+    });
+
 }
 
 module.exports = {
