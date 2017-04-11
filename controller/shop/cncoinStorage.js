@@ -131,7 +131,7 @@ function test1(req, res) {
     let http = require('http');
     let querystring = require('querystring');
     var postData = querystring.stringify({
-        goodId: 68, goodsNum: req.params.num, source: 1
+        goodId: 118, goodsNum: 1, source: 1
     });
     let config = {
         method: 'POST',
@@ -146,13 +146,14 @@ function test1(req, res) {
             'Content-Type': 'application/x-www-form-urlencoded',
             'X-Requested-With': 'XMLHttpRequest',
             'Referer': 'http://www.chinagoldcoin.net/views/pages/cart.jsp',
-            'Cookie': '__utma=119523675.229289344.1491834268.1491834268.1491923072.2; __utmz=119523675.1491923072.2.2.utmcsr=item.chinagoldcoin.net|utmccn=(referral)|utmcmd=referral|utmcct=/product_detail_118.html; __utmv=119523675.0; Hm_lvt_79551d2592621515873edbfb6d98c7c6=1491834268,1491921860; foregroundSN=2404C41146F65041307B4FE30C6A8E02-n1; lua_nickname=; Hm_lpvt_79551d2592621515873edbfb6d98c7c6=1491923089; pgv_pvi=9884649472; pgv_si=s2699280384; __utmb=119523675.5.10.1491923072; __utmc=119523675; CARTGOODS=Id%3A118%2Csrc%3A1%2CNum%3A999%26',
+            'Cookie': '__utma=119523675.229289344.1491834268.1491834268.1491923072.2; __utmz=119523675.1491923072.2.2.utmcsr=item.chinagoldcoin.net|utmccn=(referral)|utmcmd=referral|utmcct=/product_detail_118.html; __utmv=119523675.0; Hm_lvt_79551d2592621515873edbfb6d98c7c6=1491834268,1491921860; foregroundSN=2404C41146F65041307B4FE30C6A8E02-n1; lua_nickname=; Hm_lpvt_79551d2592621515873edbfb6d98c7c6=1491923089; pgv_pvi=9884649472; pgv_si=s2699280384; __utmb=119523675.5.10.1491923072; __utmc=119523675; CARTGOODS=Id%3A118%2Csrc%3A1%2CNum%3A1%26',
             'Connection': 'keep-alive'
         }
     };
-    console.log(config);
+    // console.log(config);
     let request = http.request(config, (response) => {
         let result = '';
+        response.setEncoding('utf8');
         response.on('data', (chunk) => {
             console.log(`BODY: ${chunk}`);
             result += chunk;
@@ -160,7 +161,7 @@ function test1(req, res) {
         response.on('end', () => {
             res.send(result);
             res.end();
-            console.log('No more data in response.');
+            console.log(result);
         });
     });
     request.on('error', (e) => {
