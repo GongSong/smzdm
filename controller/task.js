@@ -9,7 +9,7 @@ async function init() {
     console.log('解压controller目录中zip文件到cncoinRecord目录下，gitignore已自动设为不上传该目录\n');
 
     await cncoin.asyncData();
-
+    await cncoin.save2DB();
 }
 
 

@@ -5,7 +5,9 @@ var insert = {
     wfx_stock: 'insert into wfx_stock(category_id,item_id,title,status,num,original_price,price,sales_volume,pic_url,link_item,rec_date) values ?',
     wfx_comment_list: 'INSERT INTO wfx_comment_list(item_id,order_item_id,detail,create_time) VALUES ?',
     wfx_comment_nlp: 'INSERT INTO wfx_comment_nlp(item_id,comment_id,negative,positive) VALUES ?',
-    wfx_comment_seg: 'INSERT INTO wfx_comment_seg(item_id,comment_id,word,word_type,pos) VALUES ?'
+    wfx_comment_seg: 'INSERT INTO wfx_comment_seg(item_id,comment_id,word) VALUES ?',
+    cncoin_comment_stat: 'insert into cncoin_comment_stat (item_id,allNumber,count,goodNumber,pageNo,middleNumber,imageNumber,badNumber,rec_date) values ?',
+    cncoin_comment_list: 'insert into cncoin_comment_list (item_id,comment_id,levelId,countByNumber,comment_type,content,comment_rank,access_date,average_points,account,add_time) values ?',
 };
 
 var update = {

@@ -307,17 +307,6 @@ async function splitComment(req, res) {
     res.json(comments);
 }
 
-function readCommentFromDisk(i) {
-
-    let content = 'Comment';
-    let fileName = util.getMainContent() + '/controller/data/cncoin' + content + '/itemid_' + i + '.json';
-
-    let str = fs.readFileSync(fileName, 'utf-8');
-    let comment = JSON.parse(str);
-    console.log(typeof comment);
-    console.log(comment);
-}
-
 async function getStorage() {
     let data = await coinStorage();
     let fileName = util.getMainContent() + '/controller/data/cncoinStorageTest.json';
