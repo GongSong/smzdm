@@ -54,13 +54,23 @@ async function asyncData() {
     // await cncoin.splitAnswer();
 
     //读取评论得分信息
-    // await coin.getCommentScore();
+    // await cncoin.getCommentScore();
+
+    //读取用户咨询NLP得分信息
+    // await cncoin.getQuestionScore();
+
+    // 读取客服回答NLP得分
+    // await cncoin.getAnswerScore();
 
     // 库存测试
-    await cncoinStorage.test1();
+    // await cncoinStorage.test1();
+
 }
 
 async function save2DB() {
+
+    // 存储商品列表
+    // await cncoinDb.saveGoods();
 
     //存储评论信息(已完结)
     // await cncoinDb.saveComment();

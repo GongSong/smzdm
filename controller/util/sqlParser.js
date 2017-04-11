@@ -91,7 +91,7 @@ function handleWfxCommentSeg(obj) {
 
 function handleCncoinCommentStat(obj) {
     let url = sql.insert.cncoin_comment_stat;
-    let rec_date = getNow()
+    let rec_date = getNow();
     let sqlValues = `(${obj.item_id},${obj.allNumber},${obj.count},${obj.goodNumber},${obj.pageNo},${obj.middleNumber},${obj.imageNumber},${obj.badNumber},'${rec_date}')`;
     url = url.replace('?', sqlValues);
     return url;
@@ -100,6 +100,14 @@ function handleCncoinCommentStat(obj) {
 function handleCncoinCommentList(obj) {
     let url = sql.insert.cncoin_comment_list;
     let sqlValues = `(${obj.item_id},${obj.comment_id},${obj.levelId},${obj.countByNumber},${obj.comment_type},'${obj.content}',${obj.comment_rank},'${obj.access_date}',${obj.average_points},'${obj.account}','${obj.add_time}')`;
+    url = url.replace('?', sqlValues);
+    return url;
+}
+
+function handleCncoinGoodsList(obj) {
+    let url = sql.insert.cncoin_goods;
+    let rec_date = getNow();
+    let sqlValues = `(${obj.item_id},'${obj.name}','${obj.tips}',${obj.price},'${rec_date}')`;
     url = url.replace('?', sqlValues);
     return url;
 }
@@ -113,5 +121,6 @@ module.exports = {
     handleWfxCommentNlp,
     handleWfxCommentSeg,
     handleCncoinCommentStat,
-    handleCncoinCommentList
+    handleCncoinCommentList,
+    handleCncoinGoodsList
 };

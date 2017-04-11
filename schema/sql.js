@@ -8,6 +8,14 @@ var insert = {
     wfx_comment_seg: 'INSERT INTO wfx_comment_seg(item_id,comment_id,word) VALUES ?',
     cncoin_comment_stat: 'insert into cncoin_comment_stat (item_id,allNumber,count,goodNumber,pageNo,middleNumber,imageNumber,badNumber,rec_date) values ?',
     cncoin_comment_list: 'insert into cncoin_comment_list (item_id,comment_id,levelId,countByNumber,comment_type,content,comment_rank,access_date,average_points,account,add_time) values ?',
+    cncoin_comment_nlp: '',
+    cncoin_comment_seg: '',
+    cncoin_question_list: '',
+    cncoin_question_nlp: '',
+    cncoin_question_seg: '',
+    cncoin_answer_nlp: '',
+    cncoin_answer_seg: '',
+    cncoin_goods: 'insert into cncoin_goods (item_id,good_name,tips,price,rec_date) values ?'
 };
 
 var update = {

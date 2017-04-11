@@ -325,7 +325,7 @@ async function splitComment() {
  * type = content 时，处理提问 
  * @param {string} [type='content'] 
  */
-async function splitQuestion(type = 'content', savedTo = 'QuestionSeg') {
+async function splitQuestion(type = 'content', saveTo = 'QuestionSeg') {
 
     let goodsList = require('../data/cncoinGoodsList.json');
     let MAX_NUM = goodsList.length;
@@ -361,7 +361,7 @@ async function splitQuestion(type = 'content', savedTo = 'QuestionSeg') {
                 // 延迟1000ms读取接口 | 通过  try...catch 后可不用延迟对接口的调用
                 // await util.sleep(1000);
         }
-        saveJson2Disk(savedTo, results, i);
+        saveJson2Disk(saveTo, results, i);
         console.log(`第${i}/${MAX_NUM}条数据读取完毕\n`);
     }
 }
@@ -383,6 +383,7 @@ async function getCommentScore(req, res) {
     let MAX_NUM = goodsList.length;
 
     let start = 1;
+    // MAX_NUM = 1;
 
     for (let i = start; i <= MAX_NUM; i++) {
         let comments = cncoinDb.getCommentById(i);
@@ -397,7 +398,6 @@ async function getCommentScore(req, res) {
             let item = comments.data[j];
             await util.getNegativeWords(item.content).then(response => {
                 results.push({
-                    detail: item.content,
                     item_id: item.item_id,
                     comment_id: item.comment_id,
                     negative: response.negative,
@@ -413,15 +413,51 @@ async function getCommentScore(req, res) {
         saveJson2Disk('CommentScore', results, i);
         console.log(`第${i}/${MAX_NUM}条数据读取完毕\n`);
     }
+}
 
-    let scores = [];
+async function getQuestionScore(type = 'content', saveTo = 'QuestionScore') {
 
-    for (let i = 0; i < result.length; i++) {
-        let item = result[i];
+    let goodsList = require('../data/cncoinGoodsList.json');
+    let MAX_NUM = goodsList.length;
 
-        console.log('第' + i + '条数据读取完毕\n');
+    let start = 1;
+    // MAX_NUM = 1;
+
+    for (let i = start; i <= MAX_NUM; i++) {
+        let comments = cncoinDb.getCommentById(i, 'Question');
+        let commentCount = comments.length;
+        if (commentCount == 0) {
+            continue;
+        }
+
+        let results = [];
+
+        for (let j = 0; j < commentCount; j++) {
+            let item = comments[j];
+            await util.getNegativeWords(item[type]).then(response => {
+                results.push({
+                    detail: item[type],
+                    item_id: item.item_id,
+                    account: item.account,
+                    replyTime: item.replyTime,
+                    postTime: item.postTime,
+                    negative: response.negative,
+                    positive: response.positive
+                });
+                console.log(`商品${i},第${j+1}/${commentCount}条咨询情绪分析完毕\n`);
+            }).catch(e => {
+                console.log(e);
+            });
+            // 延迟1000ms读取接口 | 通过  try...catch 后可不用延迟对接口的调用
+            // await util.sleep(1000);
+        }
+        saveJson2Disk(saveTo, results, i);
+        console.log(`第${i}/${MAX_NUM}条数据读取完毕\n`);
     }
-    res.json(scores);
+}
+
+function getAnswerScore() {
+    getQuestionScore('replyContent', 'AnswerScore');
 }
 
 module.exports = {
@@ -435,5 +471,7 @@ module.exports = {
     splitComment,
     splitQuestion,
     splitAnswer,
-    getCommentScore
+    getCommentScore,
+    getQuestionScore,
+    getAnswerScore
 };

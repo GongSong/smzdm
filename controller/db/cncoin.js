@@ -49,14 +49,21 @@ async function saveComment() {
     console.log(`共${MAX_NUM}条信息插入完毕`);
 }
 
-async function saveQuestion() {
+async function saveGoods() {
     let goodsList = require('../data/cncoinGoodsList.json');
     let MAX_NUM = goodsList.length;
-    let start = 1;
-
+    let start = 0;
+    for (let i = start; i < MAX_NUM; i++) {
+        let item = goodsList[i];
+        let sqlStr = sqlParser.handleCncoinGoodsList(item);
+        await query(sqlStr, function(res) {
+            console.log(`第${i+1}/${MAX_NUM}条 商品数据插入完毕\n`);
+        });
+    }
 }
 
 module.exports = {
     saveComment,
-    getCommentById
+    getCommentById,
+    saveGoods
 }
