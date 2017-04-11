@@ -39,6 +39,9 @@ async function asyncData() {
     // id号 68 121 72 无法顺利读取，需特殊处理
     // await cncoin.handleSpecialComment();
 
+    // 读取库存信息
+    await cncoin.getStorage();
+
     // 分割评论信息
     // await cncoin.splitComment();
 }

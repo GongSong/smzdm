@@ -1,10 +1,11 @@
 let axios = require('axios');
 let parser = require('../util/htmlParser');
 
+let coinStorage = require('./cncoinStorage').getStorage;
+
 let fs = require('fs');
 
 let spiderSetting = require('../util/spiderSetting');
-let dbResult = require('../db/wfx');
 
 let util = require('../util/common');
 
@@ -317,6 +318,13 @@ function readCommentFromDisk(i) {
     console.log(comment);
 }
 
+async function getStorage() {
+    let data = await coinStorage();
+    let fileName = util.getMainContent() + '/controller/data/cncoinStorageTest.json';
+    fs.writeFileSync(fileName, JSON.stringify(data), 'utf8');
+    console.log('json数据写入磁盘完毕');
+}
+
 // async function getCommentScore(req, res) {
 //     let data = require('../data/wfx_comment.json');
 //     let result = [];
@@ -350,6 +358,7 @@ module.exports = {
     getQuestion,
     getComment,
     handleSpecialComment,
+    getStorage,
     // splitComment,
     // getCommentScore
 };
