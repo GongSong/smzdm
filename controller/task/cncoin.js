@@ -1,5 +1,6 @@
 let cncoin = require('../shop/cncoin');
 let cncoinDb = require('../db/cncoin');
+let cncoinStorage = require('../shop/cncoinStorage');
 
 // 初始化数据库
 function dbInit() {
@@ -54,13 +55,15 @@ async function asyncData() {
 
     //读取评论得分信息
     // await coin.getCommentScore();
+
+    // 库存测试
+    await cncoinStorage.test1();
 }
 
 async function save2DB() {
 
     //存储评论信息(已完结)
     // await cncoinDb.saveComment();
-
 
 }
 
