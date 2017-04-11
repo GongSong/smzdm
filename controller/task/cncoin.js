@@ -1,15 +1,15 @@
 let cncoin = require('../shop/cncoin');
 let cncoinDb = require('../db/cncoin');
 
-// // 初始化数据库
-// function dbInit() {
+// 初始化数据库
+function dbInit() {
 
-// }
+}
 
-// // 添加初始数据
-// function dbDataInit() {
+// 添加初始数据
+function dbDataInit() {
 
-// }
+}
 
 // // 同步每日价格
 // function asyncPrice() {
