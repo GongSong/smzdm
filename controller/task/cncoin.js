@@ -70,7 +70,7 @@ async function asyncData() {
 async function save2DB() {
 
     // 存储商品列表
-    await cncoinDb.saveGoods();
+    // await cncoinDb.saveGoods();
 
     //存储评论信息(已完结)
     // await cncoinDb.saveComment();
