@@ -9,6 +9,8 @@ let spiderSetting = require('../util/spiderSetting');
 
 let util = require('../util/common');
 
+let cncoinDb = require('../db/cncoin');
+
 let PAGESIZE = 3000;
 
 // 获取商品主表信息
@@ -281,30 +283,31 @@ function getCommentById(goodsId, pageNo = 0, loopTimes = 0, type = 'all') {
     })
 }
 
-async function splitComment(req, res) {
-    let data = require('../data/cncoinGoodsList.json');
-    let idList = data.map(item => item.item_id);
+async function splitComment() {
 
-    let result = [];
-    let comments = [];
+    let goodsList = require('../data/cncoinGoodsList.json');
+    let MAX_NUM = goodsList.length;
 
-    // 按序号依次读取数据，降低接口请求频次，必要时应增加延时
-    // 用for循环同步执行，即在await完成之后才执行 i++
-    // 用forEach/map等遍历函数，其回调函数不能是 async函数，无法在其中使用await,数据将被异步执行
-    for (let i = 0; i < result.length; i++) {
-        let item = result[i];
-        await util.wordSegment(item.detail).then(response => {
-            comments.push({
-                detail: item.detail,
-                item_id: item.item_id,
-                tokens: response.tokens,
-                combtokens: response.combtokens,
-                comment_id: item.order_item_id
-            });
-        })
+    let start = 1;
+    MAX_NUM = 1;
+
+    for (let i = start; i <= MAX_NUM; i++) {
+
+        let comments = cncoinDb.getCommentById(i);
+
+        // await util.wordSegment(item.detail).then(response => {
+        //     comments.push({
+        //         detail: item.detail,
+        //         item_id: item.item_id,
+        //         tokens: response.tokens,
+        //         combtokens: response.combtokens,
+        //         comment_id: item.order_item_id
+        //     });
+        // })
+        console.log(comments);
         console.log('第' + i + '条数据读取完毕\n');
     }
-    res.json(comments);
+
 }
 
 async function getStorage() {
@@ -348,6 +351,6 @@ module.exports = {
     getComment,
     handleSpecialComment,
     getStorage,
-    // splitComment,
+    splitComment,
     // getCommentScore
 };

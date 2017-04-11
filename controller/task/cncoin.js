@@ -44,7 +44,7 @@ async function asyncData() {
     // await cncoin.getStorage();
 
     // 分割评论信息
-    // await cncoin.splitComment();
+    await cncoin.splitComment();
 }
 
 async function save2DB() {
