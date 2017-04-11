@@ -131,7 +131,7 @@ function test1(req, res) {
     let http = require('http');
     let querystring = require('querystring');
     var postData = querystring.stringify({
-        goodId: 118, goodsNum: 1, source: 1
+        goodId: 118, goodsNum: 25, source: 1
     });
     let config = {
         method: 'POST',
@@ -159,7 +159,10 @@ function test1(req, res) {
             result += chunk;
         });
         response.on('end', () => {
-            res.send(result);
+            //%1F%EF%BF%BD%08%00%00%00%00%00%00%03%EF%BF%BDL-%06%00%EF%BF%BD5%EF%BF%BDu%03%00%00%00
+            //%1F%EF%BF%BD%08%00%00%00%00%00%00%03%EF%BF%BD%EF%BF%BD%07%00%1F(%EF%BF%BDg%02%00%00%00
+            res.send(querystring.escape(result) + '\n' + querystring.unescape(result));
+            // res.send(querystring.unescape(result));
             res.end();
             console.log(result);
         });
