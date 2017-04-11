@@ -143,14 +143,14 @@ function handleWordSegment(wordList) {
     };
 }
 
-function wordSegment(content) {
-
+function wordSegment(text) {
+    text = text_filter(text);
     let postData = querystring.stringify({
         api: nlp.apiList.LexicalAnalysis,
         body_data: JSON.stringify({
             code: 0x200000, // 2097152, // 0x20000
             type: 1,
-            text: content.replace(/ /g, '')
+            text
         })
     });
 
@@ -158,7 +158,9 @@ function wordSegment(content) {
         nlp.tencentNLPAnaly(postData, data => {
             resolve(data);
         });
-    });
+    }).catch(e => {
+        console.log(e);
+    })
 }
 
 function getNegativeWordsByTencentApi(content) {
@@ -186,11 +188,25 @@ function getMainContent() {
     return str.replace(/\\/g, '/');
 }
 
+function text_filter(text) {
+    text = text.replace(/<[\/\s]*(?:(?!div|br)[^>]*)>/g, '');
+    text = text.replace(/<\s*div[^>]*>/g, '<div>');
+    text = text.replace(/<[\/\s]*div[^>]*>/g, '</div>');
+    text = text.replace(/ /g, '');
+    return text;
+}
+
+function sleep(ms = 0) {
+    return new Promise(r => setTimeout(r, ms));
+}
+
 module.exports = {
     getNow,
     parseHTML,
     handleWordSegment,
     getNegativeWords,
     wordSegment,
-    getMainContent
+    getMainContent,
+    text_filter,
+    sleep
 }

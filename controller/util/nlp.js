@@ -78,8 +78,17 @@ function tencentNLPAnaly(postData, callback) {
             result += chunk;
         });
         res.on('end', function() {
-            result = result.replace(/ /g,'');
-            result = JSON.parse(result);
+            // 可能存在请求过多服务器拒绝的问题，此时JSON.parse将报错
+            // 对于该类问题忽略错误
+            try {
+                result = JSON.parse(result);
+            } catch (e) {
+                result = {
+                    combtokens: [],
+                    tokens: []
+                }
+                console.log(postData);
+            }
             callback(result);
         });
     }).on('error', e => {
