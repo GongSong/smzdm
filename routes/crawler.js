@@ -75,6 +75,11 @@ router.get('/cncoin/comment', function(req, res) {
     crawler.cncoin.getComment(req, res);
 });
 
+// cncoin test storage
+router.get('/cncoin/test', function(req, res) {
+    crawler.cncoin.test1(req, res);
+});
+
 // router.get('/cncoin/storage', function(req, res) {
 //     crawler.cncoin.getStorage(req, res);
 // })
