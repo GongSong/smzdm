@@ -153,8 +153,7 @@ async function saveData2Content(content, detailFunc, startId = 1) {
 
     for (let i = startId; i <= MAX_NUM; i++) {
         let record = await getDataList(i, detailFunc);
-        let fileName = util.getMainContent() + '/controller/data/cncoin' + content + '/itemid_' + i + '.json';
-        fs.writeFileSync(fileName, JSON.stringify(record), 'utf8');
+        saveJson2Disk(content, record);
         console.log(content + ':第' + i + '项数据写入完毕\n');
     }
 }
@@ -207,11 +206,9 @@ async function getBadListComment(id) {
 
 async function handleSpecialComment() {
     let idList = [68, 72, 121];
-    let content = 'Comment';
     for (let i = 0; i < 3; i++) {
         let result = await getBadListComment(idList[i]);
-        let fileName = util.getMainContent() + '/controller/data/cncoin' + content + '/itemid_' + idList[i] + '.json';
-        fs.writeFileSync(fileName, JSON.stringify(result), 'utf8');
+        saveJson2Disk('Comment', result, i);
     }
     console.log('数据读取完成');
 }
@@ -221,8 +218,6 @@ async function getComment(startId = 1) {
     let goodsList = require('../data/cncoinGoodsList.json');
     let MAX_NUM = goodsList.length;
     let recordInfo = [];
-
-    let content = 'Comment';
 
     /**
      * id =68 (5059条);id=72 (2741条);id= 121 (1318条)
@@ -235,8 +230,7 @@ async function getComment(startId = 1) {
             return;
         }
         let record = await getCommentDetail(i);
-        let fileName = util.getMainContent() + '/controller/data/cncoin' + content + '/itemid_' + i + '.json';
-        fs.writeFileSync(fileName, JSON.stringify(record), 'utf8');
+        saveJson2Disk('Comment', record, i);
     }
 }
 
@@ -283,6 +277,11 @@ function getCommentById(goodsId, pageNo = 0, loopTimes = 0, type = 'all') {
     })
 }
 
+async function saveJson2Disk(content, data, i) {
+    let fileName = util.getMainContent() + '/controller/data/cncoin' + content + '/itemid_' + i + '.json';
+    fs.writeFileSync(fileName, JSON.stringify(data), 'utf8');
+}
+
 async function splitComment() {
 
     let goodsList = require('../data/cncoinGoodsList.json');
@@ -292,20 +291,26 @@ async function splitComment() {
     MAX_NUM = 1;
 
     for (let i = start; i <= MAX_NUM; i++) {
-
         let comments = cncoinDb.getCommentById(i);
-
-        // await util.wordSegment(item.detail).then(response => {
-        //     comments.push({
-        //         detail: item.detail,
-        //         item_id: item.item_id,
-        //         tokens: response.tokens,
-        //         combtokens: response.combtokens,
-        //         comment_id: item.order_item_id
-        //     });
-        // })
-        console.log(comments);
-        console.log('第' + i + '条数据读取完毕\n');
+        let commentCount = comments.data.length;
+        if (commentCount == 0) {
+            continue;
+        }
+        for (let j = 0; j < commentCount; j++) {
+            let item = comments.data[j];
+            await util.wordSegment(item.detail).then(response => {
+                comments.push({
+                    detail: item.content,
+                    item_id: item.item_id,
+                    tokens: response.tokens,
+                    combtokens: response.combtokens,
+                    comment_id: item.comment_id
+                });
+                console.log(`商品${i},第${j+1}/${commentCount}条评论分词完毕\n`);
+            })
+        }
+        saveJson2Disk('CommentSeg', comments, i);
+        console.log(`第${i}/${MAX_NUM}条数据读取完毕\n`);
     }
 
 }
