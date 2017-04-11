@@ -288,7 +288,6 @@ async function splitComment() {
     let MAX_NUM = goodsList.length;
 
     let start = 1;
-    MAX_NUM = 1;
 
     for (let i = start; i <= MAX_NUM; i++) {
         let comments = cncoinDb.getCommentById(i);
@@ -296,6 +295,9 @@ async function splitComment() {
         if (commentCount == 0) {
             continue;
         }
+
+        let results = [];
+
         for (let j = 0; j < commentCount; j++) {
             let item = comments.data[j];
             await util.wordSegment(item.detail).then(response => {
@@ -307,9 +309,13 @@ async function splitComment() {
                     comment_id: item.comment_id
                 });
                 console.log(`商品${i},第${j + 1}/${commentCount}条评论分词完毕\n`);
-            })
+            }).catch(e => {
+                console.log(e);
+            });
+            // 延迟1000ms读取接口 | 通过  try...catch 后可不用延迟对接口的调用
+            // await util.sleep(1000);
         }
-        saveJson2Disk('CommentSeg', comments, i);
+        saveJson2Disk('CommentSeg', results, i);
         console.log(`第${i}/${MAX_NUM}条数据读取完毕\n`);
     }
 

@@ -77,9 +77,18 @@ function tencentNLPAnaly(postData, callback) {
         res.on('data', (chunk) => {
             result += chunk;
         });
-        res.on('end', function() {
-            result = result.replace(/ /g,'');
-            result = JSON.parse(result);
+        res.on('end', function () {
+            // 可能存在请求过多服务器拒绝的问题，此时JSON.parse将报错
+            // 对于该类问题忽略错误
+            try {
+                result = JSON.parse(result);
+            } catch (e) {
+                result = {
+                    combtokens: [],
+                    tokens: []
+                }
+                console.log(postData);
+            }
             callback(result);
         });
     }).on('error', e => {
@@ -92,12 +101,12 @@ function tencentNLPAnaly(postData, callback) {
 let apiList = {
     TextSentiment: 12,
     LexicalAnalysis: 2
-        /*
-            http://nlp.qq.com/help.cgi?topic=api#analysis
-            code:text的编码(0x00200000== utf-8) 目前文智统一输入为utf-8
-            type:0为基础粒度版分词，倾向于将句子切分的更细，在搜索场景使用为佳。
-                 1为混合粒度版分词，倾向于保留更多基本短语不被切分开。
-        */
+    /*
+        http://nlp.qq.com/help.cgi?topic=api#analysis
+        code:text的编码(0x00200000== utf-8) 目前文智统一输入为utf-8
+        type:0为基础粒度版分词，倾向于将句子切分的更细，在搜索场景使用为佳。
+             1为混合粒度版分词，倾向于保留更多基本短语不被切分开。
+    */
 };
 
 module.exports = {
