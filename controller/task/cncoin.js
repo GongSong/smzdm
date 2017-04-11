@@ -43,8 +43,17 @@ async function asyncData() {
     // 读取库存信息-接口信息有误
     // await cncoin.getStorage();
 
-    // 分割评论信息
-    await cncoin.splitComment();
+    // 分割评论信息 已完成
+    // await cncoin.splitComment();
+
+    // 分割咨询信息
+    // await cncoin.splitQuestion();
+
+    // 分割咨询回复
+    // await cncoin.splitAnswer();
+
+    //读取评论得分信息
+    // await coin.getCommentScore();
 }
 
 async function save2DB() {

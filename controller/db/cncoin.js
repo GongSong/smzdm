@@ -5,16 +5,12 @@ let sql = require('../../schema/sql.js')
 let fs = require('fs');
 let util = require('../util/common');
 
-function getCommentById(i = 1) {
+function getCommentById(i = 1, content = 'Comment') {
 
-    let content = 'Comment';
     let fileName = util.getMainContent() + '/controller/data/cncoin' + content + '/itemid_' + i + '.json';
 
     let str = fs.readFileSync(fileName, 'utf-8');
     let comment = JSON.parse(str);
-    // console.log(typeof comment);
-    // console.log(comment);
-    // 此时数据读入至comment中，将评论中描述信息和评论内容分开
     return comment;
 }
 
@@ -50,8 +46,13 @@ async function saveComment() {
             })
         }
     }
-
     console.log(`共${MAX_NUM}条信息插入完毕`);
+}
+
+async function saveQuestion() {
+    let goodsList = require('../data/cncoinGoodsList.json');
+    let MAX_NUM = goodsList.length;
+    let start = 1;
 
 }
 

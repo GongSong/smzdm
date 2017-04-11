@@ -317,9 +317,57 @@ async function splitComment() {
         }
         saveJson2Disk('CommentSeg', results, i);
         console.log(`第${i}/${MAX_NUM}条数据读取完毕\n`);
-        // return;
     }
+}
 
+/**
+ * type = replyContent 时，处理回复 
+ * type = content 时，处理提问 
+ * @param {string} [type='content'] 
+ */
+async function splitQuestion(type = 'content', savedTo = 'QuestionSeg') {
+
+    let goodsList = require('../data/cncoinGoodsList.json');
+    let MAX_NUM = goodsList.length;
+
+    let start = 1;
+
+    for (let i = start; i <= MAX_NUM; i++) {
+        let comments = cncoinDb.getCommentById(i, 'Question');
+        let commentCount = comments.length;
+        if (commentCount == 0) {
+            continue;
+        }
+
+        let results = [];
+
+        for (let j = 0; j < commentCount; j++) {
+            let item = comments[j];
+            await util.wordSegment(item[type]).then(response => {
+                    // 用 id/account/replyTime/PostTime来确定同一条请求
+                    results.push({
+                        detail: item[type],
+                        item_id: item.item_id,
+                        tokens: response.tokens,
+                        combtokens: response.combtokens,
+                        account: item.account,
+                        replyTime: item.replyTime,
+                        postTime: item.postTime
+                    });
+                    console.log(`商品${i},第${j+1}/${commentCount}条评论分词完毕\n`);
+                }).catch(e => {
+                    console.log(e);
+                })
+                // 延迟1000ms读取接口 | 通过  try...catch 后可不用延迟对接口的调用
+                // await util.sleep(1000);
+        }
+        saveJson2Disk(savedTo, results, i);
+        console.log(`第${i}/${MAX_NUM}条数据读取完毕\n`);
+    }
+}
+
+function splitAnswer() {
+    splitQuestion('replyContent', 'AnswerSeg');
 }
 
 async function getStorage() {
@@ -329,31 +377,52 @@ async function getStorage() {
     console.log('json数据写入磁盘完毕');
 }
 
-// async function getCommentScore(req, res) {
-//     let data = require('../data/wfx_comment.json');
-//     let result = [];
+async function getCommentScore(req, res) {
 
-//     data.forEach(comment => {
-//         comment.forEach(item => {
-//             result.push(item);
-//         });
-//     });
+    let goodsList = require('../data/cncoinGoodsList.json');
+    let MAX_NUM = goodsList.length;
 
-//     let scores = [];
+    let start = 1;
 
-//     for (let i = 0; i < result.length; i++) {
-//         let item = result[i];
-//         await util.getNegativeWords(item.detail).then(obj => {
-//             obj.text = item.detail;
-//             obj.item_id = item.item_id;
-//             obj.comment_id = item.order_item_id;
-//             scores.push(obj);
-//             console.log(obj);
-//         })
-//         console.log('第' + i + '条数据读取完毕\n');
-//     }
-//     res.json(scores);
-// }
+    for (let i = start; i <= MAX_NUM; i++) {
+        let comments = cncoinDb.getCommentById(i);
+        let commentCount = comments.data.length;
+        if (commentCount == 0) {
+            continue;
+        }
+
+        let results = [];
+
+        for (let j = 0; j < commentCount; j++) {
+            let item = comments.data[j];
+            await util.getNegativeWords(item.content).then(response => {
+                results.push({
+                    detail: item.content,
+                    item_id: item.item_id,
+                    comment_id: item.comment_id,
+                    negative: response.negative,
+                    positive: response.positive
+                });
+                console.log(`商品${i},第${j+1}/${commentCount}条评论情绪分析完毕\n`);
+            }).catch(e => {
+                console.log(e);
+            });
+            // 延迟1000ms读取接口 | 通过  try...catch 后可不用延迟对接口的调用
+            // await util.sleep(1000);
+        }
+        saveJson2Disk('CommentScore', results, i);
+        console.log(`第${i}/${MAX_NUM}条数据读取完毕\n`);
+    }
+
+    let scores = [];
+
+    for (let i = 0; i < result.length; i++) {
+        let item = result[i];
+
+        console.log('第' + i + '条数据读取完毕\n');
+    }
+    res.json(scores);
+}
 
 module.exports = {
     getGoodsList,
@@ -364,5 +433,7 @@ module.exports = {
     handleSpecialComment,
     getStorage,
     splitComment,
-    // getCommentScore
+    splitQuestion,
+    splitAnswer,
+    getCommentScore
 };
