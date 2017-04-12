@@ -17,6 +17,11 @@ function dbDataInit() {
 
 // }
 
+// // 同步库存信息
+// function asyncStorageNum() {
+
+// }
+
 async function init() {
     await dbInit();
     await dbDataInit();
@@ -36,6 +41,9 @@ async function asyncData() {
     // id号 68 121 72 无法顺利读取，需特殊处理
     // await cncoin.handleSpecialComment();
 
+    // 读取库存信息-接口信息有误
+    // await cncoin.getStorage();
+
     // 分割评论信息 已完成
     // await cncoin.splitComment();
 
@@ -54,8 +62,10 @@ async function asyncData() {
     // 读取客服回答NLP得分
     // await cncoin.getAnswerScore();
 
-    // 库存数据获取
-    // await cncoinStorage.getStorage();
+    // 库存测试
+    await cncoinStorage.requestStorage(68, 1);
+
+
 }
 
 async function save2DB() {
@@ -66,6 +76,7 @@ async function save2DB() {
     //存储评论信息(已完结)
     // await cncoinDb.saveComment();
 
+<<<<<<< HEAD
     // 存储库存信息
     // await cncoinDb.saveStorage();
 
@@ -83,6 +94,8 @@ async function save2DB() {
         .catch(e => {
             console.log(e);
         });
+=======
+>>>>>>> remotes/origin/master
 }
 
 module.exports = {

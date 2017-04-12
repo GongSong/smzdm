@@ -1,8 +1,13 @@
-let fs = require('fs');
-let http = require('http');
-let util = require('../util/common');
-let querystring = require('querystring');
+let axios = require('axios');
 
+let spiderSetting = require('../util/spiderSetting');
+
+let util = require('../util/common');
+let goodsList = require('../data/cncoinGoodsList.json');
+let MAX_NUM = goodsList.length;
+
+let querystring = require('querystring');
+let http = require('http');
 let config = {
     method: 'POST',
     host: 'www.chinagoldcoin.net',
@@ -20,23 +25,29 @@ let config = {
     }
 };
 
-async function getStorage(start = 1) {
-    let goodsList = require('../data/cncoinGoodsList.json');
-    let MAX_NUM = goodsList.length;
+async function getStorage() {
     let storageNum = [];
-    for (let i = start; i <= MAX_NUM; i++) {
-        let val = await getStorageById(i);
-        storageNum.push({
-            item_id: i,
-            value: val,
-            rec_date: util.getNow(1)
-        });
-    }
+    let start = 68;
+    MAX_NUM = 68;
 
-    let fileName = util.getMainContent() + '/controller/data/cncoinStorage/' + util.getNow(8) + '.json';
-    fs.writeFileSync(fileName, JSON.stringify(storageNum), 'utf8');
+    // 返回乱码
+    // await storageData();
+
+    // for (let i = start; i <= MAX_NUM; i++) {
+    //     let val = await getStorageById(i);
+    //     storageNum.push({
+    //         id: i,
+    //         value: val,
+    //         datetime: util.getNow(1)
+    //     });
+    // }
+
+    // data返回为 yes / no 时为正常
+    // 此时同样返回空
+    storageNum = await testStorage(68, 2);
 
     console.log('所有数据读取完毕');
+    return storageNum;
 }
 
 async function testStorage(goodId, goodsNum) {
@@ -45,20 +56,24 @@ async function testStorage(goodId, goodsNum) {
 }
 
 async function getStorageById(id) {
+    let startNum = 0;
     console.log('\n正在读取' + id + '的数据：');
+
     // 如果商品库存为1时，获取无数据说明无统计结果，返回0
-    let quickStorage = await requestStorage(id, 1);
-    if (quickStorage.result == 'no') {
-        console.log('商品' + id + '无数据\n');
+    if (!testStorage(id, 1)) {
         return 0;
     }
 
-    let startNum = 0;
-
-    for (let i = 3; i >= 0; i--) {
-        startNum += await getStorageBit(10 ** i, id, startNum);
-    }
-    console.log(`id:${id},商品件数:${startNum}`);
+    //千位
+    startNum += await getStorageBit(1000, id, startNum);
+    console.log('千位：' + startNum);
+    //百位
+    startNum += await getStorageBit(100, id, startNum);
+    console.log('百位：' + startNum);
+    startNum += await getStorageBit(10, id, startNum);
+    console.log('十位：' + startNum);
+    startNum += await getStorageBit(1, id, startNum);
+    console.log('个位：' + startNum);
     return startNum;
 }
 
@@ -67,12 +82,11 @@ async function getStorageBit(step, id, startNum = 0) {
     //let step = 1000;
     let bitNum;
 
+    let isFind = false;
     //10000-9000-8000-...-0
-    for (let i = step * 10; i >= 0; i -= step) {
+    for (let i = step * 10; !isFind && i >= 0; i -= step) {
         bitNum = i;
-        if (await testStorage(id, i + startNum)) {
-            break;
-        }
+        isFind = await testStorage(id, i + startNum);
     }
     return bitNum;
 }

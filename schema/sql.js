@@ -16,6 +16,8 @@ var insert = {
     cncoin_answer_nlp: '',
     cncoin_answer_seg: '',
     cncoin_goods: 'insert into cncoin_goods (item_id,good_name,tips,price,rec_date) values ?',
+    ccgold_goods: 'insert into ccgold_goods (good_id,good_name,good_cate,img_src,shop_name,rec_date) values ?',
+    ccgold_goods_detail: 'insert into ccgold_goods_detail (good_id,good_name,good_cate,weight,price,inventory,sales,freight,shop_name,rec_date) values ?',
     cncoin_storage: 'insert into cncoin_storage(item_id,value,rec_date) values ?',
     cncoin_goods_detail: 'insert into cncoin_goods_detail (item_id,year,material,weight,theme) values ?',
     cncoin_trade: 'insert into cncoin_trade (item_id,address,access_date,account,quantity,handle_status,order_type,areaid) values ?',

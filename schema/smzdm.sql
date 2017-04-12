@@ -12,6 +12,32 @@ File Encoding         : 65001
 
 Date: 2017-04-12 03:16:05
 */
+-- ----------------------------
+/**
+
+ccgold                    长城
+  1.  ccgold_goods              商品列表
+  2.  ccgold_goods_detail       商品详情
+
+chinagoldcoin             中国金币总公司
+  1.  cncoin_comment_list       评论列表
+  2.  cncoin_comment_stat       评论分析
+  3.  cncoin_goods              商品列表
+
+wfx                       微分销
+  1.  wfx_comment_list          评论列表
+  2.  wfx_comment_nlp           自然语言处理
+  3.  wfx_comment_seg           分词列表
+  4.  wfx_item_marketing        市场营销方式/积分、点赞
+  5.  wfx_stock                 库存
+
+yz                        有赞/上币
+  1.  yz_goods                  商品列表
+  2.  yz_stock                  库存
+  3.  yz_trade_record           交易历史记录
+
+**/
+-- ----------------------------
 
 SET FOREIGN_KEY_CHECKS=0;
 
@@ -242,3 +268,6 @@ CREATE TABLE `yz_trade_record` (
   PRIMARY KEY (`id`),
   KEY `idx_yz_trade` (`alias`,`update_time`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='有赞店铺交易记录';
+
+
+SET FOREIGN_KEY_CHECKS=1;
