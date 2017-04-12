@@ -117,9 +117,10 @@ function handleCncoinGoodsList(obj) {
  * @param {*} obj 
  */
 function handelCcgoldGoodsList(obj) {
+    console.log(obj);
     let url = sql.insert.ccgold_goods;
     let rec_date = getNow();
-    let sqlValues = `(${obj.goodsId},'${obj.title}','${obj.cate_id}',${obj.img},'${obj.company}','${rec_date}')`;
+    let sqlValues = `(${obj.goodsId},'${obj.title}',${obj.cate_id},'${obj.img}','${obj.company}','${rec_date}')`;
     url = url.replace('?', sqlValues);
     return url;
 }
@@ -130,8 +131,7 @@ function handelCcgoldGoodsList(obj) {
  */
 function handelCcgoldGoodsDetail(obj) {
     let url = sql.insert.ccgold_goods_detail;
-    let rec_date = getNow();
-    let sqlValues = `(${obj.goods_id},'${obj.good_name}','${obj.cate_id}',${obj.weight},'${obj.price}','${stock}','${sale_num}','${freight}','${shop_name}','${rec_date}')`;
+    let sqlValues = `(${obj.goods_id},'${obj.good_name}',${obj.cate_id},${obj.weight},${obj.price},${obj.stock},${obj.sale_num},${obj.freight},'${obj.shop_name}','${obj.rec_date}')`;
     url = url.replace('?', sqlValues);
     return url;
 }
