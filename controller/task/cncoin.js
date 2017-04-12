@@ -63,7 +63,8 @@ async function asyncData() {
     // await cncoin.getAnswerScore();
 
     // 库存测试
-    // await cncoinStorage.test1();
+    await cncoinStorage.requestStorage(68, 1);
+
 
 }
 

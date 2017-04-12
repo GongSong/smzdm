@@ -25,44 +25,13 @@ let config = {
     }
 };
 
-function httpRequest(postData, callback) {
-    let config = {
-        host: 'www.chinagoldcoin.net',
-        method: 'post',
-        path: '/views/contents/shop/goods/goods_limit_cart_ajax.jsp',
-        headers
-    };
-
-    let result = "";
-    let req = http.request(config, res => {
-        res.on('data', (chunk) => {
-            result += chunk;
-        });
-        res.on('end', function () {
-            callback(result);
-        });
-    }).on('error', e => {
-        console.log(e);
-    })
-
-    req.write(postData);
-    req.end();
-}
-
-async function storateData() {
-    let postData = querystring.stringify({ goodId: 121, goodsNum: 433, source: 1 });
-    await httpRequest(postData, function (data) {
-        console.log(data);
-    })
-}
-
 async function getStorage() {
     let storageNum = [];
     let start = 68;
     MAX_NUM = 68;
 
     // 返回乱码
-    // await storateData();
+    // await storageData();
 
     // for (let i = start; i <= MAX_NUM; i++) {
     //     let val = await getStorageById(i);
@@ -82,27 +51,19 @@ async function getStorage() {
 }
 
 async function testStorage(goodId, goodsNum) {
-    let flag = false;
-    let url = 'http://www.chinagoldcoin.net/views/contents/shop/goods/goods_limit_cart_ajax.jsp'
-    let config = {
-        method: 'POST',
-        url,
-        data: { goodId, goodsNum, source: 1 },
-        headers
-    }
-
-    return await axios(config).then(res => {
-        console.log('返回数据：' + res.data);
-        return res.data == 'yes';
-    })
-        .catch(e => {
-            console.log(e);
-        });
+    let store = await requestStorage(goodId, goodsNum);
+    return store.result == 'yes';
 }
 
 async function getStorageById(id) {
     let startNum = 0;
     console.log('\n正在读取' + id + '的数据：');
+
+    // 如果商品库存为1时，获取无数据说明无统计结果，返回0
+    if (!testStorage(id, 1)) {
+        return 0;
+    }
+
     //千位
     startNum += await getStorageBit(1000, id, startNum);
     console.log('千位：' + startNum);
@@ -131,10 +92,11 @@ async function getStorageBit(step, id, startNum = 0) {
 }
 
 function requestStorage(goodId, goodsNum) {
-    // console.log({goodId,goodsNum});
 
     let postData = querystring.stringify({
-        goodId, goodsNum, source: 1
+        goodId,
+        goodsNum,
+        source: 1
     });
 
     return new Promise((resolve, reject) => {
@@ -152,7 +114,6 @@ function requestStorage(goodId, goodsNum) {
             console.log(`problem with request: ${e.message}`);
             reject(e);
         });
-
         request.write(postData);
         request.end();
     });
