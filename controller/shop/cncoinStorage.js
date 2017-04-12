@@ -29,7 +29,7 @@ async function getStorage(start = 1) {
         storageNum.push({
             item_id: i,
             value: val,
-            rec_time: util.getNow(1)
+            rec_date: util.getNow(1)
         });
     }
 

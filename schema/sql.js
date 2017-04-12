@@ -15,7 +15,8 @@ var insert = {
     cncoin_question_seg: '',
     cncoin_answer_nlp: '',
     cncoin_answer_seg: '',
-    cncoin_goods: 'insert into cncoin_goods (item_id,good_name,tips,price,rec_date) values ?'
+    cncoin_goods: 'insert into cncoin_goods (item_id,good_name,tips,price,rec_date) values ?',
+    cncoin_storage: 'insert into cncoin_storage(item_id,value,rec_date) values ?'
 };
 
 var update = {

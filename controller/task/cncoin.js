@@ -41,9 +41,6 @@ async function asyncData() {
     // id号 68 121 72 无法顺利读取，需特殊处理
     // await cncoin.handleSpecialComment();
 
-    // 读取库存信息-接口信息有误
-    // await cncoin.getStorage();
-
     // 分割评论信息 已完成
     // await cncoin.splitComment();
 
@@ -62,10 +59,8 @@ async function asyncData() {
     // 读取客服回答NLP得分
     // await cncoin.getAnswerScore();
 
-    // 库存测试
-    await cncoinStorage.getStorage()
-
-
+    // 库存数据获取
+    // await cncoinStorage.getStorage();
 }
 
 async function save2DB() {
@@ -76,6 +71,8 @@ async function save2DB() {
     //存储评论信息(已完结)
     // await cncoinDb.saveComment();
 
+    // 存储库存信息
+    // await cncoinDb.saveStorage();
 }
 
 module.exports = {
