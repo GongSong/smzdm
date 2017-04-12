@@ -62,7 +62,6 @@ async function saveGoods() {
     }
 }
 
-<<<<<<< HEAD
 async function saveStorage() {
     // 获取今天数据并存储
     let storage = require('../data/cncoinStorage/' + util.getNow(8) + '.json');
@@ -148,10 +147,4 @@ module.exports = {
     saveDetail,
     saveTradRecord,
     saveQuestion
-=======
-module.exports = {
-    saveComment,
-    getCommentById,
-    saveGoods
->>>>>>> remotes/origin/master
 }
