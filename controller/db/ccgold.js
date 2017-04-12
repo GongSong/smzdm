@@ -15,16 +15,19 @@ function setStockData(req, res) {
 }
 
 
-function getGoodList(req, res, next) {
-    let sqlStr = sql.query.wfx_itemid_list
-    query(sqlStr, function(result) {
-        let data = JSON.stringify(result)
-        data = JSON.parse(data);
-        next(data);
+function setGoodList(req, res, next) {
+    let arr = require('../data/ccgoldGoodsList.json')
+    let spiderData = {
+        data: arr
+    }
+    let sqlStr = sqlParser.handleWfxStockData(spiderData)
+    query(sqlStr, function (result) {
+        let str = JSON.stringify(result)
+        res.send(str)
     })
 }
 
 module.exports = {
     setStockData,
-    getGoodList
+    setGoodList
 }
