@@ -144,9 +144,10 @@ CREATE TABLE `wfx_comment_seg` (
   `item_id` int(11) NOT NULL COMMENT '商品编号',
   `comment_id` int(11) NOT NULL COMMENT '评论编号',
   `word` varchar(20) NOT NULL COMMENT '词语',
+  `pos` int COMMENT '词语位置',
   PRIMARY KEY (`id`),
   KEY `idx_wfx_commentseg_item` (`item_id`) USING BTREE,
-  KEY `idx_wfx_commentseg_comment` (`comment_id`) USING BTREE,
+  KEY `idx_wfx_commentseg_comment` (`comment_id`,`pos`) USING BTREE,
   KEY `idx_wfx_commentseg_word` (`word`) USING HASH
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='微分销评论分词';
 
