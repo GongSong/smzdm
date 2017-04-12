@@ -127,7 +127,8 @@ async function getStorageBit(step, id, startNum = 0) {
 }
 
 function test1(req, res, num) {
-    console.log('请求数量='+num);
+    // let iconv = require('iconv-lite');
+    console.log('请求数量=' + num);
 
     let postData = querystring.stringify({
         goodId: 118, goodsNum: num, source: 1
@@ -153,21 +154,17 @@ function test1(req, res, num) {
 
     let request = http.request(config, (response) => {
         let result = '';
-        response.setEncoding('utf8');
-        response.on('data', (chunk) => {
-            // console.log(`BODY: ${chunk}`);
+        let zlib = require('zlib');
+        let gunzip = zlib.createGunzip();
+        response.pipe(gunzip);
+        gunzip.on('data', (chunk) => {
             result += chunk;
-        });
-        response.on('end', () => {
-            //yes:%1F%EF%BF%BD%08%00%00%00%00%00%00%03%EF%BF%BDL-%06%00%EF%BF%BD5%EF%BF%BDu%03%00%00%00
-            //no:%1F%EF%BF%BD%08%00%00%00%00%00%00%03%EF%BF%BD%EF%BF%BD%07%00%1F(%EF%BF%BDg%02%00%00%00
-            res.send(JSON.stringify(response.headers) + '-----------------' + result);
+        }).on('end', () => {
+            res.send(result);
             res.end();
-            // console.log(response.headers);
-            console.log('响应结果='+querystring.escape(result));
+            console.log(response.headers);
         });
-    });
-    request.on('error', (e) => {
+    }).on('error', (e) => {
         console.log(`problem with request: ${e.message}`);
     });
 
