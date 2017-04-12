@@ -8,18 +8,22 @@ let MAX_NUM = goodsList.length;
 
 let querystring = require('querystring');
 let http = require('http');
-let headers = {
-    Host: 'www.chinagoldcoin.net',
-    Cookie: 'pgv_pvi=5114602496; pgv_si=s7545359360; __utmz=119523675.1491833990.18.13.utmcsr=item.chinagoldcoin.net|utmccn=(referral)|utmcmd=referral|utmcct=/product_detail_68.html; uu_code=cmVhbGV2ZUBxcS5jb20=; foregroundSN=4469382B3793254DE1DFE5F8A7B499A3-n1; lua_nickname=; __utma=119523675.1928653905.1487392583.1491826665.1491833990.18; __utmc=119523675; __utmv=119523675.0; __utmb=119523675.63.9.1491841398836; CARTGOODS=Id%3A121%2Csrc%3A1%2CNum%3A2%26; Hm_lvt_79551d2592621515873edbfb6d98c7c6=1490989155,1491487062,1491747498,1491826190; Hm_lpvt_79551d2592621515873edbfb6d98c7c6=1491842387',
-    Origin: 'http://www.chinagoldcoin.net',
-    Referer: 'http://www.chinagoldcoin.net/views/pages/cart.jsp',
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36',
-    'X-Requested-With': 'XMLHttpRequest',
-    "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-    'Connection': 'keep-alive',
-    'Accept-Language': 'zh-CN,zh;q=0.8',
-    'Accept-Encoding': 'gzip, deflate'
-};
+let config = {
+        method: 'POST',
+        host: 'www.chinagoldcoin.net',
+        path: '/views/contents/shop/goods/goods_limit_cart_ajax.jsp',
+        headers: {
+            'Host': 'www.chinagoldcoin.net',
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:50.0) Gecko/20100101 Firefox/50.0',
+            'Accept': '*/*',
+            'Accept-Language': 'zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3',
+            'Accept-Encoding': 'gzip, deflate',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-Requested-With': 'XMLHttpRequest',
+            'Referer': 'http://www.chinagoldcoin.net/views/pages/cart.jsp',
+            'Connection': 'keep-alive'
+        }
+    };
 
 function httpRequest(postData, callback) {
     let config = {
@@ -126,31 +130,17 @@ async function getStorageBit(step, id, startNum = 0) {
     return bitNum;
 }
 
-function test1(req, res, num) {
-    // let iconv = require('iconv-lite');
-    console.log('请求数量=' + num);
+function test1(req, res) {
+    let url = require('url');
+    let url_parts = url.parse(req.url,true);
+    let query = url_parts.query;
+    let goodId = query.goodId;
+    let goodsNum = query.goodsNum;
+    console.log({goodId,goodsNum});
 
     let postData = querystring.stringify({
-        goodId: 118, goodsNum: num, source: 1
+        goodId, goodsNum, source: 1
     });
-    let config = {
-        method: 'POST',
-        host: 'www.chinagoldcoin.net',
-        path: '/views/contents/shop/goods/goods_limit_cart_ajax.jsp',
-        headers: {
-            'Host': 'www.chinagoldcoin.net',
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:50.0) Gecko/20100101 Firefox/50.0',
-            'Accept': '*/*',
-            'Accept-Language': 'zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3',
-            'Accept-Encoding': 'gzip, deflate',
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'X-Requested-With': 'XMLHttpRequest',
-            'Referer': 'http://www.chinagoldcoin.net/views/pages/cart.jsp',
-            'Connection': 'keep-alive'
-        }
-    };
-
-    // 'Cookie': 'lua_nickname=; Hm_lvt_79551d2592621515873edbfb6d98c7c6=1491955526; Hm_lpvt_79551d2592621515873edbfb6d98c7c6=1491955630; foregroundSN=A3F6F7EB793A0A5C4222342CF0480DE8-n1; pgv_pvi=7141651456; pgv_si=s694099968; __utma=119523675.808675668.1491955629.1491955629.1491955629.1; __utmb=119523675.5.10.1491955629; __utmc=119523675; __utmz=119523675.1491955629.1.1.utmcsr=item.chinagoldcoin.net|utmccn=(referral)|utmcmd=referral|utmcct=/product_detail_118.html; __utmv=119523675.0; CARTGOODS=Id%3A118%2Csrc%3A1%2CNum%3A1%26',
 
     let request = http.request(config, (response) => {
         let result = '';
@@ -160,9 +150,7 @@ function test1(req, res, num) {
         gunzip.on('data', (chunk) => {
             result += chunk;
         }).on('end', () => {
-            res.send(result);
-            res.end();
-            console.log(response.headers);
+            res.json({goodId,goodsNum,result});
         });
     }).on('error', (e) => {
         console.log(`problem with request: ${e.message}`);
