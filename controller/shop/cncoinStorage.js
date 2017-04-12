@@ -128,8 +128,9 @@ async function getStorageBit(step, id, startNum = 0) {
 
 function test1(req, res, num) {
     console.log('请求数量='+num);
+
     let postData = querystring.stringify({
-        goodId: 68, goodsNum: num, source: 1
+        goodId: 118, goodsNum: num, source: 1
     });
     let config = {
         method: 'POST',
@@ -160,7 +161,7 @@ function test1(req, res, num) {
         response.on('end', () => {
             //yes:%1F%EF%BF%BD%08%00%00%00%00%00%00%03%EF%BF%BDL-%06%00%EF%BF%BD5%EF%BF%BDu%03%00%00%00
             //no:%1F%EF%BF%BD%08%00%00%00%00%00%00%03%EF%BF%BD%EF%BF%BD%07%00%1F(%EF%BF%BDg%02%00%00%00
-            res.send(response.headers + '-----------------' + result);
+            res.send(JSON.stringify(response.headers) + '-----------------' + result);
             res.end();
             // console.log(response.headers);
             console.log('响应结果='+querystring.escape(result));
