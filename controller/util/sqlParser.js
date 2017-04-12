@@ -161,13 +161,10 @@ module.exports = {
     handleCncoinCommentStat,
     handleCncoinCommentList,
     handleCncoinGoodsList,
-<<<<<<< HEAD
     handleCncoinStorage,
     handleCncoinDetail,
     handleCncoinTrade,
-    handleCncoinQuestion
-=======
+    handleCncoinQuestion,
     handelCcgoldGoodsList,
     handelCcgoldGoodsDetail
->>>>>>> remotes/origin/master
 };
