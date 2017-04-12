@@ -9,21 +9,21 @@ let MAX_NUM = goodsList.length;
 let querystring = require('querystring');
 let http = require('http');
 let config = {
-        method: 'POST',
-        host: 'www.chinagoldcoin.net',
-        path: '/views/contents/shop/goods/goods_limit_cart_ajax.jsp',
-        headers: {
-            'Host': 'www.chinagoldcoin.net',
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:50.0) Gecko/20100101 Firefox/50.0',
-            'Accept': '*/*',
-            'Accept-Language': 'zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3',
-            'Accept-Encoding': 'gzip, deflate',
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'X-Requested-With': 'XMLHttpRequest',
-            'Referer': 'http://www.chinagoldcoin.net/views/pages/cart.jsp',
-            'Connection': 'keep-alive'
-        }
-    };
+    method: 'POST',
+    host: 'www.chinagoldcoin.net',
+    path: '/views/contents/shop/goods/goods_limit_cart_ajax.jsp',
+    headers: {
+        'Host': 'www.chinagoldcoin.net',
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:50.0) Gecko/20100101 Firefox/50.0',
+        'Accept': '*/*',
+        'Accept-Language': 'zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3',
+        'Accept-Encoding': 'gzip, deflate',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'X-Requested-With': 'XMLHttpRequest',
+        'Referer': 'http://www.chinagoldcoin.net/views/pages/cart.jsp',
+        'Connection': 'keep-alive'
+    }
+};
 
 function httpRequest(postData, callback) {
     let config = {
@@ -130,38 +130,35 @@ async function getStorageBit(step, id, startNum = 0) {
     return bitNum;
 }
 
-function test1(req, res) {
-    let url = require('url');
-    let url_parts = url.parse(req.url,true);
-    let query = url_parts.query;
-    let goodId = query.goodId;
-    let goodsNum = query.goodsNum;
-    console.log({goodId,goodsNum});
+function requestStorage(goodId, goodsNum) {
+    // console.log({goodId,goodsNum});
 
     let postData = querystring.stringify({
         goodId, goodsNum, source: 1
     });
 
-    let request = http.request(config, (response) => {
-        let result = '';
-        let zlib = require('zlib');
-        let gunzip = zlib.createGunzip();
-        response.pipe(gunzip);
-        gunzip.on('data', (chunk) => {
-            result += chunk;
-        }).on('end', () => {
-            res.json({goodId,goodsNum,result});
+    return new Promise((resolve, reject) => {
+        let request = http.request(config, (response) => {
+            let result = '';
+            let zlib = require('zlib');
+            let gunzip = zlib.createGunzip();
+            response.pipe(gunzip);
+            gunzip.on('data', (chunk) => {
+                result += chunk;
+            }).on('end', () => {
+                resolve({ goodId, goodsNum, result })
+            });
+        }).on('error', (e) => {
+            console.log(`problem with request: ${e.message}`);
+            reject(e);
         });
-    }).on('error', (e) => {
-        console.log(`problem with request: ${e.message}`);
+
+        request.write(postData);
+        request.end();
     });
-
-    request.write(postData);
-    request.end();
-
 }
 
 module.exports = {
     getStorage,
-    test1
+    requestStorage
 }
