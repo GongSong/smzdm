@@ -6,12 +6,15 @@ let fs = require('fs');
 let util = require('../util/common');
 
 function getCommentById(i = 1, content = 'Comment') {
-
     let fileName = util.getMainContent() + '/controller/data/cncoin' + content + '/itemid_' + i + '.json';
-
-    let str = fs.readFileSync(fileName, 'utf-8');
-    let comment = JSON.parse(str);
-    return comment;
+    try {
+        let str = fs.readFileSync(fileName, 'utf-8');
+        let comment = JSON.parse(str);
+        return comment;
+    } catch (e) {
+        console.log('第' + i + '条信息读取失败');
+        return [];
+    }
 }
 
 async function saveComment() {
@@ -139,6 +142,124 @@ async function saveQuestion() {
     }
 }
 
+async function saveQuestionSeg() {
+    let goodsList = require('../data/cncoinGoodsList.json');
+    let MAX_NUM = goodsList.length;
+    let start = 1;
+
+    for (let i = start; i <= MAX_NUM; i++) {
+        for (let type = 0; type <= 1; type++) {
+            let Record = getCommentById(i, type ? 'AnswerSeg' : 'QuestionSeg');
+            for (let k = 0; k < Record.length; k++) {
+                let question = Record[k];
+                if (!Reflect.has(question, 'tokens')) {
+                    continue;
+                }
+
+                for (let j = 0; j < question.combtokens.length; j++) {
+                    let cmb = question.combtokens[i];
+                    if (typeof cmb == 'undefined') {
+                        continue;
+                    }
+                    cmb.wtype = cmb.cls;
+                    question.tokens.push(cmb);
+                }
+
+                for (let j = 0; j < question.tokens.length; j++) {
+                    let item = question.tokens[j];
+                    if (item == null) {
+                        continue;
+                    }
+                    item.item_id = question.item_id;
+                    item.replyTime = question.replyTime;
+                    item.account = question.account;
+                    item.postTime = question.postTime;
+                    let url = sqlParser.handleCncoinQuestionSeg(item, type);
+                    await query(url);
+                }
+            }
+        }
+        console.log(`第${i}/${MAX_NUM}条商品咨询NLP信息插入完毕`);
+    }
+}
+
+async function saveQuestionNlp() {
+    let goodsList = require('../data/cncoinGoodsList.json');
+    let MAX_NUM = goodsList.length;
+    let start = 1;
+    for (let i = start; i <= MAX_NUM; i++) {
+        for (let type = 0; type <= 1; type++) {
+            let Record = getCommentById(i, type ? 'AnswerScore' : 'QuestionScore');
+            for (let k = 0; k < Record.length; k++) {
+                let item = Record[k];
+                if (!Reflect.has(item, 'positive')) {
+                    continue;
+                }
+                let url = sqlParser.handleCncoinQuestionNlp(item, type);
+                await query(url);
+            }
+        }
+        console.log(`第${i}/${MAX_NUM}条商品咨询NLP信息插入完毕`);
+    }
+}
+
+async function saveCommentSeg() {
+    let goodsList = require('../data/cncoinGoodsList.json');
+    let MAX_NUM = goodsList.length;
+    let start = 1;
+
+    for (let i = start; i <= MAX_NUM; i++) {
+        let Record = getCommentById(i, 'CommentSeg');
+        for (let k = 0; k < Record.length; k++) {
+            let question = Record[k];
+            if (!Reflect.has(question, 'tokens')) {
+                continue;
+            }
+
+            for (let j = 0; j < question.combtokens.length; j++) {
+                let cmb = question.combtokens[i];
+                if (typeof cmb == 'undefined') {
+                    continue;
+                }
+                cmb.wtype = cmb.cls;
+                question.tokens.push(cmb);
+            }
+
+            for (let j = 0; j < question.tokens.length; j++) {
+                let item = question.tokens[j];
+                if (item == null) {
+                    continue;
+                }
+                item.item_id = question.item_id;
+                item.comment_id = question.comment_id;
+                let url = sqlParser.handleCncoinCommentSeg(item);
+                await query(url);
+            }
+        }
+        console.log(`第${i}/${MAX_NUM}条商品评论分词信息插入完毕`);
+    }
+}
+
+async function saveCommentNlp() {
+    let goodsList = require('../data/cncoinGoodsList.json');
+    let MAX_NUM = goodsList.length;
+    let start = 1;
+    for (let i = start; i <= MAX_NUM; i++) {
+
+        let Record = getCommentById(i, 'CommentScore');
+        for (let k = 0; k < Record.length; k++) {
+            let item = Record[k];
+            if (!Reflect.has(item, 'positive')) {
+                continue;
+            }
+            let url = sqlParser.handleCncoinCommentNlp(item);
+            await query(url);
+        }
+
+        console.log(`第${i}/${MAX_NUM}条商品咨询NLP信息插入完毕`);
+    }
+}
+
 module.exports = {
     saveComment,
     getCommentById,
@@ -146,5 +267,9 @@ module.exports = {
     saveStorage,
     saveDetail,
     saveTradRecord,
-    saveQuestion
+    saveQuestion,
+    saveQuestionSeg,
+    saveQuestionNlp,
+    saveCommentSeg,
+    saveCommentNlp
 }

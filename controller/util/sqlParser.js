@@ -89,29 +89,6 @@ function handleWfxCommentSeg(obj) {
     return url;
 }
 
-function handleCncoinCommentStat(obj) {
-    let url = sql.insert.cncoin_comment_stat;
-    let rec_date = getNow();
-    let sqlValues = `(${obj.item_id},${obj.allNumber},${obj.count},${obj.goodNumber},${obj.pageNo},${obj.middleNumber},${obj.imageNumber},${obj.badNumber},'${rec_date}')`;
-    url = url.replace('?', sqlValues);
-    return url;
-}
-
-function handleCncoinCommentList(obj) {
-    let url = sql.insert.cncoin_comment_list;
-    let sqlValues = `(${obj.item_id},${obj.comment_id},${obj.levelId},${obj.countByNumber},${obj.comment_type},'${obj.content}',${obj.comment_rank},'${obj.access_date}',${obj.average_points},'${obj.account}','${obj.add_time}')`;
-    url = url.replace('?', sqlValues);
-    return url;
-}
-
-function handleCncoinGoodsList(obj) {
-    let url = sql.insert.cncoin_goods;
-    let rec_date = getNow();
-    let sqlValues = `(${obj.item_id},'${obj.name}','${obj.tips}',${obj.price},'${rec_date}')`;
-    url = url.replace('?', sqlValues);
-    return url;
-}
-
 /**
  * 整理长城商品列表入库sql
  * @param {*} obj 
@@ -136,6 +113,44 @@ function handelCcgoldGoodsDetail(obj) {
     return url;
 }
 
+
+function handleCncoinCommentStat(obj) {
+    let url = sql.insert.cncoin_comment_stat;
+    let rec_date = getNow();
+    let sqlValues = `(${obj.item_id},${obj.allNumber},${obj.count},${obj.goodNumber},${obj.pageNo},${obj.middleNumber},${obj.imageNumber},${obj.badNumber},'${rec_date}')`;
+    url = url.replace('?', sqlValues);
+    return url;
+}
+
+function handleCncoinCommentList(obj) {
+    let url = sql.insert.cncoin_comment_list;
+    let sqlValues = `(${obj.item_id},${obj.comment_id},${obj.levelId},${obj.countByNumber},${obj.comment_type},'${obj.content}',${obj.comment_rank},'${obj.access_date}',${obj.average_points},'${obj.account}','${obj.add_time}')`;
+    url = url.replace('?', sqlValues);
+    return url;
+}
+
+function handleCncoinGoodsList(obj) {
+    let url = sql.insert.cncoin_goods;
+    let rec_date = getNow();
+    let sqlValues = `(${obj.item_id},'${obj.name}','${obj.tips}',${obj.price},'${rec_date}')`;
+    url = url.replace('?', sqlValues);
+    return url;
+}
+
+function handleCncoinStorage(obj) {
+    let url = sql.insert.cncoin_storage;
+    let sqlValues = `(${obj.item_id},${obj.value},'${obj.rec_date}')`;
+    url = url.replace('?', sqlValues);
+    return url;
+}
+
+function handleCncoinDetail(obj) {
+    let url = sql.insert.cncoin_goods_detail;
+    let sqlValues = `(${obj.item_id},'${obj.year}','${obj.material}','${obj.weight}','${obj.theme}')`;
+    url = url.replace('?', sqlValues);
+    return url;
+}
+
 function handleCncoinTrade(obj) {
     let url = sql.insert.cncoin_trade;
     let sqlValues = `(${obj.item_id},'${obj.address}','${obj.access_date}','${obj.account}',${obj.quantity},${obj.handle_status},'${obj.order_type}','${obj.areaid}')`;
@@ -146,6 +161,36 @@ function handleCncoinTrade(obj) {
 function handleCncoinQuestion(obj) {
     let url = sql.insert.cncoin_question;
     let sqlValues = `(${obj.item_id},'${obj.content}',${obj.levelId},'${obj.account}','${obj.replyContent}','${obj.contentType}','${obj.replyTime}','${obj.postTime}')`;
+    url = url.replace('?', sqlValues);
+    return url;
+}
+
+// type=1 时，客服回答信息
+function handleCncoinQuestionSeg(obj, type = 0) {
+    let url = type ? sql.insert.cncoin_answer_seg : sql.insert.cncoin_question_seg;
+    let sqlValues = `(${obj.item_id},'${obj.account}','${obj.replyTime}','${obj.postTime}','${obj.word}','${obj.wtype}',${obj.pos})`;
+    url = url.replace('?', sqlValues);
+    return url;
+}
+
+// type=1 时，客服回答信息
+function handleCncoinQuestionNlp(obj, type = 0) {
+    let url = type ? sql.insert.cncoin_answer_nlp : sql.insert.cncoin_question_nlp;
+    let sqlValues = `(${obj.item_id},'${obj.account}','${obj.replyTime}','${obj.postTime}',${obj.negative},${obj.positive})`;
+    url = url.replace('?', sqlValues);
+    return url;
+}
+
+function handleCncoinCommentSeg(obj) {
+    let url = sql.insert.cncoin_comment_seg;
+    let sqlValues = `(${obj.item_id},${obj.comment_id},'${obj.word}','${obj.wtype}',${obj.pos})`;
+    url = url.replace('?', sqlValues);
+    return url;
+}
+
+function handleCncoinCommentNlp(obj) {
+    let url = sql.insert.cncoin_comment_nlp;
+    let sqlValues = `(${obj.item_id},${obj.comment_id},${obj.negative},${obj.positive})`;
     url = url.replace('?', sqlValues);
     return url;
 }
@@ -166,5 +211,9 @@ module.exports = {
     handleCncoinTrade,
     handleCncoinQuestion,
     handelCcgoldGoodsList,
-    handelCcgoldGoodsDetail
+    handelCcgoldGoodsDetail,
+    handleCncoinQuestionSeg,
+    handleCncoinQuestionNlp,
+    handleCncoinCommentSeg,
+    handleCncoinCommentNlp
 };

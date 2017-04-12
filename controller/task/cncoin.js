@@ -94,6 +94,18 @@ async function save2DB() {
     //         console.log(e);
     //     });
 
+    // 咨询问答分词
+    // await cncoinDb.saveQuestionSeg().catch(e => { console.log(e) });
+
+    // 咨询问答NLP
+    // await cncoinDb.saveQuestionNlp().catch(e => { console.log(e) });
+
+    // 评论分词
+    // await cncoinDb.saveCommentSeg().catch(e => { console.log(e) });
+
+    // 评论Nlp
+    // await cncoinDb.saveCommentNlp().catch(e => { console.log(e) });
+
 }
 
 module.exports = {
