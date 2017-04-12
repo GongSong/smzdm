@@ -76,8 +76,8 @@ router.get('/cncoin/comment', function(req, res) {
 });
 
 // cncoin test storage
-router.get('/cncoin/test', function(req, res) {
-    crawler.cncointest.test1(req, res);
+router.get('/cncoin/test/:num', function(req, res) {
+    crawler.cncointest.test1(req, res,req.params.num);
 });
 
 // router.get('/cncoin/storage', function(req, res) {

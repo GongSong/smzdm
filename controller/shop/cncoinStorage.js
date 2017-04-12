@@ -34,7 +34,7 @@ function httpRequest(postData, callback) {
         res.on('data', (chunk) => {
             result += chunk;
         });
-        res.on('end', function() {
+        res.on('end', function () {
             callback(result);
         });
     }).on('error', e => {
@@ -47,7 +47,7 @@ function httpRequest(postData, callback) {
 
 async function storateData() {
     let postData = querystring.stringify({ goodId: 121, goodsNum: 433, source: 1 });
-    await httpRequest(postData, function(data) {
+    await httpRequest(postData, function (data) {
         console.log(data);
     })
 }
@@ -88,9 +88,9 @@ async function testStorage(goodId, goodsNum) {
     }
 
     return await axios(config).then(res => {
-            console.log('返回数据：' + res.data);
-            return res.data == 'yes';
-        })
+        console.log('返回数据：' + res.data);
+        return res.data == 'yes';
+    })
         .catch(e => {
             console.log(e);
         });
@@ -126,12 +126,10 @@ async function getStorageBit(step, id, startNum = 0) {
     return bitNum;
 }
 
-
-function test1(req, res) {
-    let http = require('http');
-    let querystring = require('querystring');
-    var postData = querystring.stringify({
-        goodId: 118, goodsNum: 25, source: 1
+function test1(req, res, num) {
+    console.log('请求数量='+num);
+    let postData = querystring.stringify({
+        goodId: 68, goodsNum: num, source: 1
     });
     let config = {
         method: 'POST',
@@ -146,25 +144,26 @@ function test1(req, res) {
             'Content-Type': 'application/x-www-form-urlencoded',
             'X-Requested-With': 'XMLHttpRequest',
             'Referer': 'http://www.chinagoldcoin.net/views/pages/cart.jsp',
-            'Cookie': '__utma=119523675.229289344.1491834268.1491834268.1491923072.2; __utmz=119523675.1491923072.2.2.utmcsr=item.chinagoldcoin.net|utmccn=(referral)|utmcmd=referral|utmcct=/product_detail_118.html; __utmv=119523675.0; Hm_lvt_79551d2592621515873edbfb6d98c7c6=1491834268,1491921860; foregroundSN=2404C41146F65041307B4FE30C6A8E02-n1; lua_nickname=; Hm_lpvt_79551d2592621515873edbfb6d98c7c6=1491923089; pgv_pvi=9884649472; pgv_si=s2699280384; __utmb=119523675.5.10.1491923072; __utmc=119523675; CARTGOODS=Id%3A118%2Csrc%3A1%2CNum%3A1%26',
             'Connection': 'keep-alive'
         }
     };
-    // console.log(config);
+
+    // 'Cookie': 'lua_nickname=; Hm_lvt_79551d2592621515873edbfb6d98c7c6=1491955526; Hm_lpvt_79551d2592621515873edbfb6d98c7c6=1491955630; foregroundSN=A3F6F7EB793A0A5C4222342CF0480DE8-n1; pgv_pvi=7141651456; pgv_si=s694099968; __utma=119523675.808675668.1491955629.1491955629.1491955629.1; __utmb=119523675.5.10.1491955629; __utmc=119523675; __utmz=119523675.1491955629.1.1.utmcsr=item.chinagoldcoin.net|utmccn=(referral)|utmcmd=referral|utmcct=/product_detail_118.html; __utmv=119523675.0; CARTGOODS=Id%3A118%2Csrc%3A1%2CNum%3A1%26',
+
     let request = http.request(config, (response) => {
         let result = '';
         response.setEncoding('utf8');
         response.on('data', (chunk) => {
-            console.log(`BODY: ${chunk}`);
+            // console.log(`BODY: ${chunk}`);
             result += chunk;
         });
         response.on('end', () => {
-            //%1F%EF%BF%BD%08%00%00%00%00%00%00%03%EF%BF%BDL-%06%00%EF%BF%BD5%EF%BF%BDu%03%00%00%00
-            //%1F%EF%BF%BD%08%00%00%00%00%00%00%03%EF%BF%BD%EF%BF%BD%07%00%1F(%EF%BF%BDg%02%00%00%00
-            res.send(querystring.escape(result) + '\n' + querystring.unescape(result));
-            // res.send(querystring.unescape(result));
+            //yes:%1F%EF%BF%BD%08%00%00%00%00%00%00%03%EF%BF%BDL-%06%00%EF%BF%BD5%EF%BF%BDu%03%00%00%00
+            //no:%1F%EF%BF%BD%08%00%00%00%00%00%00%03%EF%BF%BD%EF%BF%BD%07%00%1F(%EF%BF%BDg%02%00%00%00
+            res.send(response.headers + '-----------------' + result);
             res.end();
-            console.log(result);
+            // console.log(response.headers);
+            console.log('响应结果='+querystring.escape(result));
         });
     });
     request.on('error', (e) => {
