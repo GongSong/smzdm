@@ -70,7 +70,19 @@ async function save2DB() {
     // await cncoinDb.saveStorage();
 
     // 存储商品属性
-    await cncoinDb.saveDetail();
+    // await cncoinDb.saveDetail();
+
+    // 交易记录
+    // await cncoinDb.saveTradRecord()
+    // .catch(e => {
+    //     console.log(e);
+    // })
+
+    // 咨询
+    await cncoinDb.saveQuestion()
+        .catch(e => {
+            console.log(e);
+        });
 }
 
 module.exports = {

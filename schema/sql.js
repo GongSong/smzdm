@@ -10,14 +10,15 @@ var insert = {
     cncoin_comment_list: 'insert into cncoin_comment_list (item_id,comment_id,levelId,countByNumber,comment_type,content,comment_rank,access_date,average_points,account,add_time) values ?',
     cncoin_comment_nlp: '',
     cncoin_comment_seg: '',
-    cncoin_question_list: '',
+    cncoin_question: 'insert into cncoin_question (item_id,content,levelId,account,replyContent,contentType,replyTime,postTime) values ?',
     cncoin_question_nlp: '',
     cncoin_question_seg: '',
     cncoin_answer_nlp: '',
     cncoin_answer_seg: '',
     cncoin_goods: 'insert into cncoin_goods (item_id,good_name,tips,price,rec_date) values ?',
     cncoin_storage: 'insert into cncoin_storage(item_id,value,rec_date) values ?',
-    cncoin_goods_detail: 'insert into cncoin_goods_detail (item_id,year,material,weight,theme) values ?'
+    cncoin_goods_detail: 'insert into cncoin_goods_detail (item_id,year,material,weight,theme) values ?',
+    cncoin_trade: 'insert into cncoin_trade (item_id,address,access_date,account,quantity,handle_status,order_type,areaid) values ?',
 };
 
 var update = {

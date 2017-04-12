@@ -17,9 +17,11 @@ let errorHandle = (errInfo, sql = 'none') => {
 function query(sql, callback) {
     pool.getConnection((err, conn) => {
         conn.query(sql, (err, result) => {
-            errorHandle(err, sql)
-            conn.release()
-            callback(result)
+            errorHandle(err, sql);
+            conn.release();
+            if (typeof callback == 'function') {
+                callback(result);
+            }
         })
     })
 }

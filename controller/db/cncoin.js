@@ -78,7 +78,7 @@ async function saveStorage() {
 }
 
 async function saveDetail() {
-    // 获取今天数据并存储
+
     let storage = require('../data/cncoinGoodsDetail.json');
     let MAX_NUM = storage.length;
     if (MAX_NUM == 0) {
@@ -92,10 +92,59 @@ async function saveDetail() {
     }
 }
 
+async function saveTradRecord() {
+    let goodsList = require('../data/cncoinGoodsList.json');
+    let MAX_NUM = goodsList.length;
+    let start = 1;
+
+    for (let i = start; i <= MAX_NUM; i++) {
+
+        let Record = getCommentById(i, 'Record');
+        let length = Record.length;
+        if (length == 0) {
+            continue;
+        }
+
+        for (let j = 0; j < length; j++) {
+            let obj = Record[j];
+            if (Reflect.has(obj, 'areaid') && obj.areaid.length > 6) {
+                obj.areaid = obj.areaid.substr(obj.areaid.length - 5, 5);
+            }
+            let url = sqlParser.handleCncoinTrade(obj);
+            await query(url);
+        }
+        console.log(`第${i}/${MAX_NUM}条商品销售信息插入完毕`);
+    }
+}
+
+async function saveQuestion() {
+    let goodsList = require('../data/cncoinGoodsList.json');
+    let MAX_NUM = goodsList.length;
+    let start = 1;
+
+    for (let i = start; i <= MAX_NUM; i++) {
+
+        let Record = getCommentById(i, 'Question');
+        let length = Record.length;
+        if (length == 0) {
+            continue;
+        }
+
+        for (let j = 0; j < length; j++) {
+            let obj = Record[j];
+            let url = sqlParser.handleCncoinQuestion(obj);
+            await query(url);
+        }
+        console.log(`第${i}/${MAX_NUM}条商品咨询信息插入完毕`);
+    }
+}
+
 module.exports = {
     saveComment,
     getCommentById,
     saveGoods,
     saveStorage,
-    saveDetail
+    saveDetail,
+    saveTradRecord,
+    saveQuestion
 }

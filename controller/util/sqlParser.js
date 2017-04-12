@@ -126,6 +126,20 @@ function handleCncoinDetail(obj) {
     return url;
 }
 
+function handleCncoinTrade(obj) {
+    let url = sql.insert.cncoin_trade;
+    let sqlValues = `(${obj.item_id},'${obj.address}','${obj.access_date}','${obj.account}',${obj.quantity},${obj.handle_status},'${obj.order_type}','${obj.areaid}')`;
+    url = url.replace('?', sqlValues);
+    return url;
+}
+
+function handleCncoinQuestion(obj) {
+    let url = sql.insert.cncoin_question;
+    let sqlValues = `(${obj.item_id},'${obj.content}',${obj.levelId},'${obj.account}','${obj.replyContent}','${obj.contentType}','${obj.replyTime}','${obj.postTime}')`;
+    url = url.replace('?', sqlValues);
+    return url;
+}
+
 module.exports = {
     handleSaleDetailData,
     handleStockData,
@@ -138,5 +152,7 @@ module.exports = {
     handleCncoinCommentList,
     handleCncoinGoodsList,
     handleCncoinStorage,
-    handleCncoinDetail
+    handleCncoinDetail,
+    handleCncoinTrade,
+    handleCncoinQuestion
 };
