@@ -119,6 +119,13 @@ function handleCncoinStorage(obj) {
     return url;
 }
 
+function handleCncoinDetail(obj) {
+    let url = sql.insert.cncoin_goods_detail;
+    let sqlValues = `(${obj.item_id},'${obj.year}','${obj.material}','${obj.weight}','${obj.theme}')`;
+    url = url.replace('?', sqlValues);
+    return url;
+}
+
 module.exports = {
     handleSaleDetailData,
     handleStockData,
@@ -130,5 +137,6 @@ module.exports = {
     handleCncoinCommentStat,
     handleCncoinCommentList,
     handleCncoinGoodsList,
-    handleCncoinStorage
+    handleCncoinStorage,
+    handleCncoinDetail
 };

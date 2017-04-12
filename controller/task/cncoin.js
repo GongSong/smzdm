@@ -17,11 +17,6 @@ function dbDataInit() {
 
 // }
 
-// // 同步库存信息
-// function asyncStorageNum() {
-
-// }
-
 async function init() {
     await dbInit();
     await dbDataInit();
@@ -73,6 +68,9 @@ async function save2DB() {
 
     // 存储库存信息
     // await cncoinDb.saveStorage();
+
+    // 存储商品属性
+    await cncoinDb.saveDetail();
 }
 
 module.exports = {

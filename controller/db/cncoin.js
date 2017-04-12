@@ -77,9 +77,25 @@ async function saveStorage() {
     }
 }
 
+async function saveDetail() {
+    // 获取今天数据并存储
+    let storage = require('../data/cncoinGoodsDetail.json');
+    let MAX_NUM = storage.length;
+    if (MAX_NUM == 0) {
+        return;
+    }
+    for (let i = 0; i < MAX_NUM; i++) {
+        let sqlStr = sqlParser.handleCncoinDetail(storage[i]);
+        await query(sqlStr, function(res) {
+            console.log(`第${i+1}/${MAX_NUM}条 商品数据插入完毕\n`);
+        });
+    }
+}
+
 module.exports = {
     saveComment,
     getCommentById,
     saveGoods,
-    saveStorage
+    saveStorage,
+    saveDetail
 }
