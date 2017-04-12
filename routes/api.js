@@ -4,6 +4,7 @@ let dirname = __dirname.replace('routes', 'public');
 
 let youzan = require('../controller/db/youzan');
 let wfx = require('../controller/db/wfx');
+let ccgold = require('../controller/db/ccgold');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -40,6 +41,14 @@ router.get('/wfx/comment/split', function(req, res, next) {
 
 router.get('/wfx/comment/score', function(req, res, next) {
     wfx.setCommentScore(req, res);
+});
+
+router.get('/ccgold/goods', function(req, res, next) {
+    ccgold.setGoodList(req, res);
+});
+
+router.get('/ccgold/goodsDetail', function(req, res, next) {
+    ccgold.setGoodDetail(req, res);
 });
 
 module.exports = router;
