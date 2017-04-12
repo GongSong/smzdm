@@ -63,7 +63,7 @@ async function asyncData() {
     // await cncoin.getAnswerScore();
 
     // 库存测试
-    await cncoinStorage.requestStorage(68, 1);
+    // await cncoinStorage.getStorage();
 
 
 }
@@ -76,7 +76,6 @@ async function save2DB() {
     //存储评论信息(已完结)
     // await cncoinDb.saveComment();
 
-<<<<<<< HEAD
     // 存储库存信息
     // await cncoinDb.saveStorage();
 
@@ -90,12 +89,11 @@ async function save2DB() {
     // })
 
     // 咨询
-    await cncoinDb.saveQuestion()
-        .catch(e => {
-            console.log(e);
-        });
-=======
->>>>>>> remotes/origin/master
+    // await cncoinDb.saveQuestion()
+    //     .catch(e => {
+    //         console.log(e);
+    //     });
+
 }
 
 module.exports = {
