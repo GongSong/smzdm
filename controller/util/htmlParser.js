@@ -169,7 +169,7 @@ let wfx = {
 };
 
 let ccgold = {
-    goodsList(html, cate_id) {
+    goodsList(html,cate_id) {
         let rec_date = util.getNow();
         let options = {
             html,
@@ -190,7 +190,7 @@ let ccgold = {
         }
         return util.parseHTML(options);
     },
-    goodsDetail(html, goodsId) {
+    goodsDetail(html, goodsId, cate_id) {
         let rec_date = util.getNow();
         let options = {
             html,
@@ -215,7 +215,7 @@ let ccgold = {
                     return el.text().replace('￥', '').trim()
                 }
             }, {
-                node: '.spec-item.thing-chi-span.on',
+                node: '#detail-container-right div.thing-gui.spec-item-parent div.thing-right span.spec-item.thing-chi-span.on',
                 name: 'weight'
             }, {
                 node: '#shy',
@@ -226,10 +226,17 @@ let ccgold = {
                 formatter(el) {
                     return el.text().split('销售量')[1].trim();
                 }
+            }, {
+                node: '#nc_kd',
+                name: 'freight',
+                formatter(el) {
+                    return el.text() === '卖家承担运费' ? '0' : (el.text().indexOf('￥') >= 0 ? el.text().replace('￥', '').trim() : el.text().trim()).replace(/快递：[\d\D+?]元/g,'$1');
+                }
             }],
             formatter(item) {
                 item.rec_date = rec_date;
                 item.goods_id = goodsId;
+                item.cate_id = cate_id;
                 return item;
             }
         }

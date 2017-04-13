@@ -97,7 +97,7 @@ function handelCcgoldGoodsList(obj) {
     console.log(obj);
     let url = sql.insert.ccgold_goods;
     let rec_date = getNow();
-    let sqlValues = `(${obj.goodsId},'${obj.title}',${obj.cate_id},'${obj.img}','${obj.company}','${rec_date}')`;
+    let sqlValues = `(${obj.goodsId},'${obj.title}',${obj.cate_id},'${rec_date}')`;
     url = url.replace('?', sqlValues);
     return url;
 }
@@ -108,7 +108,7 @@ function handelCcgoldGoodsList(obj) {
  */
 function handelCcgoldGoodsDetail(obj) {
     let url = sql.insert.ccgold_goods_detail;
-    let sqlValues = `(${obj.goods_id},'${obj.good_name}',${obj.cate_id},${obj.weight},${obj.price},${obj.stock},${obj.sale_num},${obj.freight},'${obj.shop_name}','${obj.rec_date}')`;
+    let sqlValues = `(${obj.goods_id},'${obj.good_name}',${obj.cate_id},'${obj.weight}','${obj.img}',${obj.price},${obj.stock},${obj.sale_num},${obj.freight},'${obj.shop_name}','${obj.rec_date}')`;
     url = url.replace('?', sqlValues);
     return url;
 }

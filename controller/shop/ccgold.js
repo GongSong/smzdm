@@ -16,7 +16,7 @@ async function getgoodsListByCat(page = 1) {
         }
     }
     return await axios(config).then(res => {
-        let goodItem = parser.ccgold.goodsFlag(res.data, page);
+        let goodItem = parser.ccgold.goodsList(res.data, page);
         if (goodItem.length == 0) {
             return [];
         }
@@ -25,7 +25,7 @@ async function getgoodsListByCat(page = 1) {
 }
 
 // 获取商品列表
-function getgoodsFlag(req, res) {
+function getGoodsList(req, res) {
     getgoodsListByCat().then(response => {
         res.json(response);
     });
@@ -69,7 +69,7 @@ async function getGoodsDetailById(settings) {
     console.log('正在抓取第' + page + '页,id=' + id);
 
     return await axios(config).then(res => {
-        let goodItem = parser.ccgold.goodsDetail(res.data, id);
+        let goodItem = parser.ccgold.goodsDetail(res.data, id, goods[page].cate_id);
         let data = getGoodsIdByWeight(res.data);
 
         goodsFlag[id] = true;
@@ -95,6 +95,6 @@ function getGoodsDetail(req, res) {
 }
 
 module.exports = {
-    getgoodsFlag,
+    getGoodsList,
     getGoodsDetail
 };
