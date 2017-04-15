@@ -2,29 +2,20 @@ let cncoin = require('../shop/cncoin');
 let cncoinDb = require('../db/cncoin');
 let cncoinStorage = require('../shop/cncoinStorage');
 
-// 初始化数据库
-function dbInit() {
 
-}
-
-// 添加初始数据
-function dbDataInit() {
-
-}
-
-// // 同步每日价格
-// function asyncPrice() {
+// // 初始化数据库
+// function dbInit() {
 
 // }
 
-// // 同步库存信息
-// function asyncStorageNum() {
+// // 添加初始数据
+// function dbDataInit() {
 
 // }
 
 async function init() {
-    await dbInit();
-    await dbDataInit();
+    await asyncData();
+    await save2DB();
 }
 
 async function asyncData() {
