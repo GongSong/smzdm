@@ -1,5 +1,5 @@
 let read = require('../shop/ccgold');
-let db = require('../db/ccgold');
+let save = require('../db/ccgold');
 
 // // 初始化数据库
 // function dbInit() {
@@ -19,20 +19,14 @@ async function init() {
 async function asyncData() {
     
     // 获取商品列表
-    await read.getGoodsList();
+    let goodsList = await read.getGoodsList();
+    console.log(goodsList);
 
-    // 下钻获取商品列表
-    // await cncoin.getGoodsDetail();
-
+    // 存储商品列表
+    // await save.setGoodList();
 }
 
 async function save2DB() {
-
-    // 存储商品列表
-    // await cncoinDb.saveGoods();
-
-    //存储评论信息(已完结)
-    // await cncoinDb.saveComment();
 
 }
 

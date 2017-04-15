@@ -12,7 +12,7 @@ File Encoding         : 65001
 
 Date: 2017-04-13 03:37:01
 */
-----------------------------------------------------
+-- --------------------------------------------------
 /*
 ccgold                    长城
   1.  ccgold_goods              商品列表
@@ -46,7 +46,7 @@ yz                        有赞/上币
   3.  yz_trade_record           交易历史记录
 
 */
------------------------------------------------------
+-- ---------------------------------------------------
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
@@ -57,7 +57,7 @@ CREATE TABLE `ccgold_goods` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `good_id` int(11) NOT NULL COMMENT '电商系统商品编号',
   `good_name` varchar(255) DEFAULT NULL COMMENT '商品名称',
-  `good_cate` smallint(6) DEFAULT NULL COMMENT '商品分类',
+  `cate_id` smallint(6) DEFAULT NULL COMMENT '商品分类',
   `rec_date` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '记录日期',
   PRIMARY KEY (`id`),
   KEY `idx_ccgold_good_recdate_1` (`good_id`,`rec_date`) USING BTREE
@@ -71,7 +71,7 @@ CREATE TABLE `ccgold_goods_detail` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `good_id` int(11) NOT NULL COMMENT '电商系统商品编号',
   `good_name` varchar(255) NOT NULL COMMENT '商品名称',
-  `good_cate` smallint(6) DEFAULT NULL COMMENT '商品分类',
+  `cate_id` smallint(6) DEFAULT NULL COMMENT '商品分类',
   `weight` double DEFAULT NULL COMMENT '重量',
   `img_src` varchar(255) DEFAULT NULL COMMENT '图片链接地址',
   `price` double DEFAULT NULL COMMENT '价格',

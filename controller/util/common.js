@@ -67,14 +67,11 @@ function getNow(type = 1) {
 function parseHTML(options) {
     let $ = cheerio.load(options.html);
     let data = [];
-    let nodeIdx = (Reflect.has(options, 'nodeIdx')) ? options.nodeIdx : 0;
-
-    let parentNode = $(options.parentNode).eq(nodeIdx);
+    let parentNode = (Reflect.has(options, 'nodeIdx'))?$(options.parentNode).eq(options.nodeIdx):$(options.parentNode);
 
     if (parentNode.length === 0) {
         return data;
     }
-
     // detail: http://es6.ruanyifeng.com/?search=delete&x=0&y=0#docs/reflect
     if (Reflect.has(options, 'mode')) {
         let data = {};
