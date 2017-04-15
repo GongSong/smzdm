@@ -27,10 +27,7 @@ async function getgoodsListByCat(page = 1) {
 // 获取商品列表
 function getGoodsList() {
     getgoodsListByCat().then(res => {
-        // 商品列表抓取完毕
         console.log(res);
-    }).catch(e=>{
-        console.log(e);
     })
 }
 

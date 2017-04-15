@@ -215,7 +215,7 @@ let ccgold = {
                     return el.text().replace('￥', '').trim()
                 }
             }, {
-                node: '#detail-container-right div.thing-gui.spec-item-parent div.thing-right span.spec-item.thing-chi-span.on',
+                node: '.spec-item.thing-chi-span.on',
                 name: 'weight'
             }, {
                 node: '#shy',
