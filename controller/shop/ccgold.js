@@ -25,10 +25,13 @@ async function getgoodsListByCat(page = 1) {
 }
 
 // 获取商品列表
-function getGoodsList(req, res) {
-    getgoodsListByCat().then(response => {
-        res.json(response);
-    });
+function getGoodsList() {
+    getgoodsListByCat().then(res => {
+        // 商品列表抓取完毕
+        console.log(res);
+    }).catch(e=>{
+        console.log(e);
+    })
 }
 
 function getGoodsIdByWeight(html) {
@@ -86,11 +89,11 @@ async function getGoodsDetailById(settings) {
     }).catch(e => console.log(e));
 }
 
-function getGoodsDetail(req, res) {
+function getGoodsDetail() {
     let goods = require('../data/ccgoldgoodsList.json');
 
-    getGoodsDetailById({ goods, page: 0, goodsFlag: [], goodsId: 0 }).then(response => {
-        res.json(response);
+    getGoodsDetailById({ goods, page: 0, goodsFlag: [], goodsId: 0 }).then(res => {
+        console.log(res);
     });
 }
 
