@@ -83,7 +83,7 @@ function requestStorage(goodId, goodsNum) {
         goodId,
         goodsNum,
         source: 1
-    });
+    }); 
 
     return new Promise((resolve, reject) => {
         let request = http.request(config, (response) => {
