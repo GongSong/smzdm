@@ -1,6 +1,6 @@
-let query = require('../../schema/mysql.js')
+let query = require('../../schema/mysql')
 let sqlParser = require('../util/sqlParser')
-let sql = require('../../schema/sql.js')
+let sql = require('../../schema/sql')
 
 let fs = require('fs');
 let util = require('../util/common');

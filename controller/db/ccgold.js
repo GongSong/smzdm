@@ -1,9 +1,9 @@
-let query = require('../../schema/mysql.js')
+let query = require('../../schema/mysql')
 let sqlParser = require('../util/sqlParser')
-let sql = require('../../schema/sql.js')
+let sql = require('../../schema/sql')
 
 async function insertData(sql) {
-    return await query(sql, function (result) {
+    return await query(sql, function(result) {
         let string = JSON.stringify(result)
         return string;
     });
@@ -11,9 +11,9 @@ async function insertData(sql) {
 
 function setGoodList(req, res, next) {
     let arr = require('../data/ccgoldGoodsList.json')
-    
+
     let promises = [];
-    arr.forEach(function (element) {
+    arr.forEach(function(element) {
         promises.push(insertData(sqlParser.handelCcgoldGoodsList(element)));
     }, this);
 
@@ -27,7 +27,7 @@ function setGoodList(req, res, next) {
 function setGoodDetail(req, res, next) {
     let arr = require('../data/ccgoldDetail.json')
     let promises = [];
-    arr.forEach(function (element) {
+    arr.forEach(function(element) {
         promises.push(insertData(sqlParser.handelCcgoldGoodsDetail(element)));
     }, this);
 
