@@ -127,7 +127,8 @@ let wfx = {
       score,
       share,
       remark,
-    rec_date}
+      rec_date
+    }
   },
   // 2017-04-07 symint615升级详情页面，调整评论接口
   // commentInfo(html) {
@@ -169,7 +170,6 @@ let wfx = {
 
 let ccgold = {
   goodsList(html, cate_id) {
-    let rec_date = util.getNow()
     let options = {
       html,
       parentNode: '.box-shadow',
@@ -233,7 +233,13 @@ let ccgold = {
         node: '#nc_kd',
         name: 'freight',
         formatter(el) {
-          return el.text() === '卖家承担运费' ? '0' : (el.text().indexOf('￥') >= 0 ? el.text().replace('￥', '').trim() : el.text().trim()).replace(/快递：[\d\D+?]元/g, '$1')
+          let text = el.text().trim();
+          if (text == '卖家承担运费') {
+            text = 0;
+            return text;
+          }
+          text = text.match(/[\d.\d]+/,'')[0];
+          return text;
         }
       }],
       formatter(item) {
@@ -303,4 +309,5 @@ module.exports = {
   youzan,
   wfx,
   ccgold,
-cncoin}
+  cncoin
+}

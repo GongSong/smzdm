@@ -93,14 +93,14 @@ function handleWfxCommentSeg(obj) {
  * 整理长城商品列表入库sql
  * @param {*} obj 
  */
-function handelCcgoldGoodsList(obj) {
-    console.log(obj);
-    let url = sql.insert.ccgold_goods;
-    let rec_date = getNow();
-    let sqlValues = `(${obj.goodsId},'${obj.title}',${obj.cate_id},'${rec_date}')`;
-    url = url.replace('?', sqlValues);
-    return url;
-}
+// function handelCcgoldGoodsList(obj) {
+//     console.log(obj);
+//     let url = sql.insert.ccgold_goods;
+//     let rec_date = getNow();
+//     let sqlValues = `(${obj.goodsId},'${obj.title}',${obj.cate_id},'${rec_date}')`;
+//     url = url.replace('?', sqlValues);
+//     return url;
+// }
 
 /**
  * 整理长城商品上期入库sql
@@ -210,7 +210,7 @@ module.exports = {
     handleCncoinDetail,
     handleCncoinTrade,
     handleCncoinQuestion,
-    handelCcgoldGoodsList,
+    // handelCcgoldGoodsList,
     handelCcgoldGoodsDetail,
     handleCncoinQuestionSeg,
     handleCncoinQuestionNlp,

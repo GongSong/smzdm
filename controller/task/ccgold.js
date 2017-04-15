@@ -19,11 +19,8 @@ async function init() {
 async function asyncData() {
     
     // 获取商品列表
-    let goodsList = await read.getGoodsList();
-    console.log(goodsList);
-
-    // 存储商品列表
-    // await save.setGoodList();
+    // let goodsList = await read.getGoodsList();
+    // await save.setGoodDetail(goodsList);
 }
 
 async function save2DB() {
