@@ -14,24 +14,35 @@ async function init() {
     console.log('正在同步cncoin');
 
     console.log(`${++idx}.开始同步商品列表.`);
+
     flag = await needUpdate('cncoin_goods');
     if (flag) {
         let goodsList = await read.getGoodsList();
         await save.saveGoods(goodsList);
     }
 
+    let maxId = await read.getMaxGoodsId();
+
+    console.log(`${++idx}.开始同步商品详情.`);
+    let goodsDetail = await read.getDetail(maxId);
+    await save.saveDetail(goodsDetail);
+
     console.log(`${++idx}.开始同步库存信息.`);
     flag = await needUpdate('cncoin_storage');
     if (flag) {
-        let storage = await storage.getStorage();
+        let storage = await storage.getStorage(maxId);
         await save.saveStorage(storage);
     }
 
+    console.log(`${++idx}.同步商品交易记录.`);
+
+    // 数据较多的接口中，拿到数据后需同时存储至数据库，这样出错后，大量数据无需重复获取及后续处理
+    read.handleTradeRecord(maxId);
 }
 
 async function asyncData() {
 
-    // 同步交易记录
+    // 同步交易记录 
     // await cncoin.getTradeRecord();
 
     // 同步咨询信息
@@ -61,7 +72,7 @@ async function asyncData() {
     // 读取客服回答NLP得分
     // await cncoin.getAnswerScore();
 
-    // 库存测试
+    // 库存测试 √
     // await storage.getStorage();
 }
 

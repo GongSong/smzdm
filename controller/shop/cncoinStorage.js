@@ -20,11 +20,12 @@ let config = {
     }
 };
 
-async function getStorage(start = 1) {
-    let goodsList = require('../data/cncoinGoodsList.json');
-    let MAX_NUM = goodsList.length;
+async function getStorage(start = 1, maxId) {
+    // let goodsList = require('../data/cncoinGoodsList.json');
+    // let MAX_NUM = goodsList.length;
+
     let storageNum = [];
-    for (let i = start; i <= MAX_NUM; i++) {
+    for (let i = start; i <= maxId; i++) {
         let val = await getStorageById(i);
         storageNum.push({
             item_id: i,

@@ -1,6 +1,7 @@
 let axios = require('axios');
 let parser = require('../util/htmlParser');
-
+let query = require('../../schema/mysql');
+let sql = require('../../schema/sql');
 let coinStorage = require('./cncoinStorage').getStorage;
 
 let fs = require('fs');
@@ -78,16 +79,18 @@ function getDetailById(id = 1) {
     })
 }
 
-async function getDetail(req, res) {
-    let goodsList = require('../data/cncoinGoodsList.json');
-    let MAX_NUM = goodsList.length;
+async function getDetail(maxId) {
+    // let goodsList = require('../data/cncoinGoodsList.json');
+    // let MAX_NUM = goodsList.length;
     let goodsInfo = [];
+    let minId = await query(sql.query.cncoin_detail_maxid);
+    minId = minId[0].item_id + 1;
 
-    for (let i = 1; i < MAX_NUM; i++) {
+    for (let i = minId; i <= maxId; i++) {
         let result = await getDetailById(i);
         goodsInfo.push(result);
     }
-    res.json(goodsInfo);
+    return goodsInfo;
 }
 
 // 获取交易记录
@@ -125,9 +128,55 @@ function getTradeRecordById(goodsId, pageNo = 0, loopTimes = 0) {
 }
 
 // 由于任务较多，该函数仅在task中启动，不在浏览器中显示（否则会因请求超时再次加载）
+async function handleTradeRecord(maxId, startId = 1) {
+    let dataList = await getTradeList();
+    let recordInfo = [];
+    for (let i = startId; i <= maxId; i++) {
+        let latestData = dataList.filter(item => item.item_id == i);
+        let record = await getTradDetail({ id: i, last: latestData });
+        console.log(record);
+        await cncoinDb.saveTradRecord(record);
+        recordInfo.push(record);
+    }
+    return recordInfo;
+}
 
-async function getTradeRecord(startId = 1) {
+async function getTradeRecord(maxId, startId = 1) {
     saveData2Content('Record', getTradeRecordById);
+}
+
+async function getTradDetail(settings) {
+    let recordCount = await getTradeRecordById(settings.id);
+    let loopTimes = Math.ceil(recordCount / PAGESIZE);
+    let recordList = [];
+
+    // 如果lastDate为空，说明数据库中未存储该商品信息，应该全部抓取所有记录
+    let lastDate = false;
+    if (settings.last.length) {
+        lastDate = settings.last[0].last_date;
+        console.log(`商品${settings.id}最近更新日期:${lastDate}`);
+    }
+    for (var i = 1; i <= loopTimes; i++) {
+        let record = await getTradeRecordById(settings.id, i, loopTimes);
+        recordList = [...recordList, ...record];
+        if (lastDate) {
+            // 如果lastDate不为空，数据库中记录过相关信息，此时只读取数据增量
+            let addedRecord = recordList.filter(item => item.access_date > lastDate);
+
+            // 新增的数据条数为PAGESIZE整数倍，说明当前取到的前 i 页全部为新增销售记录，应继续获取
+            let modNum = addedRecord.length % PAGESIZE;
+
+            if (addedRecord.length == 0) {
+                // 如果新接连的数据条数为0，说明该商品在当前工作日未新增销售记录，后续页面无需读取
+                return addedRecord;
+            } else if (modNum < PAGESIZE && modNum > 0) {
+                // 如果在当前 PAGESIZE条数据中找到上一次查询结果
+                return addedRecord;
+            }
+        }
+    }
+
+    return recordList;
 }
 
 // 根据id获取单件商品数据列表
@@ -149,7 +198,6 @@ async function getDataList(goodsId, detailFunc, pageNo = 1) {
 async function saveData2Content(content, detailFunc, startId = 1) {
     let goodsList = require('../data/cncoinGoodsList.json');
     let MAX_NUM = goodsList.length;
-    let recordInfo = [];
 
     for (let i = startId; i <= MAX_NUM; i++) {
         let record = await getDataList(i, detailFunc);
@@ -159,7 +207,7 @@ async function saveData2Content(content, detailFunc, startId = 1) {
 }
 
 // 获取咨询信息
-function getQuestionById(goodsId, pageNo = 0, loopTimes = 0) {
+function getQuestionById(goodsId, lastData, pageNo = 0, loopTimes = 0) {
 
     console.log(`正在抓取，商品id：${goodsId},页码:${pageNo}/${loopTimes}`);
 
@@ -185,6 +233,7 @@ function getQuestionById(goodsId, pageNo = 0, loopTimes = 0) {
 }
 
 async function getQuestion(startId = 1) {
+    let lastData;
     saveData2Content('Question', getQuestionById);
 }
 
@@ -460,18 +509,42 @@ function getAnswerScore() {
     getQuestionScore('replyContent', 'AnswerScore');
 }
 
+async function getMaxGoodsId() {
+    let data = await query(sql.query.cncoin_maxid);
+    return data[0].item_id;
+}
+
+async function getTradeList() {
+    let data = await query(sql.query.cncoin_trade_list);
+    return data;
+}
+
 module.exports = {
     getGoodsList,
     getDetail,
     getTradeRecord,
+
+    //非结构化数据
     getQuestion,
     getComment,
     handleSpecialComment,
+
     getStorage,
+
+    //segment
     splitComment,
     splitQuestion,
     splitAnswer,
+
+    //nlp
     getCommentScore,
     getQuestionScore,
-    getAnswerScore
+    getAnswerScore,
+
+    // 持续化数据获取所需各类id
+    getMaxGoodsId,
+    getTradeList,
+
+    // 交易记录读写
+    handleTradeRecord,
 };
