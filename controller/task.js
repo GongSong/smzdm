@@ -9,8 +9,8 @@ async function init() {
 
     await db.init();
 
-    await cncoin.init();
-    await ccgold.init();
+    cncoin.init();
+    ccgold.init();
 }
 
 

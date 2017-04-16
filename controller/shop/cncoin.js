@@ -48,7 +48,7 @@ function getGoodsById(detail_id = 1) {
     }).catch(e => console.log(e));
 }
 
-async function getGoodsList(req, res) {
+async function getGoodsList() {
     let goodsList = [];
     let finished = false;
 
@@ -64,7 +64,7 @@ async function getGoodsList(req, res) {
                 goodsList.push(data);
             })
     }
-    res.json(goodsList);
+    return goodsList;
 }
 
 function getDetailById(id = 1) {

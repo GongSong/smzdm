@@ -29,14 +29,14 @@ async function getStorage(start = 1) {
         storageNum.push({
             item_id: i,
             value: val,
-            rec_time: util.getNow(1)
+            rec_date: util.getNow(1)
         });
     }
 
-    let fileName = util.getMainContent() + '/controller/data/cncoinStorage/' + util.getNow(8) + '.json';
-    fs.writeFileSync(fileName, JSON.stringify(storageNum), 'utf8');
+    // let fileName = util.getMainContent() + '/controller/data/cncoinStorage/' + util.getNow(8) + '.json';
+    // fs.writeFileSync(fileName, JSON.stringify(storageNum), 'utf8');
 
-    console.log('所有数据读取完毕');
+    return storageNum;
 }
 
 async function testStorage(goodId, goodsNum) {
@@ -83,7 +83,7 @@ function requestStorage(goodId, goodsNum) {
         goodId,
         goodsNum,
         source: 1
-    }); 
+    });
 
     return new Promise((resolve, reject) => {
         let request = http.request(config, (response) => {

@@ -1,21 +1,32 @@
-let cncoin = require('../shop/cncoin');
-let cncoinDb = require('../db/cncoin');
-let cncoinStorage = require('../shop/cncoinStorage');
+let read = require('../shop/cncoin');
+let save = require('../db/cncoin');
+let storage = require('../shop/cncoinStorage');
+let needUpdate = require('./db').needUpdate;
 
-
-// // 初始化数据库
-// function dbInit() {
-
-// }
-
-// // 添加初始数据
-// function dbDataInit() {
-
-// }
-
-async function init() {
+// 添加初始数据
+async function dbDataInit() {
     await asyncData();
     await save2DB();
+}
+
+async function init() {
+    let flag, idx = 0;
+    console.log('正在同步cncoin');
+
+    console.log(`${++idx}.开始同步商品列表.`);
+    flag = await needUpdate('cncoin_goods');
+    if (flag) {
+        let goodsList = await read.getGoodsList();
+        await save.saveGoods(goodsList);
+    }
+
+    console.log(`${++idx}.开始同步库存信息.`);
+    flag = await needUpdate('cncoin_storage');
+    if (flag) {
+        let storage = await storage.getStorage();
+        await save.saveStorage(storage);
+    }
+
 }
 
 async function asyncData() {
@@ -31,9 +42,6 @@ async function asyncData() {
 
     // id号 68 121 72 无法顺利读取，需特殊处理
     // await cncoin.handleSpecialComment();
-
-    // 读取库存信息-接口信息有误
-    // await cncoin.getStorage();
 
     // 分割评论信息 已完成
     // await cncoin.splitComment();
@@ -54,9 +62,7 @@ async function asyncData() {
     // await cncoin.getAnswerScore();
 
     // 库存测试
-    // await cncoinStorage.getStorage();
-
-
+    // await storage.getStorage();
 }
 
 async function save2DB() {

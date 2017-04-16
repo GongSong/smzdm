@@ -52,8 +52,9 @@ async function saveComment() {
     console.log(`共${MAX_NUM}条信息插入完毕`);
 }
 
-async function saveGoods() {
-    let goodsList = require('../data/cncoinGoodsList.json');
+async function saveGoods(goodsList) {
+    // let goodsList = require('../data/cncoinGoodsList.json');
+
     let MAX_NUM = goodsList.length;
     let start = 0;
     for (let i = start; i < MAX_NUM; i++) {
@@ -65,9 +66,10 @@ async function saveGoods() {
     }
 }
 
-async function saveStorage() {
+async function saveStorage(storage) {
     // 获取今天数据并存储
-    let storage = require('../data/cncoinStorage/' + util.getNow(8) + '.json');
+    // let storage = require('../data/cncoinStorage/' + util.getNow(8) + '.json');
+
     let MAX_NUM = storage.length;
     if (MAX_NUM == 0) {
         return;
