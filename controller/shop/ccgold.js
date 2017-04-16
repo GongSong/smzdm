@@ -25,7 +25,7 @@ async function getgoodsListByCat(page = 1) {
 }
 
 function getGoodsIdByWeight(html) {
-    let str = html.split('spec_param = ')[1].split('var spec')[0].replace(';', '');
+    let str = html.split('spec_param = ')[1].split(';')[0];
     let data = JSON.parse(str);
     return data;
 }

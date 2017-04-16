@@ -43,12 +43,4 @@ router.get('/wfx/comment/score', function(req, res, next) {
     wfx.setCommentScore(req, res);
 });
 
-router.get('/ccgold/goods', function(req, res, next) {
-    ccgold.setGoodList(req, res);
-});
-
-router.get('/ccgold/goodsDetail', function(req, res, next) {
-    ccgold.setGoodDetail(req, res);
-});
-
 module.exports = router;

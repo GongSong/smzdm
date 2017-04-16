@@ -7,7 +7,6 @@ let errorHandle = (errInfo, sql = 'none') => {
     if (errInfo) {
         logger.error('Error occured.', {
             time: new Date().toLocaleString(),
-            pid: process.pid,
             sql,
             errInfo
         })
@@ -19,6 +18,8 @@ function query(sql, callback) {
         conn.query(sql, (err, result) => {
             errorHandle(err, sql);
             conn.release();
+            result = JSON.stringify(result);
+            result = JSON.parse(result);
             if (typeof callback == 'function') {
                 callback(result);
             }
