@@ -12,7 +12,8 @@ let util = require('../util/common');
 
 let cncoinDb = require('../db/cncoin');
 
-let PAGESIZE = 3000;
+// 数据增量存储，为回忆采集速度,pagesize = 50
+let PAGESIZE = 50;
 
 // 获取商品主表信息
 function getGoodsById(detail_id = 1) {
@@ -94,9 +95,9 @@ async function getDetail(maxId) {
 }
 
 // 获取交易记录
-function getTradeRecordById(goodsId, pageNo = 0, loopTimes = 0) {
+function getTradeRecordById(goodsId, pageNo = 1, loopTimes = 0) {
 
-    console.log(`正在抓取，商品id：${goodsId},页码:${pageNo}/${loopTimes}`);
+    // console.log(`正在抓取，商品id：${goodsId},页码:${pageNo}/${loopTimes}`);
     let config = {
         method: 'get',
         url: 'http://www.chinagoldcoin.net/views/newDetail/detail/new-more-buy.jsp',
@@ -111,7 +112,10 @@ function getTradeRecordById(goodsId, pageNo = 0, loopTimes = 0) {
         let record = res.data[0];
         // 如果只是获取评论总数
         if (pageNo == 0) {
-            return record.count;
+            return {
+                count: record.count,
+                data: []
+            };
         }
 
         // 获取评论详情，需要做字段转换
@@ -123,7 +127,10 @@ function getTradeRecordById(goodsId, pageNo = 0, loopTimes = 0) {
             Reflect.deleteProperty(obj, 'departmentId');
             return obj;
         });
-        return data;
+        return {
+            data,
+            count: record.count
+        };
     })
 }
 
@@ -133,8 +140,7 @@ async function handleTradeRecord(maxId, startId = 1) {
     let recordInfo = [];
     for (let i = startId; i <= maxId; i++) {
         let latestData = dataList.filter(item => item.item_id == i);
-        let record = await getTradDetail({ id: i, last: latestData });
-        console.log(record);
+        let record = await getTradeDetail({ id: i, last: latestData });
         await cncoinDb.saveTradRecord(record);
         recordInfo.push(record);
     }
@@ -145,9 +151,9 @@ async function getTradeRecord(maxId, startId = 1) {
     saveData2Content('Record', getTradeRecordById);
 }
 
-async function getTradDetail(settings) {
-    let recordCount = await getTradeRecordById(settings.id);
-    let loopTimes = Math.ceil(recordCount / PAGESIZE);
+// 增量获取交易记录，数据同步速度优化
+async function getTradeDetail(settings) {
+    let loopTimes = 1;
     let recordList = [];
 
     // 如果lastDate为空，说明数据库中未存储该商品信息，应该全部抓取所有记录
@@ -156,9 +162,11 @@ async function getTradDetail(settings) {
         lastDate = settings.last[0].last_date;
         console.log(`商品${settings.id}最近更新日期:${lastDate}`);
     }
+
     for (var i = 1; i <= loopTimes; i++) {
         let record = await getTradeRecordById(settings.id, i, loopTimes);
-        recordList = [...recordList, ...record];
+        loopTimes = Math.ceil(record.count / PAGESIZE);
+        recordList = [...recordList, ...record.data];
         if (lastDate) {
             // 如果lastDate不为空，数据库中记录过相关信息，此时只读取数据增量
             let addedRecord = recordList.filter(item => item.access_date > lastDate);

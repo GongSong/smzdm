@@ -38,6 +38,9 @@ async function init() {
 
     // 数据较多的接口中，拿到数据后需同时存储至数据库，这样出错后，大量数据无需重复获取及后续处理
     read.handleTradeRecord(maxId);
+
+
+
 }
 
 async function asyncData() {
