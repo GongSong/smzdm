@@ -39,6 +39,9 @@ var query = {
     // 此处应为 %H:%i:%s %H表示24小时制  不能为 %h:%m:%s m为月，i表示分钟
     // http://blog.163.com/very_apple/blog/static/277592362013283291394/
     cncoin_trade_list: "SELECT item_id,max(DATE_FORMAT(access_date,'%Y-%m-%d %H:%i:%s')) last_date FROM cncoin_trade group by item_id",
+
+    cncoin_comment_maxid: "SELECT item_id,max(comment_id) as comment_id FROM cncoin_comment_list group by item_id",
+
 }
 
 module.exports = {

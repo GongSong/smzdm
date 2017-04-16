@@ -34,12 +34,16 @@ async function init() {
         await save.saveStorage(storage);
     }
 
-    console.log(`${++idx}.同步商品交易记录.`);
-
     // 数据较多的接口中，拿到数据后需同时存储至数据库，这样出错后，大量数据无需重复获取及后续处理
-    read.handleTradeRecord(maxId);
+    console.log(`${++idx}.同步商品交易记录.`);
+    // read.handleTradeRecord(maxId);
+    console.log(`${++idx}.同步评论记录.`);
+    // read.handleComment(maxId);
+    console.log('注意：此处交易记录及评论记录因数据量较大，同步时间较长，默认关闭，若需要同步请自行打开');
 
 
+    console.log(`${++idx}.同步咨询记录---用户咨询.`);
+    console.log(`${++idx}.同步咨询记录---客服回复.`);
 
 }
 

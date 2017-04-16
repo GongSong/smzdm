@@ -136,7 +136,7 @@ function getTradeRecordById(goodsId, pageNo = 1, loopTimes = 0) {
 
 // 由于任务较多，该函数仅在task中启动，不在浏览器中显示（否则会因请求超时再次加载）
 async function handleTradeRecord(maxId, startId = 1) {
-    let dataList = await getTradeList();
+    let dataList = await query(sql.query.cncoin_trade_list);
     let recordInfo = [];
     for (let i = startId; i <= maxId; i++) {
         let latestData = dataList.filter(item => item.item_id == i);
@@ -274,7 +274,6 @@ async function getComment(startId = 1) {
 
     let goodsList = require('../data/cncoinGoodsList.json');
     let MAX_NUM = goodsList.length;
-    let recordInfo = [];
 
     /**
      * id =68 (5059条);id=72 (2741条);id= 121 (1318条)
@@ -291,6 +290,69 @@ async function getComment(startId = 1) {
     }
 }
 
+async function handleComment(maxId, startId = 1) {
+    let dataList = await query(sql.query.cncoin_comment_maxid);
+
+    // 评论内容增加较少，通过测试模式测试数据读写流程正常
+    // let isTestMode = true;
+
+    // if (isTestMode) {
+    //     maxId = 1;
+    // }
+
+    for (let i = startId; i <= maxId; i++) {
+        if (i == 68 || i == 72 || i == 121) {
+            continue;
+        }
+        let record = {};
+        let loopTimes = 1;
+
+        let recordList = [];
+
+        // 当前id商品最近一次评论信息
+        let lastData = dataList.filter(item => item.item_id == i);
+        let maxCommentId = lastData.length ? lastData[0].comment_id : 0;
+
+        // if (isTestMode) {
+        //     maxCommentId = 10000;
+        // }
+
+        console.log(`商品${i}评论最大id:${maxCommentId}`);
+
+        for (let k = 1; k <= loopTimes; k++) {
+            record = await getCommentById(i, k, loopTimes);
+            loopTimes = Math.ceil(record.count / PAGESIZE);
+            if (maxCommentId) {
+                // 如果maxCommentId不为空，数据库中记录过相关信息，此时只读取数据增量
+
+                let addedRecord = record.data.filter(item => item.comment_id > maxCommentId);
+                // 新增的数据条数为PAGESIZE整数倍，说明当前取到的前 i 页全部为新增销售记录，应继续获取
+                let modNum = addedRecord.length % PAGESIZE;
+
+                if (addedRecord.length == 0 || (modNum < PAGESIZE && modNum > 0)) {
+                    // 如果新接连的数据条数为0，说明该商品在当前工作日未新增销售记录，后续页面无需读取
+                    // 如果在当前 PAGESIZE条数据中找到上一次查询结果
+                    record.data = addedRecord;
+                    loopTimes = 1;
+                }
+            }
+            recordList = [...recordList, ...record.data];
+        }
+        record.data = recordList;
+        // 此时 record内为一件商品的增量同步信息
+        await cncoinDb.saveCommentByRecord(record);
+
+        // 分词并入库
+        let segList = await segOneComment(record);
+        await cncoinDb.saveCommentSegByRecord(segList);
+
+        // nlp处理
+        let nlpList = await getCommentScoreByComments(record);
+        await cncoinDb.saveCommentNlpByRecord(nlpList);
+        console.log('评论数据同步完毕');
+    }
+}
+
 async function getCommentDetail(goodsId) {
     let records = await getCommentById(goodsId);
     let loopTimes = Math.ceil(records.count / PAGESIZE);
@@ -299,7 +361,7 @@ async function getCommentDetail(goodsId) {
 
     for (var i = 1; i <= loopTimes; i++) {
         let record = await getCommentById(goodsId, i, loopTimes);
-        recordList = [...recordList, ...record];
+        recordList = [...recordList, ...record.data];
     }
     records.data = recordList;
     return records;
@@ -322,21 +384,46 @@ function getCommentById(goodsId, pageNo = 0, loopTimes = 0, type = 'all') {
 
     return axios(config).then(res => {
         let record = res.data[0];
+        Reflect.deleteProperty(record, 'goodsIdV');
+        record.item_id = goodsId;
         // 如果只是获取评论总数
         if (pageNo == 0) {
-            Reflect.deleteProperty(record, 'goodsIdV');
-            Reflect.deleteProperty(record, 'recordList');
-            record.item_id = goodsId;
             return record;
         }
         // 获取评论详情，需要做字段转换
-        return parser.cncoin.comment(record.recordList, goodsId);
+        record.data = parser.cncoin.comment(record.recordList, goodsId);
+        Reflect.deleteProperty(record, 'recordList');
+        return record;
     })
 }
 
 async function saveJson2Disk(content, data, i) {
     let fileName = util.getMainContent() + '/controller/data/cncoin' + content + '/itemid_' + i + '.json';
     fs.writeFileSync(fileName, JSON.stringify(data), 'utf8');
+}
+
+async function segOneComment(comments) {
+    let commentCount = comments.data.length;
+    let results = [];
+
+    for (let j = 0; j < commentCount; j++) {
+        let item = comments.data[j];
+
+        await util.wordSegment(item.content).then(response => {
+            results.push({
+                detail: item.content,
+                item_id: item.item_id,
+                tokens: response.tokens,
+                combtokens: response.combtokens,
+                comment_id: item.comment_id
+            });
+            console.log(`商品${comments.item_id},第${j + 1}/${commentCount}条评论分词完毕\n`);
+        }).catch(e => {
+            console.log(e);
+        });
+    }
+
+    return results;
 }
 
 async function splitComment() {
@@ -348,30 +435,7 @@ async function splitComment() {
 
     for (let i = start; i <= MAX_NUM; i++) {
         let comments = cncoinDb.getCommentById(i);
-        let commentCount = comments.data.length;
-        if (commentCount == 0) {
-            continue;
-        }
-
-        let results = [];
-
-        for (let j = 0; j < commentCount; j++) {
-            let item = comments.data[j];
-            await util.wordSegment(item.detail).then(response => {
-                comments.push({
-                    detail: item.content,
-                    item_id: item.item_id,
-                    tokens: response.tokens,
-                    combtokens: response.combtokens,
-                    comment_id: item.comment_id
-                });
-                console.log(`商品${i},第${j + 1}/${commentCount}条评论分词完毕\n`);
-            }).catch(e => {
-                console.log(e);
-            });
-            // 延迟1000ms读取接口 | 通过  try...catch 后可不用延迟对接口的调用
-            // await util.sleep(1000);
-        }
+        let results = await segOneComment(comments);
         saveJson2Disk('CommentSeg', results, i);
         console.log(`第${i}/${MAX_NUM}条数据读取完毕\n`);
     }
@@ -434,6 +498,29 @@ async function getStorage() {
     console.log('json数据写入磁盘完毕');
 }
 
+async function getCommentScoreByComments(comments) {
+    let commentCount = comments.data.length;
+
+    let results = [];
+
+    for (let j = 0; j < commentCount; j++) {
+        let item = comments.data[j];
+        await util.getNegativeWords(item.content).then(response => {
+            results.push({
+                item_id: item.item_id,
+                comment_id: item.comment_id,
+                negative: response.negative,
+                positive: response.positive
+            });
+            console.log(`商品${item.item_id},第${j+1}/${commentCount}条评论情绪分析完毕\n`);
+        }).catch(e => {
+            console.log(e);
+        });
+    }
+
+    return results;
+}
+
 async function getCommentScore(req, res) {
 
     let goodsList = require('../data/cncoinGoodsList.json');
@@ -444,29 +531,7 @@ async function getCommentScore(req, res) {
 
     for (let i = start; i <= MAX_NUM; i++) {
         let comments = cncoinDb.getCommentById(i);
-        let commentCount = comments.data.length;
-        if (commentCount == 0) {
-            continue;
-        }
-
-        let results = [];
-
-        for (let j = 0; j < commentCount; j++) {
-            let item = comments.data[j];
-            await util.getNegativeWords(item.content).then(response => {
-                results.push({
-                    item_id: item.item_id,
-                    comment_id: item.comment_id,
-                    negative: response.negative,
-                    positive: response.positive
-                });
-                console.log(`商品${i},第${j+1}/${commentCount}条评论情绪分析完毕\n`);
-            }).catch(e => {
-                console.log(e);
-            });
-            // 延迟1000ms读取接口 | 通过  try...catch 后可不用延迟对接口的调用
-            // await util.sleep(1000);
-        }
+        let results = getCommentScoreByComments(comments);
         saveJson2Disk('CommentScore', results, i);
         console.log(`第${i}/${MAX_NUM}条数据读取完毕\n`);
     }
@@ -522,11 +587,6 @@ async function getMaxGoodsId() {
     return data[0].item_id;
 }
 
-async function getTradeList() {
-    let data = await query(sql.query.cncoin_trade_list);
-    return data;
-}
-
 module.exports = {
     getGoodsList,
     getDetail,
@@ -551,8 +611,8 @@ module.exports = {
 
     // 持续化数据获取所需各类id
     getMaxGoodsId,
-    getTradeList,
 
-    // 交易记录读写
+    // 交易记录增量读写
     handleTradeRecord,
+    handleComment
 };
