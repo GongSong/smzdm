@@ -39,6 +39,13 @@ let settings = {
         comment: 'http://www.chinagoldcoin.net/views/newDetail/detail/new-more-pj.jsp?pageNo=10&pageCount=100&pageSize=4&goodsId=141&type=all',
         saleDetail: 'http://www.chinagoldcoin.net/views/newDetail/detail/new-more-buy.jsp?pageNo=10&pageCount=26234&pageSize=1000&goodsId=121',
         commentUrl: 'http://www.chinagoldcoin.net/views/newDetail/detail/more-zx.jsp?goodsId=121'
+    },
+
+    // 上海黄金交易所
+    sge: {
+        // 金价同步
+        gold_price: 'http://www.sge.com.cn/graph/DayilyJzj',
+        chart_url: 'https://www.sge.com.cn/sjzx/jzj'
     }
 }
 module.exports = {
