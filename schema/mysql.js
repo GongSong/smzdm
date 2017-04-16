@@ -13,18 +13,21 @@ let errorHandle = (errInfo, sql = 'none') => {
     }
 }
 
-function query(sql, callback) {
-    pool.getConnection((err, conn) => {
-        conn.query(sql, (err, result) => {
-            errorHandle(err, sql);
-            conn.release();
-            result = JSON.stringify(result);
-            result = JSON.parse(result);
-            if (typeof callback == 'function') {
-                callback(result);
-            }
-        })
-    })
+async function query(sql, callback) {
+    return new Promise((resolve, reject) => {
+        pool.getConnection((err, conn) => {
+            conn.query(sql, (err, result) => {
+                errorHandle(err, sql);
+                conn.release();
+                result = JSON.stringify(result);
+                result = JSON.parse(result);
+                if (typeof callback == 'function') {
+                    callback(result);
+                }
+                resolve(result);
+            });
+        });
+    });
 }
 
 module.exports = query

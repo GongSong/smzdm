@@ -32,9 +32,11 @@ async function init() {
     await dbInit();
 }
 
-function needUpdate(sheetName, next) {
+// 判断某一日的数据是否需要采集，用于库存、价格、销量等查询
+async function needUpdate(sheetName, next) {
     let sql = sqlStr.query.need_update.replace('?', sheetName);
-    query(sql, next);
+    let data = await query(sql);
+    return data[0].need_update;
 }
 
 module.exports = {
