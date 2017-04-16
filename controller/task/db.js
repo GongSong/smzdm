@@ -1,4 +1,4 @@
-let settings = require('../../schema/config').mysql.database;
+let settings = require('../../schema/config');
 let fs = require('fs');
 let util = require('../util/common');
 let query = require('../../schema/mysql');
@@ -21,15 +21,39 @@ async function initDbByName(name) {
 
 async function dbInit() {
     let shopList = ['ccgold', 'wfx', 'youzan', 'cncoin'];
+
+    let sql = sqlStr.query.tbl_num;
+    let data = await query(sql);
+    let tblNum = {};
+
+    data.forEach(item => {
+        tblNum[item.shopName] = tblNum.num;
+    });
+
+    // 各家网店表单数量
+    let tblNumSettings = {
+        ccgold: 1,
+        cncoin: 13,
+        wfx: 5,
+        yz: 3
+    }
+
+    // 此处四家店铺初始化语句中需删除导出语句的注释内容
     shopList.forEach((item, i) => {
-        // initDbByName(item);
-        console.log(`${i+1}.数据库 ${item} 初始化完毕.请将以上语句取消注释`);
-        // 此处四家店铺初始化语句中需删除导出语句的注释内容
+        if (tblNum[item] < tblNumSettings[item]) {
+            initDbByName(item);
+            console.log(`${i+1}.数据库 ${item} 初始化完毕`);
+        }
     })
 }
 
 async function init() {
-    await dbInit();
+    if (settings.needInit) {
+        console.log('A.数据库初始化');
+        console.log('1.数据库表单尚未初始化');
+        await dbInit();
+        console.log('2.表单初始化完毕\n');
+    }
 }
 
 // 判断某一日的数据是否需要采集，用于库存、价格、销量等查询
