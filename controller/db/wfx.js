@@ -7,17 +7,17 @@ var COMBTOKEN_TYPE = '短语';
 var IGNORE_TYPE = '标点符号';
 
 // 从json取数据
-// function setStockData(req, res) {
-//     let arr = require('../data/wfx_shenyang.json')
-//     let spiderData = {
-//         data: arr
-//     }
-//     let sqlStr = sqlParser.handleWfxStockData(spiderData)
-//     query(sqlStr, function(result) {
-//         let str = JSON.stringify(result)
-//         res.send(str)
-//     })
-// }
+async function setStockData(goodsList) {
+    if (typeof goodsList == 'undefined') {
+        goodsList = require('../data/wfx_shenyang.json');
+    }
+    let spiderData = {
+        data: goodsList
+    }
+    let sqlStr = sqlParser.handleWfxStockData(spiderData)
+    await query(sqlStr);
+    console.log('wfx商品列表数据导入完毕')
+}
 
 // 从mysql取数
 function getGoodList(req, res, next) {
@@ -34,6 +34,10 @@ async function insertData(sql) {
         let string = JSON.stringify(result)
         return string;
     });
+}
+
+async function setOneCommentData(comment) {
+
 }
 
 //  评论数据入库
@@ -164,7 +168,7 @@ function setCommentScore(req, res) {
 }
 
 module.exports = {
-    // setStockData,
+    setStockData,
     getGoodList,
     setCommentData,
     setCommentSplitData,

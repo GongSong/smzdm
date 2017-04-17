@@ -12,23 +12,22 @@ async function initDbByName(name) {
     for (let i = 0; i < sqlList.length; i++) {
         let sql = sqlList[i].trim();
         if (sql.length) {
-            await query(sql, e => {
-                console.log(e);
-            });
+            console.log(sql);
+            await query(sql);
         }
     }
 }
 
 async function dbInit() {
     // 此处crawler记录表单数据抓取状态
-    let shopList = ['ccgold', 'wfx', 'youzan', 'cncoin', 'crawler'];
+    let shopList = ['ccgold', 'wfx', 'yz', 'cncoin', 'crawler'];
 
     let sql = sqlStr.query.tbl_num;
     let data = await query(sql);
     let tblNum = {};
 
     data.forEach(item => {
-        tblNum[item.shopName] = tblNum.num;
+        tblNum[item.shopName] = item.num;
     });
 
     // 各家网店表单数量

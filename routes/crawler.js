@@ -24,60 +24,56 @@ router.get('/youzan/detail/:id', function(req, res) {
     crawler.youzan.getSaleDetailById(req, res);
 })
 
-//微分销
-router.get('/wfx/shop', function(req, res) {
-    crawler.wfx.getGoodsList(req, res);
-})
+// //微分销
+// router.get('/wfx/shop', function(req, res) {
+//     crawler.wfx.getGoodsList(req, res);
+// })
 
-// 微分销页面详情
-router.get('/wfx/detail', function(req, res) {
-    crawler.wfx.getDetail(req, res);
-});
+// // 微分销页面详情
+// router.get('/wfx/detail', function(req, res) {
+//     crawler.wfx.getDetail(req, res);
+// });
 
-// 微分销评论
-router.get('/wfx/comment', function(req, res) {
-    crawler.wfx.getComment(req, res);
-});
+// // 微分销评论
+// router.get('/wfx/comment', function(req, res) {
+//     crawler.wfx.getComment(req, res);
+// });
 
-// 微分销评论分割
-router.get('/wfx/comment/split', function(req, res) {
-    crawler.wfx.splitComment(req, res);
-});
+// // 微分销评论分割
+// router.get('/wfx/comment/split', function(req, res) {
+//     crawler.wfx.splitComment(req, res);
+// });
 
-// 评论得分
-router.get('/wfx/comment/score', function(req, res) {
-    crawler.wfx.getCommentScore(req, res);
-});
+// // 评论得分
+// router.get('/wfx/comment/score', function(req, res) {
+//     crawler.wfx.getCommentScore(req, res);
+// });
 
-// cncoin商品列表
-router.get('/cncoin/shop', function(req, res) {
-    crawler.cncoin.getGoodsList(req, res);
-});
+// // cncoin商品列表
+// router.get('/cncoin/shop', function(req, res) {
+//     crawler.cncoin.getGoodsList(req, res);
+// });
 
-// cncoin商品属性
-router.get('/cncoin/detail', function(req, res) {
-    crawler.cncoin.getDetail(req, res);
-});
+// // cncoin商品属性
+// router.get('/cncoin/detail', function(req, res) {
+//     crawler.cncoin.getDetail(req, res);
+// });
 
-// cncoin
-router.get('/cncoin/comment', function(req, res) {
-    crawler.cncoin.getComment(req, res);
-});
+// // cncoin
+// router.get('/cncoin/comment', function(req, res) {
+//     crawler.cncoin.getComment(req, res);
+// });
 
 // cncoin test storage
-router.get('/cncoin/test', function(req, res) {
-    let url = require('url');
-    let url_parts = url.parse(req.url, true);
-    let query = url_parts.query;
-    let goodId = query.goodId;
-    let goodsNum = query.goodsNum;
-    crawler.cncointest.requestStorage(goodId, goodsNum).then((result) => {
-        res.json(result);
-    });
-});
-
-// router.get('/cncoin/storage', function(req, res) {
-//     crawler.cncoin.getStorage(req, res);
-// })
+// router.get('/cncoin/test', function(req, res) {
+//     let url = require('url');
+//     let url_parts = url.parse(req.url, true);
+//     let query = url_parts.query;
+//     let goodId = query.goodId;
+//     let goodsNum = query.goodsNum;
+//     crawler.cncointest.requestStorage(goodId, goodsNum).then((result) => {
+//         res.json(result);
+//     });
+// });
 
 module.exports = router;
