@@ -51,6 +51,12 @@ var query = {
 
     // cncoin 用户手机号
     cncoin_user_mobile:"SELECT account,content,comment_rank,access_date,item_id FROM `cncoin_comment_list` where account like '1%' and length(account)=11",
+
+    // cncoin 每秒并发
+    cncoin_conn_perSec:"SELECT access_date,count(*) FROM `cncoin_trade` group by access_date having count(*)>10 order by 2 desc",
+
+    // cncoin 每分钟并发
+    cncoin_conn_perMin:"SELECT DATE_FORMAT(access_date,'%Y-%m-%d %h:%i') as mininute,count(*) FROM `cncoin_trade` group by DATE_FORMAT(access_date,'%Y%m%d %h%i') having count(*)>10 order by 2 desc"
 }
 
 module.exports = {
