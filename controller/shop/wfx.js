@@ -2,7 +2,7 @@ let axios = require('axios');
 let parser = require('../util/htmlParser');
 
 let spiderSetting = require('../util/spiderSetting');
-let dbResult = require('../db/wfx');
+let save = require('../db/wfx');
 
 let util = require('../util/common');
 
@@ -112,7 +112,7 @@ function getDetailById(id) {
 }
 
 function getDetail(req, res) {
-    dbResult.getGoodList(req, res, (data) => {
+    save.getGoodList(req, res, (data) => {
         let promises = data.map(item => getDetailById(item.item_id));
         Promise.all(promises)
             .then(result => {
@@ -156,7 +156,7 @@ async function getCommentById(item_id, page = 1) {
 
 function getComment(req, res) {
 
-    dbResult.getGoodList(req, res, (data) => {
+    save.getGoodList(req, res, (data) => {
         let promises = data.map(item => getCommentById(item.item_id));
         Promise.all(promises)
             .then(result => {

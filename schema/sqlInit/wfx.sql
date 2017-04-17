@@ -41,10 +41,11 @@ DROP TABLE IF EXISTS `wfx_item_marketing`;
 CREATE TABLE `wfx_item_marketing` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `item_id` int(11) NOT NULL COMMENT '电商系统商品编号',
+  `share` int(11) DEFAULT NULL COMMENT '点赞数',
+  `score` int(11) DEFAULT NULL COMMENT '赠送积分',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  `freight` int(11) DEFAULT NULL COMMENT '邮资',
   `rec_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '爬取日期',
-  `like_sum` int(11) DEFAULT NULL COMMENT '点赞数',
-  `points` int(11) DEFAULT NULL COMMENT '赠送积分',
-  `postage` int(11) DEFAULT NULL COMMENT '邮资',
   PRIMARY KEY (`id`),
   KEY `idx_wfx_market` (`item_id`,`rec_date`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='微分销商品营销数据';

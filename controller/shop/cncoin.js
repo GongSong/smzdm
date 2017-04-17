@@ -58,6 +58,11 @@ async function getGoodsList() {
     for (let i = 1; !finished; i++) {
         await getGoodsById(i)
             .then(data => {
+                if (typeof data == 'undefined') {
+                    console.log('商品id' + i + '服务端异常');
+                    return;
+                }
+                // 添加接口错误时的处理
                 if (Reflect.has(data, 'status')) {
                     console.log('商品id' + i + '无详情数据');
                     finished = true;
@@ -141,7 +146,7 @@ async function handleTradeRecord(maxId, startId = 1) {
     for (let i = startId; i <= maxId; i++) {
         let latestData = dataList.filter(item => item.item_id == i);
         let record = await getTradeDetail({ id: i, last: latestData });
-        await cncoinDb.saveTradRecordByRecord(record);
+        await cncoinDb.saveTradeRecordByRecord(record);
         recordInfo.push(record);
     }
     return recordInfo;

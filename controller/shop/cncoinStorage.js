@@ -20,7 +20,7 @@ let config = {
     }
 };
 
-async function getStorage(start = 1) {
+async function setStorage(start = 1) {
     let goodsList = require('../data/cncoinGoodsList.json');
     let MAX_NUM = goodsList.length;
     let storageNum = await getStorageById(MAX_NUM);
@@ -28,7 +28,7 @@ async function getStorage(start = 1) {
     fs.writeFileSync(fileName, JSON.stringify(storageNum), 'utf8');
 }
 
-async function getStorageById(maxId, start = 1) {
+async function getStorage(maxId, start = 1) {
     let storageNum = [];
     for (let i = start; i <= maxId; i++) {
         let val = await getStorageById(i);
@@ -109,5 +109,6 @@ function requestStorage(goodId, goodsNum) {
 
 module.exports = {
     getStorage,
-    requestStorage
+    requestStorage,
+    getStorageById
 }

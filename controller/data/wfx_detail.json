@@ -112,21 +112,13 @@
         "item_id": 2514431
     },
     {
-        "freight": "198件",
-        "score": "¥23  \r\n                            (满3件包邮)",
+        "freight": "23",
+        "score": "198",
         "share": "66",
-        "remark": "",
+        "remark": "满3件包邮",
         "rec_date": "2017-04-10 23:09:43",
         "item_id": 2525132
-    },
-    {
-        "freight": "198件",
-        "score": "¥23  \r\n                            (满3件包邮)",
-        "share": "66",
-        "remark": "",
-        "rec_date": "2017-04-10 23:09:43",
-        "item_id": 2525132
-    },
+    },   
     {
         "freight": "23",
         "score": "350",

@@ -1,10 +1,10 @@
-let query = require('../../schema/mysql')
-let sqlParser = require('../util/sqlParser')
-let sql = require('../../schema/sql')
-let util = require('../util/common')
+let query = require('../../schema/mysql');
+let sqlParser = require('../util/sqlParser');
+let sql = require('../../schema/sql');
+let util = require('../util/common');
 
-var COMBTOKEN_TYPE = '短语';
-var IGNORE_TYPE = '标点符号';
+const COMBTOKEN_TYPE = '短语';
+const IGNORE_TYPE = '标点符号';
 
 // 从json取数据
 async function setStockData(goodsList) {
@@ -141,7 +141,26 @@ async function setCommentScore(comment) {
     }
 }
 
+// 营销数据入库
+async function setDetail(comment) {
+    if (typeof comment == 'undefined') {
+        comment = require('../data/wfx_detail.json');
+    }
+
+    // 添加入库逻辑
+    for (let i = 0; i < comment.length; i++) {
+        if (comment[i] == null) {
+            continue;
+        }
+        console.log(`正在插入第${i+1}条数据`);
+        let sqlStr = sqlParser.handleWfxDetail(comment[i]);
+        await query(sqlStr);
+    }
+}
+
+
 module.exports = {
+    setDetail,
     setStockData,
     getGoodList,
     setCommentData,

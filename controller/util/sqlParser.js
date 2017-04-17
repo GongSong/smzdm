@@ -89,18 +89,12 @@ function handleWfxCommentSeg(obj) {
     return url;
 }
 
-/**
- * 整理长城商品列表入库sql
- * @param {*} obj 
- */
-// function handelCcgoldGoodsList(obj) {
-//     console.log(obj);
-//     let url = sql.insert.ccgold_goods;
-//     let rec_date = getNow();
-//     let sqlValues = `(${obj.goodsId},'${obj.title}',${obj.cate_id},'${rec_date}')`;
-//     url = url.replace('?', sqlValues);
-//     return url;
-// }
+function handleWfxDetail(obj) {
+    let url = sql.insert.wfx_detail;
+    let sqlValue = `(${obj.item_id},${obj.share},${obj.score},'${obj.remark}',${obj.freight},'${obj.rec_date}')`;
+    url = url.replace('?', sqlValue);
+    return url;
+}
 
 /**
  * 整理长城商品上期入库sql
@@ -200,6 +194,7 @@ module.exports = {
     handleStockData,
     handleGoodsData,
     handleWfxStockData,
+    handleWfxDetail,
     handleWfxCommentList,
     handleWfxCommentNlp,
     handleWfxCommentSeg,

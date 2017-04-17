@@ -31,6 +31,7 @@ async function loadDefault() {
     await save.setCommentData();
     await save.setCommentSplitData();
     await save.setCommentScore();
+    await save.setDetail();
 }
 
 module.exports = {
