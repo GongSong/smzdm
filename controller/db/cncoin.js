@@ -122,25 +122,59 @@ async function saveTradRecord(record) {
     }
 }
 
+async function saveQuestionByRecord(Record) {
+    let length = Record.length;
+    for (let j = 0; j < length; j++) {
+        let obj = Record[j];
+        let sql = sqlParser.handleCncoinQuestion(obj);
+        console.log(sql);
+        await query(sql);
+        console.log(`第${j}/${length}条商品咨询信息插入完毕`);
+    }
+}
+
 async function saveQuestion() {
     let goodsList = require('../data/cncoinGoodsList.json');
     let MAX_NUM = goodsList.length;
     let start = 1;
-
     for (let i = start; i <= MAX_NUM; i++) {
-
         let Record = getCommentById(i, 'Question');
-        let length = Record.length;
-        if (length == 0) {
+        await saveQuestionByRecord(Record);
+        console.log(`第${i}/${MAX_NUM}条商品咨询信息插入完毕`);
+    }
+}
+
+async function saveQuestionSegByRecord(Record, type) {
+    for (let k = 0; k < Record.length; k++) {
+        let question = Record[k];
+        let i = question.item_id;
+        if (!Reflect.has(question, 'tokens')) {
             continue;
         }
 
-        for (let j = 0; j < length; j++) {
-            let obj = Record[j];
-            let url = sqlParser.handleCncoinQuestion(obj);
-            await query(url);
+        for (let j = 0; j < question.combtokens.length; j++) {
+            let cmb = question.combtokens[i];
+            if (typeof cmb == 'undefined') {
+                continue;
+            }
+            cmb.wtype = cmb.cls;
+            question.tokens.push(cmb);
         }
-        console.log(`第${i}/${MAX_NUM}条商品咨询信息插入完毕`);
+
+        for (let j = 0; j < question.tokens.length; j++) {
+            let item = question.tokens[j];
+            if (item == null) {
+                continue;
+            }
+            item.item_id = question.item_id;
+            item.replyTime = question.replyTime;
+            item.account = question.account;
+            item.postTime = question.postTime;
+            let sql = sqlParser.handleCncoinQuestionSeg(item, type);
+            console.log(sql);
+            await query(sql);
+        }
+        console.log(`${i},第${k}/${Record.length}条商品咨询SEG信息插入完毕`);
     }
 }
 
@@ -152,36 +186,22 @@ async function saveQuestionSeg() {
     for (let i = start; i <= MAX_NUM; i++) {
         for (let type = 0; type <= 1; type++) {
             let Record = getCommentById(i, type ? 'AnswerSeg' : 'QuestionSeg');
-            for (let k = 0; k < Record.length; k++) {
-                let question = Record[k];
-                if (!Reflect.has(question, 'tokens')) {
-                    continue;
-                }
-
-                for (let j = 0; j < question.combtokens.length; j++) {
-                    let cmb = question.combtokens[i];
-                    if (typeof cmb == 'undefined') {
-                        continue;
-                    }
-                    cmb.wtype = cmb.cls;
-                    question.tokens.push(cmb);
-                }
-
-                for (let j = 0; j < question.tokens.length; j++) {
-                    let item = question.tokens[j];
-                    if (item == null) {
-                        continue;
-                    }
-                    item.item_id = question.item_id;
-                    item.replyTime = question.replyTime;
-                    item.account = question.account;
-                    item.postTime = question.postTime;
-                    let url = sqlParser.handleCncoinQuestionSeg(item, type);
-                    await query(url);
-                }
-            }
+            await saveQuestionSegByRecord(Record, type);
         }
-        console.log(`第${i}/${MAX_NUM}条商品咨询NLP信息插入完毕`);
+        console.log(`第${i}/${MAX_NUM}条商品咨询SEG信息插入完毕`);
+    }
+}
+
+async function saveQuestionNlpByRecord(Record, type) {
+    for (let k = 0; k < Record.length; k++) {
+        let item = Record[k];
+        if (!Reflect.has(item, 'positive')) {
+            continue;
+        }
+        let sql = sqlParser.handleCncoinQuestionNlp(item, type);
+        console.log(sql);
+        await query(sql);
+        console.log(`${Record.item_id},第${k}/${Record.length}条商品咨询NLP信息插入完毕`);
     }
 }
 
@@ -192,14 +212,7 @@ async function saveQuestionNlp() {
     for (let i = start; i <= MAX_NUM; i++) {
         for (let type = 0; type <= 1; type++) {
             let Record = getCommentById(i, type ? 'AnswerScore' : 'QuestionScore');
-            for (let k = 0; k < Record.length; k++) {
-                let item = Record[k];
-                if (!Reflect.has(item, 'positive')) {
-                    continue;
-                }
-                let url = sqlParser.handleCncoinQuestionNlp(item, type);
-                await query(url);
-            }
+            await saveQuestionNlpByRecord(Record, type);
         }
         console.log(`第${i}/${MAX_NUM}条商品咨询NLP信息插入完毕`);
     }
@@ -285,5 +298,8 @@ module.exports = {
     saveTradRecordByRecord,
     saveCommentByRecord,
     saveCommentSegByRecord,
-    saveCommentNlpByRecord
+    saveCommentNlpByRecord,
+    saveQuestionByRecord,
+    saveQuestionSegByRecord,
+    saveQuestionNlpByRecord,
 }

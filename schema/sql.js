@@ -41,10 +41,13 @@ var query = {
     // 获取商品交易记录中最后一次记录时间，用于获取交易记录时无需重新获取数据
     // 此处应为 %H:%i:%s %H表示24小时制  不能为 %h:%m:%s m为月，i表示分钟
     // http://blog.163.com/very_apple/blog/static/277592362013283291394/
-    cncoin_trade_list: "SELECT item_id,max(DATE_FORMAT(access_date,'%Y-%m-%d %H:%i:%s')) last_date FROM cncoin_trade group by item_id",
+    // cncoin_trade_list: "SELECT item_id,max(DATE_FORMAT(access_date,'%Y-%m-%d %H:%i:%s')) last_date FROM cncoin_trade group by item_id",
+    cncoin_trade_list: "SELECT item_id,max(cast(access_date AS CHAR)) last_date FROM cncoin_trade group by item_id",
 
     cncoin_comment_maxid: "SELECT item_id,max(comment_id) as comment_id FROM cncoin_comment_list group by item_id",
 
+    //获取最近一次用户咨询信息，由于无question_id等信息，只能以用户名，发送时间，作为标志
+    cncoin_question_maxid: "SELECT item_id,max(cast(posttime AS CHAR)) AS last_date FROM  cncoin_question group by item_id"
 }
 
 module.exports = {

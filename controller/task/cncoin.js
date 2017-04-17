@@ -56,9 +56,14 @@ async function init() {
         await db.setCrawlerStatus('cncoin_comment');
     }
 
-    console.log(`${++idx}.同步咨询记录---用户咨询.`);
-    console.log(`${++idx}.同步咨询记录---客服回复.`);
+    console.log(`${++idx}.同步咨询记录---用户咨询/服务记录.`);
+    flag = await db.needUpdate('cncoin_question');
+    if (flag) {
+        await read.handleQuestionList(maxId).catch(e => { console.log(e) });
+        await db.setCrawlerStatus('cncoin_question');
+    }
 
+    console.log('cncoin数据增量备份完毕\n');
 }
 
 async function asyncData() {
