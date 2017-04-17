@@ -141,7 +141,7 @@ async function handleTradeRecord(maxId, startId = 1) {
     for (let i = startId; i <= maxId; i++) {
         let latestData = dataList.filter(item => item.item_id == i);
         let record = await getTradeDetail({ id: i, last: latestData });
-        await cncoinDb.saveTradRecord(record);
+        await cncoinDb.saveTradRecordByRecord(record);
         recordInfo.push(record);
     }
     return recordInfo;

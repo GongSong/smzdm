@@ -20,7 +20,8 @@ async function initDbByName(name) {
 }
 
 async function dbInit() {
-    let shopList = ['ccgold', 'wfx', 'youzan', 'cncoin'];
+    // 此处crawler记录表单数据抓取状态
+    let shopList = ['ccgold', 'wfx', 'youzan', 'cncoin', 'crawler'];
 
     let sql = sqlStr.query.tbl_num;
     let data = await query(sql);
@@ -34,8 +35,9 @@ async function dbInit() {
     let tblNumSettings = {
         ccgold: 1,
         cncoin: 13,
+        crawler: 1,
         wfx: 5,
-        yz: 3
+        yz: 3,
     }
 
     // 此处四家店铺初始化语句中需删除导出语句的注释内容
@@ -57,13 +59,19 @@ async function init() {
 }
 
 // 判断某一日的数据是否需要采集，用于库存、价格、销量等查询
-async function needUpdate(sheetName, next) {
-    let sql = sqlStr.query.need_update.replace('?', sheetName);
+async function needUpdate(tblName) {
+    let sql = sqlStr.query.need_update.replace('?', tblName);
     let data = await query(sql);
-    return data[0].need_update;
+    return (data.length == 0) ? 1 : data[0].need_update;
+}
+
+async function setCrawlerStatus(tblName) {
+    let sql = sqlStr.insert.crawler_list.replace('?', tblName);
+    await query(sql);
 }
 
 module.exports = {
     init,
-    needUpdate
+    needUpdate,
+    setCrawlerStatus
 };

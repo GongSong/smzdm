@@ -1,12 +1,13 @@
 let read = require('../shop/ccgold');
 let save = require('../db/ccgold');
-let needUpdate = require('./db').needUpdate;
+let db = require('./db');
 
 async function init() {
-    let flag = await needUpdate('ccgold_goods_detail');
+    let flag = await db.needUpdate('ccgold_goods_detail');
     console.log('正在同步ccgold');
     if (flag) {
-        asyncData();
+        await asyncData();
+        db.setCrawlerStatus('ccgold_goods_detail');
         return;
     }
     console.log('今日数据已上传，无需重复采集!\n');

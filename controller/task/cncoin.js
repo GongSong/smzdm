@@ -1,7 +1,7 @@
 let read = require('../shop/cncoin');
 let save = require('../db/cncoin');
 let storage = require('../shop/cncoinStorage');
-let needUpdate = require('./db').needUpdate;
+let db = require('./db');
 
 // 添加初始数据
 async function dbDataInit() {
@@ -15,32 +15,46 @@ async function init() {
 
     console.log(`${++idx}.开始同步商品列表.`);
 
-    flag = await needUpdate('cncoin_goods');
+    flag = await db.needUpdate('cncoin_goods');
     if (flag) {
         let goodsList = await read.getGoodsList();
         await save.saveGoods(goodsList);
+        await db.setCrawlerStatus('cncoin_goods');
     }
 
     let maxId = await read.getMaxGoodsId();
 
     console.log(`${++idx}.开始同步商品详情.`);
-    let goodsDetail = await read.getDetail(maxId);
-    await save.saveDetail(goodsDetail);
+    flag = await db.needUpdate('cncoin_goods_detail');
+    if (flag) {
+        let goodsDetail = await read.getDetail(maxId);
+        await save.saveDetail(goodsDetail);
+        await db.setCrawlerStatus('cncoin_goods_detail');
+    }
 
     console.log(`${++idx}.开始同步库存信息.`);
-    flag = await needUpdate('cncoin_storage');
+    flag = await db.needUpdate('cncoin_storage');
     if (flag) {
-        let storage = await storage.getStorage(maxId);
-        await save.saveStorage(storage);
+        let storages = await storage.getStorage(maxId);
+        await save.saveStorage(storages);
+        await db.setCrawlerStatus('cncoin_storage');
     }
 
     // 数据较多的接口中，拿到数据后需同时存储至数据库，这样出错后，大量数据无需重复获取及后续处理
     console.log(`${++idx}.同步商品交易记录.`);
-    // read.handleTradeRecord(maxId);
-    console.log(`${++idx}.同步评论记录.`);
-    // read.handleComment(maxId);
-    console.log('注意：此处交易记录及评论记录因数据量较大，同步时间较长，默认关闭，若需要同步请自行打开');
 
+    flag = await db.needUpdate("cncoin_trade");
+    if (flag) {
+        await read.handleTradeRecord(maxId).catch(e => { console.log(e) });
+        await db.setCrawlerStatus('cncoin_trade');
+    }
+
+    console.log(`${++idx}.同步评论记录.`);
+    flag = await db.needUpdate("cncoin_comment");
+    if (flag) {
+        await read.handleComment(maxId).catch(e => { console.log(e) });
+        await db.setCrawlerStatus('cncoin_comment');
+    }
 
     console.log(`${++idx}.同步咨询记录---用户咨询.`);
     console.log(`${++idx}.同步咨询记录---客服回复.`);

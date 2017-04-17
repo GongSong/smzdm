@@ -1,4 +1,5 @@
 let dbName = require('./config').mysql.database;
+let rec_date = require('../controller/util/common').getNow;
 
 var insert = {
     yz_goods: 'insert into yz_goods (alias,goodId,title,price,priceTaobao,imgSrc,isVirtual,shopName,rec_date) values ?',
@@ -22,6 +23,8 @@ var insert = {
     cncoin_goods_detail: 'insert into cncoin_goods_detail (item_id,year,material,weight,theme) values ?',
     cncoin_trade: 'insert into cncoin_trade (item_id,address,access_date,account,quantity,handle_status,order_type,areaid) values ?',
     ccgold_goods_detail: 'insert into ccgold_goods_detail (good_id,good_name,cate_id,weight,img_src,price,inventory,sales,freight,shop_name,rec_date) values ?',
+
+    crawler_list: `insert into crawler_list (tbl_name,rec_date) values ('?','${rec_date()}')`,
 };
 
 var update = {
@@ -30,7 +33,7 @@ var update = {
 
 var query = {
     wfx_itemid_list: "SELECT a.item_id FROM wfx_stock AS a where DATE_FORMAT(a.rec_date, '%Y%m%d') = (SELECT DISTINCT DATE_FORMAT(a.rec_date, '%Y%m%d') AS lastDate FROM wfx_stock AS a ORDER BY 1 DESC LIMIT 1) order by item_id",
-    need_update: "SELECT DATE_FORMAT(rec_date, '%Y%m%d') < DATE_FORMAT(CURDATE(), '%Y%m%d') AS need_update FROM ? order by 1 limit 1",
+    need_update: "SELECT DATE_FORMAT(rec_date, '%Y%m%d') < DATE_FORMAT(CURDATE(), '%Y%m%d') AS need_update FROM crawler_list where tbl_name= '?' order by 1 limit 1",
     tbl_num: "select substr(a.TABLE_NAME,1,INSTR(TABLE_NAME,'_')-1) as shopName ,count(*) as num from information_schema.TABLES a where TABLE_SCHEMA = '" + dbName + "' group by substr(a.TABLE_NAME,1,INSTR(TABLE_NAME,'_')-1)",
     cncoin_maxid: "SELECT max(item_id) item_id FROM cncoin_goods",
     cncoin_detail_maxid: "SELECT IFNULL(max(item_id),0)  as item_id FROM cncoin_goods_detail",

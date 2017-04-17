@@ -20,7 +20,7 @@ let config = {
     }
 };
 
-async function getStorage(start = 1, maxId) {
+async function getStorage(maxId, start = 1) {
     // let goodsList = require('../data/cncoinGoodsList.json');
     // let MAX_NUM = goodsList.length;
 
