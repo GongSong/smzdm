@@ -4,7 +4,7 @@ let db = require('./db');
 
 async function init() {
     let flag = await db.needUpdate('ccgold_goods_detail');
-    console.log('正在同步ccgold');
+    console.log('\n\n正在同步ccgold');
     if (flag) {
         await asyncData();
         db.setCrawlerStatus('ccgold_goods_detail');

@@ -7,17 +7,17 @@ var COMBTOKEN_TYPE = '短语';
 var IGNORE_TYPE = '标点符号';
 
 // 从json取数据
-function setStockData(req, res) {
-    let arr = require('../data/wfx_shenyang.json')
-    let spiderData = {
-        data: arr
-    }
-    let sqlStr = sqlParser.handleWfxStockData(spiderData)
-    query(sqlStr, function(result) {
-        let str = JSON.stringify(result)
-        res.send(str)
-    })
-}
+// function setStockData(req, res) {
+//     let arr = require('../data/wfx_shenyang.json')
+//     let spiderData = {
+//         data: arr
+//     }
+//     let sqlStr = sqlParser.handleWfxStockData(spiderData)
+//     query(sqlStr, function(result) {
+//         let str = JSON.stringify(result)
+//         res.send(str)
+//     })
+// }
 
 // 从mysql取数
 function getGoodList(req, res, next) {
@@ -124,7 +124,6 @@ function setCommentSplitData(req, res) {
         if (Reflect.get(v, 'item_id') !== undefined) {
             promises.push(insertData(sqlStr));
         }
-
     });
     Promise.all(promises).then(item => {
         res.json({

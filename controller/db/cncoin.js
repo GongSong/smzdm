@@ -171,6 +171,10 @@ async function saveQuestionSegByRecord(Record, type) {
             item.account = question.account;
             item.postTime = question.postTime;
             let sql = sqlParser.handleCncoinQuestionSeg(item, type);
+            // 有可能分词失败，继续下一条信息
+            if (sql.includes('undefined')) {
+                continue;
+            }
             console.log(sql);
             await query(sql);
         }
@@ -199,9 +203,13 @@ async function saveQuestionNlpByRecord(Record, type) {
             continue;
         }
         let sql = sqlParser.handleCncoinQuestionNlp(item, type);
+        // 有可能分词失败，继续下一条信息
+        if (sql.includes('undefined')) {
+            continue;
+        }
         console.log(sql);
         await query(sql);
-        console.log(`${Record.item_id},第${k}/${Record.length}条商品咨询NLP信息插入完毕`);
+        console.log(`第${k}/${Record.length}条商品咨询NLP信息插入完毕`);
     }
 }
 

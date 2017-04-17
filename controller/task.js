@@ -1,5 +1,6 @@
 let cncoin = require('./task/cncoin');
 let ccgold = require('./task/ccgold');
+let wfx = require('./task/wfx');
 let db = require('./task/db');
 
 async function init() {
@@ -11,6 +12,7 @@ async function init() {
 
     cncoin.init();
     ccgold.init();
+    wfx.init();
 }
 
 

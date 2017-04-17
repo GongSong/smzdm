@@ -11,7 +11,7 @@ async function dbDataInit() {
 
 async function init() {
     let flag, idx = 0;
-    console.log('正在同步cncoin');
+    console.log('\n\n正在同步cncoin');
 
     console.log(`${++idx}.开始同步商品列表.`);
 

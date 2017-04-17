@@ -317,11 +317,11 @@ async function handleQuestionList(maxId) {
         // 问题NLP
         let score = await getQuestionScoreByRecord(record, 'content');
         // 入库
-        await cncoinDb.saveQuestionNlpByRecord(record, 'content');
+        await cncoinDb.saveQuestionNlpByRecord(score, 'content');
         // 回答 NLP
         score = await getQuestionScoreByRecord(record, 'replyContent');
         // 入库
-        await cncoinDb.saveQuestionNlpByRecord(record, 'replyContent');
+        await cncoinDb.saveQuestionNlpByRecord(score, 'replyContent');
     }
 }
 
