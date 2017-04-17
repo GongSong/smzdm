@@ -20,10 +20,15 @@ let config = {
     }
 };
 
-async function getStorage(maxId, start = 1) {
-    // let goodsList = require('../data/cncoinGoodsList.json');
-    // let MAX_NUM = goodsList.length;
+async function getStorage(start = 1) {
+    let goodsList = require('../data/cncoinGoodsList.json');
+    let MAX_NUM = goodsList.length;
+    let storageNum = await getStorageById(MAX_NUM);
+    let fileName = util.getMainContent() + '/controller/data/cncoinStorage/' + util.getNow(8) + '.json';
+    fs.writeFileSync(fileName, JSON.stringify(storageNum), 'utf8');
+}
 
+async function getStorageById(maxId, start = 1) {
     let storageNum = [];
     for (let i = start; i <= maxId; i++) {
         let val = await getStorageById(i);
@@ -33,10 +38,6 @@ async function getStorage(maxId, start = 1) {
             rec_date: util.getNow(1)
         });
     }
-
-    // let fileName = util.getMainContent() + '/controller/data/cncoinStorage/' + util.getNow(8) + '.json';
-    // fs.writeFileSync(fileName, JSON.stringify(storageNum), 'utf8');
-
     return storageNum;
 }
 

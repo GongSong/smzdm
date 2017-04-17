@@ -3,12 +3,6 @@ let save = require('../db/cncoin');
 let storage = require('../shop/cncoinStorage');
 let db = require('./db');
 
-// 添加初始数据
-async function dbDataInit() {
-    await asyncData();
-    await save2DB();
-}
-
 async function init() {
     let flag, idx = 0;
     console.log('\n\n正在同步cncoin');
@@ -35,7 +29,7 @@ async function init() {
     console.log(`${++idx}.开始同步库存信息.`);
     flag = await db.needUpdate('cncoin_storage');
     if (flag) {
-        let storages = await storage.getStorage(maxId);
+        let storages = await storage.getStorageById(maxId);
         await save.saveStorage(storages);
         await db.setCrawlerStatus('cncoin_storage');
     }
@@ -67,83 +61,85 @@ async function init() {
 }
 
 async function asyncData() {
-
-    // 同步交易记录 
+    // 同步交易记录-数据存储至本地JSON
     // await cncoin.getTradeRecord();
 
-    // 同步咨询信息
+    // 同步咨询信息-数据存储至本地JSON
     // await cncoin.getQuestion();
 
-    // 同步评论信息
+    // 同步评论信息-数据存储至本地JSON
     // await cncoin.getComment();
 
     // id号 68 121 72 无法顺利读取，需特殊处理
     // await cncoin.handleSpecialComment();
 
-    // 分割评论信息 已完成
+    // 分割评论信息 已完成-数据存储至本地JSON
     // await cncoin.splitComment();
 
-    // 分割咨询信息
+    // 分割咨询信息-数据存储至本地JSON
     // await cncoin.splitQuestion();
 
-    // 分割咨询回复
+    // 分割咨询回复-数据存储至本地JSON
     // await cncoin.splitAnswer();
 
-    //读取评论得分信息
+    //读取评论得分信息-数据存储至本地JSON
     // await cncoin.getCommentScore();
 
-    //读取用户咨询NLP得分信息
+    //读取用户咨询NLP得分信息-数据存储至本地JSON
     // await cncoin.getQuestionScore();
 
-    // 读取客服回答NLP得分
+    // 读取客服回答NLP得分-数据存储至本地JSON
     // await cncoin.getAnswerScore();
 
-    // 库存测试 √
+    // 库存测试 -数据存储至本地JSON
     // await storage.getStorage();
 }
 
 async function save2DB() {
 
     // 存储商品列表
-    // await cncoinDb.saveGoods();
+     await save.saveGoods().catch(e => { console.log(e) });
 
     //存储评论信息(已完结)
-    // await cncoinDb.saveComment();
+     await save.saveComment().catch(e => { console.log(e) });
 
-    // 存储库存信息
-    // await cncoinDb.saveStorage();
+    // 存储库存信息(需要载入历史数据)
+    // await save.saveStorage().catch(e => { console.log(e) });
 
     // 存储商品属性
-    // await cncoinDb.saveDetail();
+     await save.saveDetail().catch(e => { console.log(e) });
 
     // 交易记录
-    // await cncoinDb.saveTradRecord()
-    // .catch(e => {
-    //     console.log(e);
-    // })
+    await save.saveTradeRecord()
+    .catch(e => {
+        console.log(e);
+    })
 
     // 咨询
-    // await cncoinDb.saveQuestion()
-    //     .catch(e => {
-    //         console.log(e);
-    //     });
+    await save.saveQuestion()
+        .catch(e => {
+            console.log(e);
+        });
 
     // 咨询问答分词
-    // await cncoinDb.saveQuestionSeg().catch(e => { console.log(e) });
+     await save.saveQuestionSeg().catch(e => { console.log(e) });
 
     // 咨询问答NLP
-    // await cncoinDb.saveQuestionNlp().catch(e => { console.log(e) });
+     await save.saveQuestionNlp().catch(e => { console.log(e) });
 
     // 评论分词
-    // await cncoinDb.saveCommentSeg().catch(e => { console.log(e) });
+     await save.saveCommentSeg().catch(e => { console.log(e) });
 
     // 评论Nlp
-    // await cncoinDb.saveCommentNlp().catch(e => { console.log(e) });
+    await save.saveCommentNlp().catch(e => { console.log(e) });
+}
 
+// 添加初始数据
+async function loadDefault() {
+    await save2DB();
 }
 
 module.exports = {
-    asyncData,
-    save2DB,
+    loadDefault,
     init
 };

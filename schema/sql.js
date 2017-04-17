@@ -47,7 +47,10 @@ var query = {
     cncoin_comment_maxid: "SELECT item_id,max(comment_id) as comment_id FROM cncoin_comment_list group by item_id",
 
     //获取最近一次用户咨询信息，由于无question_id等信息，只能以用户名，发送时间，作为标志
-    cncoin_question_maxid: "SELECT item_id,max(cast(posttime AS CHAR)) AS last_date FROM  cncoin_question group by item_id"
+    cncoin_question_maxid: "SELECT item_id,max(cast(posttime AS CHAR)) AS last_date FROM  cncoin_question group by item_id",
+
+    // cncoin 用户手机号
+    cncoin_user_mobile:"SELECT account,content,comment_rank,access_date,item_id FROM `cncoin_comment_list` where account like '1%' and length(account)=11",
 }
 
 module.exports = {

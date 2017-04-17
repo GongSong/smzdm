@@ -63,7 +63,8 @@ async function saveGoods(goodsList) {
 async function saveStorage(storage) {
     // 获取今天数据并存储
     if (typeof storage == 'undefined') {
-        storage = require('../data/cncoinStorage/' + util.getNow(8) + '.json');
+        // storage = require('../data/cncoinStorage/' + util.getNow(8) + '.json');
+        storage = require('../data/cncoinStorage/20170412.json');
     }
     let MAX_NUM = storage.length;
     if (MAX_NUM == 0) {
@@ -93,7 +94,7 @@ async function saveDetail(storage) {
     }
 }
 
-async function saveTradRecordByRecord(record) {
+async function saveTradeRecordByRecord(record) {
     let length = record.length;
     if (length == 0) {
         return;
@@ -111,14 +112,14 @@ async function saveTradRecordByRecord(record) {
 }
 
 // 存储单条商品销售记录
-async function saveTradRecord(record) {
+async function saveTradeRecord(record) {
     let goodsList = require('../data/cncoinGoodsList.json');
     let MAX_NUM = goodsList.length;
     let start = 1;
 
-    for (let i = start; i <= maxId; i++) {
+    for (let i = start; i <= MAX_NUM; i++) {
         let record = getCommentById(i, 'Record');
-        await saveTradRecordByRecord(record);
+        await saveTradeRecordByRecord(record);
     }
 }
 
@@ -295,7 +296,7 @@ module.exports = {
     saveGoods,
     saveStorage,
     saveDetail,
-    saveTradRecord,
+    saveTradeRecord,
     saveQuestion,
     saveQuestionSeg,
     saveQuestionNlp,
@@ -303,7 +304,7 @@ module.exports = {
     saveCommentNlp,
 
     // 存储单个商品id相关信息
-    saveTradRecordByRecord,
+    saveTradeRecordByRecord,
     saveCommentByRecord,
     saveCommentSegByRecord,
     saveCommentNlpByRecord,

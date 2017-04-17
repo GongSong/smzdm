@@ -164,7 +164,7 @@ function setCommentScore(req, res) {
 }
 
 module.exports = {
-    setStockData,
+    // setStockData,
     getGoodList,
     setCommentData,
     setCommentSplitData,
