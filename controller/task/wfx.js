@@ -25,10 +25,11 @@ async function init() {
     }
 }
 
-async function asyncData() {
+async function loadDefault() {
 
 }
 
 module.exports = {
-    init
+    init,
+    loadDefault
 };

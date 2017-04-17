@@ -42,7 +42,7 @@ async function dbInit() {
 
     // 此处四家店铺初始化语句中需删除导出语句的注释内容
     shopList.forEach((item, i) => {
-        if (tblNum[item] < tblNumSettings[item]) {
+        if (!Reflect.has(tblNum, item) || tblNum[item] < tblNumSettings[item]) {
             initDbByName(item);
             console.log(`${i+1}.数据库 ${item} 初始化完毕`);
         }
