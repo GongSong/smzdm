@@ -1,28 +1,28 @@
-let query = require('../../schema/mysql.js')
+let query = require('../../schema/mysql')
 let sqlParser = require('../util/sqlParser')
-let sql = require('../../schema/sql.js')
+let sql = require('../../schema/sql')
 let util = require('../util/common')
 
 var COMBTOKEN_TYPE = '短语';
 var IGNORE_TYPE = '标点符号';
 
 // 从json取数据
-function setStockData(req, res) {
-    let arr = require('../data/wfx_shenyang.json')
-    let spiderData = {
-        data: arr
-    }
-    let sqlStr = sqlParser.handleWfxStockData(spiderData)
-    query(sqlStr, function (result) {
-        let str = JSON.stringify(result)
-        res.send(str)
-    })
-}
+// function setStockData(req, res) {
+//     let arr = require('../data/wfx_shenyang.json')
+//     let spiderData = {
+//         data: arr
+//     }
+//     let sqlStr = sqlParser.handleWfxStockData(spiderData)
+//     query(sqlStr, function(result) {
+//         let str = JSON.stringify(result)
+//         res.send(str)
+//     })
+// }
 
 // 从mysql取数
 function getGoodList(req, res, next) {
     let sqlStr = sql.query.wfx_itemid_list
-    query(sqlStr, function (result) {
+    query(sqlStr, function(result) {
         let data = JSON.stringify(result)
         data = JSON.parse(data);
         next(data);
@@ -30,7 +30,7 @@ function getGoodList(req, res, next) {
 }
 
 async function insertData(sql) {
-    return await query(sql, function (result) {
+    return await query(sql, function(result) {
         let string = JSON.stringify(result)
         return string;
     });
@@ -92,8 +92,8 @@ function setCommentSplitData(req, res) {
                 pos: token.pos
             };
         });
-        oneToken.forEach((v,i) =>{
-            if(v.wtype !== IGNORE_TYPE){
+        oneToken.forEach((v, i) => {
+            if (v.wtype !== IGNORE_TYPE) {
                 tokens.push(v);
             }
         });
@@ -111,7 +111,7 @@ function setCommentSplitData(req, res) {
                 comment_id: item.comment_id,
                 word: token.word,
                 wtype: COMBTOKEN_TYPE,
-                pos:token.pos
+                pos: token.pos
             });
         });
     });
@@ -124,7 +124,6 @@ function setCommentSplitData(req, res) {
         if (Reflect.get(v, 'item_id') !== undefined) {
             promises.push(insertData(sqlStr));
         }
-
     });
     Promise.all(promises).then(item => {
         res.json({

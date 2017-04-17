@@ -1,20 +1,53 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : MySQL
+Source Server         : Mysql_local
 Source Server Version : 50621
-Source Host           : 127.0.0.1:3306
+Source Host           : localhost:3306
 Source Database       : smzdm
 
 Target Server Type    : MYSQL
 Target Server Version : 50621
 File Encoding         : 65001
 
-Date: 2017-04-15 13:06:40
+Date: 2017-04-13 03:37:01
 */
+-- --------------------------------------------------
+/*
+ccgold                    长城
+  1.  ccgold_goods              商品列表
+  2.  ccgold_goods_detail       商品详情
 
+chinagoldcoin             中国金币总公司
+  1.  cncoin_comment_list       评论列表
+  2.  cncoin_comment_stat       评论分析
+  3.  cncoin_goods              商品列表
+  4.  cncoin_answer_nlp         客服回复情绪nlp
+  5.  cncoin_answer_seg         客服回复分词
+  6.  cncoin_question           咨询列表
+  7.  cncoin_question_nlp       用户咨询情绪nlp
+  8.  cncoin_question_seg       用户咨询分词
+  9.  cncoin_storage            库存
+  10. cncoin_trade              交易记录
+  11. cncoin_comment_seg        评论分词
+  12. cncoin_comment_nlp        评论情绪nlp
+  
+
+wfx                       微分销
+  1.  wfx_comment_list          评论列表
+  2.  wfx_comment_nlp           自然语言处理
+  3.  wfx_comment_seg           分词列表
+  4.  wfx_item_marketing        市场营销方式/积分、点赞
+  5.  wfx_stock                 库存
+
+yz                        有赞/上币
+  1.  yz_goods                  商品列表
+  2.  yz_stock                  库存
+  3.  yz_trade_record           交易历史记录
+
+*/
+-- ---------------------------------------------------
 SET FOREIGN_KEY_CHECKS=0;
-
 -- ----------------------------
 -- Table structure for ccgold_goods_detail
 -- ----------------------------
@@ -24,7 +57,7 @@ CREATE TABLE `ccgold_goods_detail` (
   `good_id` int(11) NOT NULL COMMENT '电商系统商品编号',
   `good_name` varchar(255) NOT NULL COMMENT '商品名称',
   `cate_id` smallint(6) DEFAULT NULL COMMENT '商品分类',
-  `weight` varchar(20) DEFAULT NULL COMMENT '重量',
+  `weight` double DEFAULT NULL COMMENT '重量',
   `img_src` varchar(255) DEFAULT NULL COMMENT '图片链接地址',
   `price` double DEFAULT NULL COMMENT '价格',
   `inventory` int(11) DEFAULT NULL COMMENT '库存',
@@ -34,7 +67,7 @@ CREATE TABLE `ccgold_goods_detail` (
   `rec_date` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '记录日期',
   PRIMARY KEY (`id`),
   KEY `idx_ccgold_good_recdate_2` (`good_id`,`rec_date`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='某电商商品详情';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='某电商商品详情';
 
 -- ----------------------------
 -- Table structure for cncoin_answer_nlp
@@ -49,7 +82,7 @@ CREATE TABLE `cncoin_answer_nlp` (
   `negative` float unsigned zerofill DEFAULT NULL,
   `positive` float unsigned zerofill DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for cncoin_answer_seg
@@ -65,7 +98,7 @@ CREATE TABLE `cncoin_answer_seg` (
   `wtype` varchar(20) DEFAULT NULL,
   `pos` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for cncoin_comment_list
@@ -85,7 +118,7 @@ CREATE TABLE `cncoin_comment_list` (
   `account` varchar(255) DEFAULT NULL,
   `add_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for cncoin_comment_nlp
@@ -98,7 +131,7 @@ CREATE TABLE `cncoin_comment_nlp` (
   `negative` float unsigned zerofill DEFAULT NULL,
   `positive` float unsigned zerofill DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for cncoin_comment_seg
@@ -112,7 +145,7 @@ CREATE TABLE `cncoin_comment_seg` (
   `wtype` varchar(10) DEFAULT NULL,
   `pos` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for cncoin_comment_stat
@@ -130,7 +163,7 @@ CREATE TABLE `cncoin_comment_stat` (
   `badNumber` int(11) DEFAULT NULL,
   `rec_date` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for cncoin_goods
@@ -144,7 +177,7 @@ CREATE TABLE `cncoin_goods` (
   `price` decimal(10,0) DEFAULT NULL,
   `rec_date` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for cncoin_goods_detail
@@ -158,7 +191,7 @@ CREATE TABLE `cncoin_goods_detail` (
   `theme` varchar(255) DEFAULT NULL,
   `weight` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for cncoin_question
@@ -175,7 +208,7 @@ CREATE TABLE `cncoin_question` (
   `replyTime` datetime DEFAULT NULL,
   `postTime` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for cncoin_question_nlp
@@ -190,7 +223,7 @@ CREATE TABLE `cncoin_question_nlp` (
   `negative` float unsigned zerofill DEFAULT NULL,
   `positive` float unsigned zerofill DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for cncoin_question_seg
@@ -206,7 +239,7 @@ CREATE TABLE `cncoin_question_seg` (
   `wtype` varchar(20) DEFAULT NULL,
   `pos` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for cncoin_storage
@@ -218,7 +251,7 @@ CREATE TABLE `cncoin_storage` (
   `value` int(255) DEFAULT NULL,
   `rec_date` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for cncoin_trade
@@ -235,7 +268,7 @@ CREATE TABLE `cncoin_trade` (
   `order_type` varchar(20) DEFAULT NULL,
   `areaid` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for wfx_comment_list

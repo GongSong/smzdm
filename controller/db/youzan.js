@@ -1,4 +1,4 @@
-let query = require('../../schema/mysql.js')
+let query = require('../../schema/mysql')
 let sqlParser = require('../util/sqlParser')
 
 function getGoodsData(req, res) {

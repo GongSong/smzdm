@@ -1,34 +1,23 @@
 let read = require('../shop/ccgold');
 let save = require('../db/ccgold');
-
-// // 初始化数据库
-// function dbInit() {
-
-// }
-
-// // 添加初始数据
-// function dbDataInit() {
-
-// }
+let db = require('./db');
 
 async function init() {
-    await asyncData();
-    await save2DB();
+    let flag = await db.needUpdate('ccgold_goods_detail');
+    console.log('\n\n正在同步ccgold');
+    if (flag) {
+        await asyncData();
+        db.setCrawlerStatus('ccgold_goods_detail');
+        return;
+    }
+    console.log('今日数据已上传，无需重复采集!\n');
 }
 
 async function asyncData() {
-    
-    // 获取商品列表
-    // let goodsList = await read.getGoodsList();
-    // await save.setGoodDetail(goodsList);
-}
-
-async function save2DB() {
-
+    let goodsList = await read.getGoodsList();
+    await save.setGoodList(goodsList);
 }
 
 module.exports = {
-    asyncData,
-    save2DB,
     init
 };
