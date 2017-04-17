@@ -112,16 +112,24 @@ let wfx = {
         let rec_date = util.getNow()
         let $ = cheerio.load(html)
         let dom = $('.otherinfo').eq(1).find('span')
-        let freight = dom.eq(1).find('em').text().replace('¥', '').trim()
-        let score = dom.eq(2).find('em').text().trim()
+
+        // regExp相关
+        // http://www.w3school.com.cn/jsref/jsref_obj_regexp.asp
+        // https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/RegExp#character-classes
+
+        let text = dom.text().replace(/\n/g, '').replace(/\s/g, '');
+        let freight = text.match(/运费:¥(\w+)/);
+        freight = (freight != null) ? freight[1] : 0;
+
+        let score = text.match(/积分:(\w+)/);
+        score = (score != null) ? score[1] : 0;
+
+        //点赞
         let share = $('.shareinfo span').text()
-        let remark = ''
-        if (freight == '(包邮)') {
-            freight = 0
-        } else if (freight.includes('\r\n')) {
-            remark = freight.split('\r\n')[1].trim()
-            freight = freight.split('\r\n')[0].trim()
-        }
+
+        let remark = text.match(/\((\S+)\)/);
+        remark = (remark == null) ? '' : remark[1];
+
         return {
             freight,
             score,

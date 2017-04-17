@@ -2,7 +2,7 @@ let axios = require('axios');
 let parser = require('../util/htmlParser');
 
 let spiderSetting = require('../util/spiderSetting');
-let save = require('../db/wfx');
+let db = require('../db/wfx');
 
 let util = require('../util/common');
 
@@ -59,31 +59,30 @@ function formatterData(obj, keys) {
  * 4.获取第3步B中最后10第数据，并同第2步A的数据合并
  * 
  */
-function getGoodsList(req, res) {
+async function getGoodsList() {
     let urlUp = 'http://www.symint615.com/Item/lists/order/up';
     let urlDown = 'http://www.symint615.com/Item/lists/order/down';
 
     let goodList = [];
-    getGoodsById(urlUp).then(response => {
-        goodList = response;
-        let page = parseInt(response.length / 10) + 1;
-        return getGoodsById(urlDown, page);
-    }).then(response => {
-        let appendList = response.slice(response.length - 10, response.length);
-        goodList = [...goodList, ...appendList];
-        goodList.sort((a, b) => {
-            return a.item_id - b.item_id;
-        })
+    goodList = await getGoodsById(urlUp);
 
-        let keys = ['hide_stock', 'buy_method', 'buy_url', 'is_show_sale', 'buy_need_points', 'is_compress', 'group', 'sale_num', 'basic_sales', 'join_level_discount', 'type'];
-        goodList = goodList.map(item => formatterData(item, keys));
-        res.json(goodList);
-    });
+    let page = parseInt(goodList.length / 10) + 1;
+    let res = await getGoodsById(urlDown, page);
+
+    let appendList = res.slice(res.length - 10, res.length);
+    goodList = [...goodList, ...appendList];
+    goodList.sort((a, b) => {
+        return a.item_id - b.item_id;
+    })
+
+    let keys = ['hide_stock', 'buy_method', 'buy_url', 'is_show_sale', 'buy_need_points', 'is_compress', 'group', 'sale_num', 'basic_sales', 'join_level_discount', 'type'];
+    goodList = goodList.map(item => formatterData(item, keys));
+
+    return goodList;
 }
 
-function getDetailById(id) {
+async function getDetailById(id) {
     let url = 'http://www.symint615.com/Item/detail_ajax';
-    // 'pid=0&bid=0'
     let config = {
         method: 'get',
         url,
@@ -95,12 +94,14 @@ function getDetailById(id) {
         headers: spiderSetting.headers.wfx
     };
 
-    return axios(config).then(result => {
+    return await axios(config).then(result => {
         let obj = result.data;
         // 系统维护升级时，输出为网页数据
         if (typeof obj != 'object') {
             console.log('wfx系统维护中,数据采集失败...');
-            return;
+            return {
+                item_id: id
+            };
         }
         let html = obj.data;
         let info = parser.wfx.shareInfo(html);
@@ -111,19 +112,21 @@ function getDetailById(id) {
     })
 }
 
-function getDetail(req, res) {
-    save.getGoodList(req, res, (data) => {
-        let promises = data.map(item => getDetailById(item.item_id));
-        Promise.all(promises)
-            .then(result => {
-                res.send(result);
-            })
-    })
+async function getDetail() {
+    let data = await db.getGoodList();
+    let results = [];
+    for (let i = 0; i < data.length; i++) {
+        console.log(`正在抓取第${i}/${data.length}页`);
+        let record = await getDetailById(data[i].item_id);
+        results.push(record);
+    }
+    return results;
 }
 
-async function getCommentById(item_id, page = 1) {
+// 该函数待修改
+async function getCommentById(item_id, page = 1, lastId = 0) {
 
-    console.log('正在抓取第' + page + '页');
+    console.log('正在抓取第' + page + '页,最近更新id:' + lastId);
     let url = 'http://www.symint615.com/Item/getItemComment';
     let config = {
         method: 'get',
@@ -135,44 +138,86 @@ async function getCommentById(item_id, page = 1) {
         headers: spiderSetting.headers.wfx
     };
 
-    return await axios(config).then(res => {
-        let comments = res.data;
-        // 如果当前页无数据或小于每页最大产品数量10，则表示下一页无数据
-        if (typeof comments.data.length == 0) {
-            return [];
-        } else if (comments.data.length < 10) {
-            return parser.wfx.commentInfo(comments.data, item_id);
-        }
-        return getCommentById(item_id, page + 1)
-            .then(res => {
-                // 2017年接口升级后，第2页以后的评论返回结果非标准json格式，即内容没在 res.data中，而是直接返回 array结果。
-                if (typeof res.data != 'undefined') {
-                    res = res.data.data;
-                }
-                return parser.wfx.commentInfo([...comments.data, ...res], item_id);
-            });
-    }).catch(e => console.log(e));
+    let res = await axios(config);
+
+    let comments = res.data;
+
+    // 如果当前页无数据或小于每页最大产品数量10，则表示下一页无数据
+    if (typeof comments.data.length == 0) {
+        return [];
+    } else if (comments.data.length < 10) {
+        let data = parser.wfx.commentInfo(comments.data, item_id);
+        // 处理增量备份
+        return data.filter(item => item.order_item_id > lastId);
+    }
+
+    return await getCommentById(item_id, page + 1)
+        .then(res => {
+            // 2017年接口升级后，第2页以后的评论返回结果非标准json格式，即内容没在 res.data中，而是直接返回 array结果。
+            if (typeof res.data != 'undefined') {
+                res = res.data.data;
+            }
+            data = parser.wfx.commentInfo([...comments.data, ...res], item_id);
+            // 处理增量备份
+            return data.filter(item => item.order_item_id > lastId);
+        });
 }
 
-function getComment(req, res) {
-
-    save.getGoodList(req, res, (data) => {
-        let promises = data.map(item => getCommentById(item.item_id));
-        Promise.all(promises)
-            .then(result => {
-                // 去除空数据
-                let arr = [];
-                result.forEach(item => {
-                    if (item == null) {
-                        return;
-                    }
-                    if (JSON.stringify(item) != '[]') {
-                        arr.push(item);
-                    }
-                })
-                res.send(arr);
-            });
+async function getComment() {
+    let data = await db.getGoodList();
+    let maxId = data.length;
+    let results = [];
+    for (let i = 0; i < maxId; i++) {
+        console.log(`正在抓取第${i}/${data.length}页`);
+        let record = await getCommentById(data[i].item_id);
+        results.push(record);
+    }
+    // 去除空数据
+    let arr = [];
+    result.forEach(item => {
+        if (item == null) {
+            return;
+        }
+        if (JSON.stringify(item) != '[]') {
+            arr.push(item);
+        }
     })
+    return arr;
+}
+
+async function handleComment() {
+    // 商品id列表
+    let data = await db.getGoodList();
+    let maxId = data.length;
+
+    // 最近一次更新位置
+    let lastData = await db.getLastComment();
+
+    let results = [],
+        lastId;
+    for (let i = 0; i < maxId; i++) {
+        let curId = data[i].item_id;
+        console.log(`正在抓取第${i}/${data.length}页`);
+
+        //获取当前产品最近一次评论信息
+        lastId = lastData.filter(item => item.item_id == curId);
+        lastId = lastId.length ? lastId[0].order_item_id : 0;
+        let record = await getCommentById(curId, 1, lastId);
+        // console.log(record);
+        results.push(record);
+    }
+    console.log(results);
+    // 去除空数据
+    let arr = [];
+    result.forEach(item => {
+        if (item == null) {
+            return;
+        }
+        if (JSON.stringify(item) != '[]') {
+            arr.push(item);
+        }
+    })
+    return arr;
 }
 
 // 用node-segment分词并做词性处理
@@ -257,5 +302,8 @@ module.exports = {
     getDetail,
     getComment,
     splitComment,
-    getCommentScore
+    getCommentScore,
+
+    //  评论信息增量备份 
+    handleComment
 };

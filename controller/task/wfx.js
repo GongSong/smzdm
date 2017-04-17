@@ -9,20 +9,25 @@ async function init() {
     flag = await db.needUpdate('wfx_stock');
     if (flag) {
         console.log(`${++idx}.开始同步商品列表.`);
-
+        let goodsList = await read.getGoodsList();
+        await save.setStockData(goodsList);
+        await db.setCrawlerStatus('wfx_stock');
     }
 
     flag = await db.needUpdate('wfx_item_marketing');
     if (flag) {
         console.log(`${++idx}.开始同步wfx_item_marketing.`);
-
+        let detail = await read.getDetail();
+        await save.setDetail(detail);
+        await db.setCrawlerStatus('wfx_item_marketing');
     }
 
     flag = await db.needUpdate('wfx_comment_list');
     if (flag) {
         console.log(`${++idx}.开始同步评论信息.`);
-
+        await read.handleComment();
     }
+    console.log('wfx数据同步完毕\n');
 }
 
 async function loadDefault() {

@@ -33,7 +33,8 @@ var update = {
 };
 
 var query = {
-    wfx_itemid_list: "SELECT a.item_id FROM wfx_stock AS a where DATE_FORMAT(a.rec_date, '%Y%m%d') = (SELECT DISTINCT DATE_FORMAT(a.rec_date, '%Y%m%d') AS lastDate FROM wfx_stock AS a ORDER BY 1 DESC LIMIT 1) order by item_id",
+    wfx_itemid_list: "SELECT distinct a.item_id FROM wfx_stock AS a WHERE DATE_FORMAT(a.rec_date, '%Y%m%d') = DATE_FORMAT(NOW(), '%Y%m%d') ORDER BY	item_id",
+    wfx_comment_maxid: "SELECT item_id,max(order_item_id) order_item_id FROM wfx_comment_list group by item_id order by 1",
     need_update: "SELECT DATE_FORMAT(rec_date, '%Y%m%d') < DATE_FORMAT(CURDATE(), '%Y%m%d') AS need_update FROM crawler_list where tbl_name= '?' order by 1 limit 1",
     tbl_num: "select substr(a.TABLE_NAME,1,INSTR(TABLE_NAME,'_')-1) as shopName ,count(*) as num from information_schema.TABLES a where TABLE_SCHEMA = '" + dbName + "' group by substr(a.TABLE_NAME,1,INSTR(TABLE_NAME,'_')-1)",
     cncoin_maxid: "SELECT max(item_id) item_id FROM cncoin_goods",

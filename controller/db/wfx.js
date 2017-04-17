@@ -17,13 +17,15 @@ async function setStockData(goodsList) {
 }
 
 // 从mysql取数
-function getGoodList(req, res, next) {
-    let sqlStr = sql.query.wfx_itemid_list
-    query(sqlStr, function(result) {
-        let data = JSON.stringify(result)
-        data = JSON.parse(data);
-        next(data);
-    })
+async function getGoodList() {
+    let sqlStr = sql.query.wfx_itemid_list;
+    return query(sqlStr);
+}
+
+// 最近评论记录
+async function getLastComment() {
+    let sqlStr = sql.query.wfx_comment_maxid;
+    return query(sqlStr);
 }
 
 async function insertData(sql) {
@@ -162,8 +164,9 @@ async function setDetail(comment) {
 module.exports = {
     setDetail,
     setStockData,
-    getGoodList,
     setCommentData,
     setCommentSplitData,
-    setCommentScore
+    setCommentScore,
+    getGoodList,
+    getLastComment
 }
