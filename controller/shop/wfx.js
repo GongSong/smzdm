@@ -156,30 +156,22 @@ async function getCommentById(item_id, page = 1) {
 
 function getComment(req, res) {
 
-    let testMode = false;
-
     dbResult.getGoodList(req, res, (data) => {
-        if (!testMode) {
-            let promises = data.map(item => getCommentById(item.item_id));
-            Promise.all(promises)
-                .then(result => {
-                    // 去除空数据
-                    let arr = [];
-                    result.forEach(item => {
-                        if (item == null) {
-                            return;
-                        }
-                        if (JSON.stringify(item) != '[]') {
-                            arr.push(item);
-                        }
-                    })
-                    res.send(arr);
+        let promises = data.map(item => getCommentById(item.item_id));
+        Promise.all(promises)
+            .then(result => {
+                // 去除空数据
+                let arr = [];
+                result.forEach(item => {
+                    if (item == null) {
+                        return;
+                    }
+                    if (JSON.stringify(item) != '[]') {
+                        arr.push(item);
+                    }
                 })
-        } else {
-            getCommentById(data[7].item_id).then(result => {
-                res.send(result);
-            })
-        }
+                res.send(arr);
+            });
     })
 }
 

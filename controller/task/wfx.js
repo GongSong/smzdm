@@ -26,11 +26,11 @@ async function init() {
 }
 
 async function loadDefault() {
-
     // 商品列表信息/库存信息，该数据每日更新
     await save.setStockData();
-
-
+    await save.setCommentData();
+    await save.setCommentSplitData();
+    await save.setCommentScore();
 }
 
 module.exports = {
