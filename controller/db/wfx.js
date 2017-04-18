@@ -19,13 +19,13 @@ async function setStockData(goodsList) {
 // 从mysql取数
 async function getGoodList() {
     let sqlStr = sql.query.wfx_itemid_list;
-    return await query(sqlStr);
+    return query(sqlStr);
 }
 
 // 最近评论记录
 async function getLastComment() {
     let sqlStr = sql.query.wfx_comment_maxid;
-    return await query(sqlStr);
+    return query(sqlStr);
 }
 
 async function insertData(sql) {

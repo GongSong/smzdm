@@ -60,8 +60,13 @@ var query = {
     // cncoin 每分钟并发
     cncoin_conn_perMin: "SELECT DATE_FORMAT(access_date,'%Y-%m-%d %h:%i') as mininute,count(*) FROM `cncoin_trade` group by DATE_FORMAT(access_date,'%Y%m%d %h%i') having count(*)>10 order by 2 desc",
 
+<<<<<<< HEAD
+    // sge 上海金最新记录日期
+    sge_lastRecordDate: "select max(history_date) from sge_trends"
+=======
     // yz最近交易时间
     youzan_trad_maxid:"SELECT a.goodId,max(cast(a.update_time AS CHAR)) as last_date FROM yz_trade_record a group by a.goodId order by 1"
+>>>>>>> aa2ad67b54a858a98c29db662810492224e23fb6
 }
 
 module.exports = {
