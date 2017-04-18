@@ -41,10 +41,10 @@ async function getNewestPriceList() {
 
 function formatData(arr) {
     return arr.map(item => {
-        let dateTime = (new Date(item[0])).toISOString().replace('T', ' ').replace('.000Z', '');
+        let dateTime = (new Date(item[0])).toISOString().split('T')[0];
         return {
             zp: item[1],
-            history_date: dateTime.split(' ')[0]
+            history_date: dateTime
         };
     });
 }
