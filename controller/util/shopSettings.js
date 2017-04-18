@@ -34,6 +34,15 @@ let settings = {
         // json
         goodsPrice: 'https://p.3.cn/prices/mgets?skuids=J_10057276779',
         commentJson: 'https://item.m.jd.com/ware/getDetailCommentList.json?wareId=10940760573',
+        newComment: 'https://item.m.jd.com/newComments/newCommentsDetail.json',
+        /**
+         * post
+         * wareId:11165603143
+            offset:1
+            num:10
+            type:0
+            checkParam:LUIPPTP
+         */
         goodsList: 'https://shop.m.jd.com/search/searchWareAjax.json',
         /*
             post
