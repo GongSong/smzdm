@@ -6,13 +6,13 @@ let db = require('../db/wfx');
 
 let util = require('../util/common');
 
-// 载入模块
-var Segment = require('segment');
-// 创建实例
-var segment = new Segment();
-// 使用默认的识别模块及字典，载入字典文件需要1秒，仅初始化时执行一次即可
-segment.useDefault();
-segment.loadSynonymDict('synonym.txt');
+// // 载入模块
+// var Segment = require('segment');
+// // 创建实例
+// var segment = new Segment();
+// // 使用默认的识别模块及字典，载入字典文件需要1秒，仅初始化时执行一次即可
+// segment.useDefault();
+// segment.loadSynonymDict('synonym.txt');
 
 // 获取商品主表信息
 async function getGoodsById(url, page = 2) {
@@ -123,10 +123,8 @@ async function getDetail() {
     return results;
 }
 
-// 该函数待修改
-async function getCommentById(item_id, page = 1, lastId = 0) {
-
-    console.log('正在抓取第' + page + '页,最近更新id:' + lastId);
+async function getCommentByPage(item_id, page = 1) {
+    console.log('正在抓取第' + page + '页');
     let url = 'http://www.symint615.com/Item/getItemComment';
     let config = {
         method: 'get',
@@ -139,35 +137,38 @@ async function getCommentById(item_id, page = 1, lastId = 0) {
     };
 
     let res = await axios(config);
-
     let comments = res.data;
-
+    // 2017年接口升级后，第2页以后的评论返回结果非标准json格式，即内容没在 res.data中，而是直接返回 array结果。
+    let data = comments.data;
     // 如果当前页无数据或小于每页最大产品数量10，则表示下一页无数据
-    if (typeof comments.data.length == 0) {
+    if (typeof data.length == 0) {
         return [];
-    } else if (comments.data.length < 10) {
-        let data = parser.wfx.commentInfo(comments.data, item_id);
-        // 处理增量备份
-        return data.filter(item => item.order_item_id > lastId);
     }
+    return parser.wfx.commentInfo(data, item_id);
+}
 
-    return await getCommentById(item_id, page + 1)
-        .then(res => {
-            // 2017年接口升级后，第2页以后的评论返回结果非标准json格式，即内容没在 res.data中，而是直接返回 array结果。
-            if (typeof res.data != 'undefined') {
-                res = res.data.data;
-            }
-            data = parser.wfx.commentInfo([...comments.data, ...res], item_id);
-            // 处理增量备份
-            return data.filter(item => item.order_item_id > lastId);
-        });
+async function getCommentById(item_id, lastId = 0) {
+
+    let isEnd = false;
+    let records = [];
+    for (let i = 1; !isEnd; i++) {
+        // 获取单页数据
+        let data = await getCommentByPage(item_id, i);
+        //数据过滤（默认id从大到小排列，前序获取数据后表示后序数据已经入库）
+        data = data.filter(item => item.order_item_id > lastId);
+        if (data.length < 10) {
+            isEnd = true;
+        }
+        records = [...records, ...data];
+    }
+    return records;
 }
 
 async function getComment() {
     let data = await db.getGoodList();
     let maxId = data.length;
     let results = [];
-    for (let i = 0; i < maxId; i++) {
+    for (let i = 1; i < maxId; i++) {
         console.log(`正在抓取第${i}/${data.length}页`);
         let record = await getCommentById(data[i].item_id);
         results.push(record);
@@ -195,21 +196,24 @@ async function handleComment() {
 
     let results = [],
         lastId;
-    for (let i = 0; i < maxId; i++) {
+    let start = 1;
+    // maxId = 8;
+    for (let i = start; i < maxId; i++) {
         let curId = data[i].item_id;
         console.log(`正在抓取第${i}/${data.length}页`);
 
         //获取当前产品最近一次评论信息
         lastId = lastData.filter(item => item.item_id == curId);
         lastId = lastId.length ? lastId[0].order_item_id : 0;
-        let record = await getCommentById(curId, 1, lastId);
-        // console.log(record);
+        // 测试代码
+        // lastId = 2982707;
+        let record = await getCommentById(curId, lastId);
         results.push(record);
     }
-    console.log(results);
+
     // 去除空数据
     let arr = [];
-    result.forEach(item => {
+    results.forEach(item => {
         if (item == null) {
             return;
         }
@@ -221,27 +225,29 @@ async function handleComment() {
 }
 
 // 用node-segment分词并做词性处理
-function splitCommentBySegment(req, res) {
-    let data = require('../data/wfx_comment.json');
-    let result = [];
+// function splitCommentBySegment(req, res) {
+//     let data = require('../data/wfx_comment.json');
+//     let result = [];
 
-    data.forEach(comment => {
-        comment.forEach(item => {
-            let segText = segment.doSegment(item.detail, {
-                stripPunctuation: true
-            });
-            result.push(Object.assign(util.handleWordSegment(segText), {
-                item_id: item.item_id,
-                detail: item.detail
-            }));
-        });
-    });
+//     data.forEach(comment => {
+//         comment.forEach(item => {
+//             let segText = segment.doSegment(item.detail, {
+//                 stripPunctuation: true
+//             });
+//             result.push(Object.assign(util.handleWordSegment(segText), {
+//                 item_id: item.item_id,
+//                 detail: item.detail
+//             }));
+//         });
+//     });
 
-    res.json(result);
-}
+//     res.json(result);
+// }
 
-async function splitComment(req, res) {
-    let data = require('../data/wfx_comment.json');
+async function splitComment(data) {
+    if (typeof data == 'undefined') {
+        data = require('../data/wfx_comment.json');
+    }
     let result = [];
 
     data.forEach(comment => {
@@ -268,11 +274,13 @@ async function splitComment(req, res) {
         })
         console.log('第' + i + '条数据读取完毕\n');
     }
-    res.json(comments);
+    return comments;
 }
 
-async function getCommentScore(req, res) {
-    let data = require('../data/wfx_comment.json');
+async function getCommentScore(data) {
+    if (typeof data == 'undefined') {
+        data = require('../data/wfx_comment.json');
+    }
     let result = [];
 
     data.forEach(comment => {
@@ -294,7 +302,7 @@ async function getCommentScore(req, res) {
         })
         console.log('第' + i + '条数据读取完毕\n');
     }
-    res.json(scores);
+    return scores;
 }
 
 module.exports = {

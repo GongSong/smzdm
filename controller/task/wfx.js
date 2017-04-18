@@ -25,7 +25,16 @@ async function init() {
     flag = await db.needUpdate('wfx_comment_list');
     if (flag) {
         console.log(`${++idx}.开始同步评论信息.`);
-        await read.handleComment();
+        let comment = await read.handleComment();
+        let segs = await read.splitComment(comment);
+        let scores = await read.getCommentScore(comment);
+
+        // 分词、nlp处理完毕之后再做入库操作
+        await save.setCommentData(comment);
+        await save.setCommentSplitData(segs);
+        await save.setCommentScore(scores);
+
+        await db.setCrawlerStatus('wfx_comment_list');
     }
     console.log('wfx数据同步完毕\n');
 }
