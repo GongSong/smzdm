@@ -1,6 +1,7 @@
 let cncoin = require('./task/cncoin');
 let ccgold = require('./task/ccgold');
 let wfx = require('./task/wfx');
+let youzan = require('./task/youzan');
 let db = require('./task/db');
 
 async function init() {
@@ -11,6 +12,7 @@ async function init() {
     cncoin.init();
     ccgold.init();
     wfx.init();
+    youzan.init();
 }
 
 // 初次执行时初始化数据库，载入默认数据
@@ -25,6 +27,7 @@ async function loadDefault() {
 
     // wfx.loadDefault();
 
+    // youzan.loadDefault();
 }
 
 
