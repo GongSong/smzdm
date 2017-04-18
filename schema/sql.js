@@ -58,7 +58,10 @@ var query = {
     cncoin_conn_perSec: "SELECT access_date,count(*) FROM `cncoin_trade` group by access_date having count(*)>10 order by 2 desc",
 
     // cncoin 每分钟并发
-    cncoin_conn_perMin: "SELECT DATE_FORMAT(access_date,'%Y-%m-%d %h:%i') as mininute,count(*) FROM `cncoin_trade` group by DATE_FORMAT(access_date,'%Y%m%d %h%i') having count(*)>10 order by 2 desc"
+    cncoin_conn_perMin: "SELECT DATE_FORMAT(access_date,'%Y-%m-%d %h:%i') as mininute,count(*) FROM `cncoin_trade` group by DATE_FORMAT(access_date,'%Y%m%d %h%i') having count(*)>10 order by 2 desc",
+
+    // yz最近交易时间
+    youzan_trad_maxid:"SELECT a.goodId,max(cast(a.update_time AS CHAR)) as last_date FROM yz_trade_record a group by a.goodId order by 1"
 }
 
 module.exports = {
