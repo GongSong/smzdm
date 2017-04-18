@@ -64,18 +64,27 @@ async function getGoodsDetailById(settings) {
     return await axios(config).then(res => {
         let goodItem = parser.ccgold.goodsDetail(res.data, id, goods[page].cate_id);
         let data = getGoodsIdByWeight(res.data);
-
+        let result;
         goodsFlag[id] = true;
 
         // 如果  data.length == 1,说明商品无同类产品，不进入该循环而直接跳至下一条信息；
         for (let i = 0; i < data.length; i++) {
             let curId = data[i].goods_id;
             if (typeof goodsFlag[curId] == 'undefined') {
-                return getGoodsDetailById({ goods, page, goodsId: curId, goodsFlag }).then(res => [...goodItem, ...res]);
+                result = getGoodsDetailById({ goods, page, goodsId: curId, goodsFlag });
+                if (typeof result != 'array') {
+                    return goodItem;
+                }
+                goodItem = [...goodItem, ...result];
+                return goodItem;
             }
         }
-        return getGoodsDetailById({ goods, page: page + 1, goodsFlag, goodsId: 0 }).then(res => [...goodItem, ...res]);
-
+        result = getGoodsDetailById({ goods, page: page + 1, goodsFlag, goodsId: 0 });
+        if (typeof result != 'array') {
+            return goodItem;
+        }
+        goodItem = [...goodItem, ...result];
+        return goodItem;
     }).catch(e => console.log(e));
 }
 

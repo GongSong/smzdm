@@ -56,20 +56,19 @@ async function getGoodsList() {
 
     // 当id自增到 code返回值不会000002时，到达id上限，无商品数据
     for (let i = 1; !finished; i++) {
-        await getGoodsById(i)
-            .then(data => {
-                if (typeof data == 'undefined') {
-                    console.log('商品id' + i + '服务端异常');
-                    return;
-                }
-                // 添加接口错误时的处理
-                if (Reflect.has(data, 'status')) {
-                    console.log('商品id' + i + '无详情数据');
-                    finished = true;
-                    return;
-                }
-                goodsList.push(data);
-            })
+        let data = await getGoodsById(i);
+
+        if (typeof data == 'undefined') {
+            console.log('商品id' + i + '服务端异常');
+            return goodsList;
+        }
+        // 添加接口错误时的处理
+        if (Reflect.has(data, 'status')) {
+            console.log('商品id' + i + '无详情数据');
+            finished = true;
+            return goodsList;
+        }
+        goodsList.push(data);
     }
     return goodsList;
 }

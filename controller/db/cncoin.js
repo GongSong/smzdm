@@ -54,9 +54,8 @@ async function saveGoods(goodsList) {
     for (let i = start; i < MAX_NUM; i++) {
         let item = goodsList[i];
         let sqlStr = sqlParser.handleCncoinGoodsList(item);
-        await query(sqlStr, function(res) {
-            console.log(`第${i+1}/${MAX_NUM}条 商品数据插入完毕\n`);
-        });
+        await query(sqlStr);
+        console.log(`第${i+1}/${MAX_NUM}条 商品数据插入完毕\n`);
     }
 }
 
@@ -72,9 +71,8 @@ async function saveStorage(storage) {
     }
     for (let i = 0; i < MAX_NUM; i++) {
         let sqlStr = sqlParser.handleCncoinStorage(storage[i]);
-        await query(sqlStr, function(res) {
-            console.log(`第${i+1}/${MAX_NUM}条 商品数据插入完毕\n`);
-        });
+        await query(sqlStr);
+        console.log(`第${i+1}/${MAX_NUM}条 商品数据插入完毕\n`);
     }
 }
 
@@ -88,9 +86,8 @@ async function saveDetail(storage) {
     }
     for (let i = 0; i < MAX_NUM; i++) {
         let sqlStr = sqlParser.handleCncoinDetail(storage[i]);
-        await query(sqlStr, function(res) {
-            console.log(`第${i+1}/${MAX_NUM}条 商品数据插入完毕\n`);
-        });
+        await query(sqlStr);
+        console.log(`第${i+1}/${MAX_NUM}条 商品数据插入完毕\n`);
     }
 }
 

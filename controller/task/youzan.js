@@ -11,6 +11,9 @@ async function init() {
         console.log(`${++idx}.开始同步商品列表.`);
         goodsList = await read.getGoodsByShopName();
         if (goodsList.length == 0) {
+            await db.setCrawlerStatus('yz_goods');
+            await db.setCrawlerStatus('yz_stock');
+            await db.setCrawlerStatus('yz_trade_record');
             return;
         }
         await save.setGoodsData(goodsList);

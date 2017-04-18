@@ -98,22 +98,22 @@ async function asyncData() {
 async function save2DB() {
 
     // 存储商品列表
-     await save.saveGoods().catch(e => { console.log(e) });
+    await save.saveGoods().catch(e => { console.log(e) });
 
     //存储评论信息(已完结)
-     await save.saveComment().catch(e => { console.log(e) });
+    await save.saveComment().catch(e => { console.log(e) });
 
     // 存储库存信息(需要载入历史数据)
     // await save.saveStorage().catch(e => { console.log(e) });
 
     // 存储商品属性
-     await save.saveDetail().catch(e => { console.log(e) });
+    await save.saveDetail().catch(e => { console.log(e) });
 
     // 交易记录
     await save.saveTradeRecord()
-    .catch(e => {
-        console.log(e);
-    })
+        .catch(e => {
+            console.log(e);
+        })
 
     // 咨询
     await save.saveQuestion()
@@ -122,13 +122,13 @@ async function save2DB() {
         });
 
     // 咨询问答分词
-     await save.saveQuestionSeg().catch(e => { console.log(e) });
+    await save.saveQuestionSeg().catch(e => { console.log(e) });
 
     // 咨询问答NLP
-     await save.saveQuestionNlp().catch(e => { console.log(e) });
+    await save.saveQuestionNlp().catch(e => { console.log(e) });
 
     // 评论分词
-     await save.saveCommentSeg().catch(e => { console.log(e) });
+    await save.saveCommentSeg().catch(e => { console.log(e) });
 
     // 评论Nlp
     await save.saveCommentNlp().catch(e => { console.log(e) });
