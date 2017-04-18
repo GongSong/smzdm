@@ -41,35 +41,26 @@ async function getNewestPriceList() {
 
 function formatData(arr) {
     return arr.map(item => {
-        let dateTime = (new Date(item[0])).toISOString().split('T')[0];
         return {
             zp: item[1],
-            history_date: dateTime
+            history_date: (new Date(item[0])).toISOString().split('T')[0]
         };
     });
 }
 
-async function getOneYearGoldPrice() {
+async function getGoldPrice() {
     let priceYearly = await getPriceYearly();
     priceYearly = {
         zp: formatData(priceYearly.zp),
         wp: formatData(priceYearly.wp)
     };
-    return priceYearly.zp.map(zpItem => {
+    let data = priceYearly.zp.map(zpItem => {
         let wp = priceYearly.wp.filter(wpItem => zpItem.history_date == wpItem.history_date);
         zpItem.wp = (wp.length == 0) ? zpItem.zp : wp[0].zp;
         return zpItem;
     });
-}
-
-async function getGoldPrice() {
-    let priceYearly = await query(sql_lastRecordDate);
-    let goldPrice = await getOneYearGoldPrice();
-    let hisDate = priceYearly.his_date;
-    if (hisDate == null) {
-        return goldPrice;
-    }
-    return goldPrice.filter(item => item.history_date > hisDate);
+    let newestDate = await query(sql_lastRecordDate);
+    return (newestDate.his_date == null) ? data : data.filter(item => item.history_date > newestDate.his_date);
 }
 
 async function saveGoldPrice(todayPrice) {
