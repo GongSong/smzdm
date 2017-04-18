@@ -1,44 +1,84 @@
-var axios = require('axios');
-var parser = require('../util/htmlParser');
-
-var headers = require('../util/spiderSetting').headers.sge;
-var url = require('../util/shopSettings').settings.sge.gold_price;
-var sql_lastRecordDate = require('../../schema/sql').query.sge_lastRecordDate;
-var query = require('../../schema/mysql');
+let axios = require('axios');
+let util = require('../util/common');
+let sql_lastRecordDate = require('../../schema/sql').query.sge_lastRecordDate;
+let query = require('../../schema/mysql');
+let parser = require('../util/sqlParser');
 
 // 获取一年内历史金价
 async function getPriceYearly() {
-    let today = new Date().toString();
-    console.log('正在抓取' + today + '之前一年的每日上海金历史基准价');
+    console.log('正在抓取' + util.getNow() + '之前一年的每日上海金历史基准价');
     let config = {
         method: 'get',
-        url,
-        headers
+        url: 'http://www.sge.com.cn/graph/DayilyJzj'
     }
-    return await axios(config).then(res => {
-        return res;
-    }).catch(e => console.log(e));
+    return await axios(config).then(res => res.data).catch(e => console.log(e));
 }
 
-async function getLastPriceRecord(){
-    return await query(sql_lastRecordDate);
-}
+async function getNewestPriceList() {
+    let priceYearly = await getPriceYearly();
+    let lastRecordDate = await query(sql_lastRecordDate);
 
-function getNewestPriceList(){
-    let priceYearly = getPriceYearly();
-    let lastRecordDate = getLastPriceRecord();
-    
-    if(!lastRecordDate){
+    if (!lastRecordDate) {
         return priceYearly;
     }
 
-    let milliseconds = lastRecordDate.getMilliseconds();
+    let milliseconds = isNaN(lastRecordDate) ? 0 : lastRecordDate.getMilliseconds();
     console.log('last record date is ' + milliseconds);
-    priceYearly.zp[0].forEach(function(element) {
-        console.log(element);
-    }, this);
+    let priceList = [];
+    let i = 0;
+    let zp = Reflect.get(priceYearly, 'zp');
+    let wp = Reflect.get(priceYearly, 'wp');
+    for (let daily in zp) {
+        console.log(daily);
+        if (daily[0] > milliseconds) {
+            let p = { date: new Date(daily[0]), "zp": daily[1], "wp": wp[i++][1] };
+            console.log(p);
+            priceList.push(p);
+        }
+    }
+    return priceList;
+}
+
+function formatData(arr) {
+    return arr.map(item => {
+        let dateTime = (new Date(item[0])).toISOString().replace('T', ' ').replace('.000Z', '');
+        return {
+            zp: item[1],
+            history_date: dateTime.split(' ')[0]
+        };
+    });
+}
+
+async function getOneYearGoldPrice() {
+    let priceYearly = await getPriceYearly();
+    priceYearly = {
+        zp: formatData(priceYearly.zp),
+        wp: formatData(priceYearly.wp)
+    };
+    return priceYearly.zp.map(zpItem => {
+        let wp = priceYearly.wp.filter(wpItem => zpItem.history_date == wpItem.history_date);
+        zpItem.wp = (wp.length == 0) ? zpItem.zp : wp[0].zp;
+        return zpItem;
+    });
+}
+
+async function getGoldPrice() {
+    let priceYearly = await query(sql_lastRecordDate);
+    let goldPrice = await getOneYearGoldPrice();
+    let hisDate = priceYearly.his_date;
+    if (hisDate == null) {
+        return goldPrice;
+    }
+    return goldPrice.filter(item => item.history_date > hisDate);
+}
+
+async function saveGoldPrice(todayPrice) {
+    let url = parser.handleSGEData(todayPrice);
+    await query(url);
 }
 
 module.exports = {
-    getNewestPriceList
+    getNewestPriceList,
+    getGoldPrice,
+    saveGoldPrice
 };

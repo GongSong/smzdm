@@ -26,6 +26,8 @@ var insert = {
     ccgold_goods_detail: 'insert into ccgold_goods_detail (good_id,good_name,cate_id,weight,img_src,price,inventory,sales,freight,shop_name,rec_date) values ?',
 
     crawler_list: `insert into crawler_list (tbl_name,rec_date) values ('?','${rec_date()}')`,
+
+    sge: 'insert into sge_trends(history_date,zp,wp) values ?',
 };
 
 var update = {
@@ -61,7 +63,7 @@ var query = {
     cncoin_conn_perMin: "SELECT DATE_FORMAT(access_date,'%Y-%m-%d %h:%i') as mininute,count(*) FROM `cncoin_trade` group by DATE_FORMAT(access_date,'%Y%m%d %h%i') having count(*)>10 order by 2 desc",
 
     // sge 上海金最新记录日期
-    sge_lastRecordDate: "select max(history_date) from sge_trends",
+    sge_lastRecordDate: "select max(history_date) as his_date from sge_trends",
 
     // yz最近交易时间
     youzan_trad_maxid: "SELECT a.goodId,max(cast(a.update_time AS CHAR)) as last_date FROM yz_trade_record a group by a.goodId order by 1",

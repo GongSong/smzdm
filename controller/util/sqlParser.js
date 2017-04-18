@@ -189,6 +189,15 @@ function handleCncoinCommentNlp(obj) {
     return url;
 }
 
+function handleSGEData(arr) {
+    let url = sql.insert.sge;
+    let sqlValues = arr.map(item => {
+        return `('${item.history_date}',${item.zp},${item.wp})`
+    })
+    url = url.replace('?', sqlValues.join(','))
+    return url
+}
+
 module.exports = {
     handleSaleDetailData,
     handleStockData,
@@ -210,5 +219,6 @@ module.exports = {
     handleCncoinQuestionSeg,
     handleCncoinQuestionNlp,
     handleCncoinCommentSeg,
-    handleCncoinCommentNlp
+    handleCncoinCommentNlp,
+    handleSGEData
 };
