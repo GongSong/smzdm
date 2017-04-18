@@ -58,7 +58,10 @@ var query = {
     cncoin_conn_perSec: "SELECT access_date,count(*) FROM `cncoin_trade` group by access_date having count(*)>10 order by 2 desc",
 
     // cncoin 每分钟并发
-    cncoin_conn_perMin: "SELECT DATE_FORMAT(access_date,'%Y-%m-%d %h:%i') as mininute,count(*) FROM `cncoin_trade` group by DATE_FORMAT(access_date,'%Y%m%d %h%i') having count(*)>10 order by 2 desc"
+    cncoin_conn_perMin: "SELECT DATE_FORMAT(access_date,'%Y-%m-%d %h:%i') as mininute,count(*) FROM `cncoin_trade` group by DATE_FORMAT(access_date,'%Y%m%d %h%i') having count(*)>10 order by 2 desc",
+
+    // sge 上海金最新记录日期
+    sge_lastRecordDate: "select max(history_date) from sge_trends"
 }
 
 module.exports = {
