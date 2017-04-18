@@ -1,5 +1,12 @@
-let query = require('../../schema/mysql')
-let sqlParser = require('../util/sqlParser')
+let query = require('../../schema/mysql');
+let sqlParser = require('../util/sqlParser');
+let sql = require('../../schema/sql');
+
+// 最近评论记录
+async function getLastTrade() {
+    let sqlStr = sql.query.youzan_trad_maxid;
+    return await query(sqlStr);
+}
 
 function getGoodsData(req, res) {
     query('select * from yz_goods', function(result) {
