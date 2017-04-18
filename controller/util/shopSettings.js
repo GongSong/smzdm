@@ -30,7 +30,17 @@ let settings = {
         goodList: 'https://mall.jd.com/view_search-517384-0-5-1-24-1.html',
         goodDetail: 'https://item.jd.com/10325434111.html',
         comment: 'https://club.jd.com/comment/productPageComments.action?productId=10057276779&score=0&sortType=5&page=1&pageSize=100&isShadowSku=0',
-        goodsPrice: 'https://p.3.cn/prices/mgets?skuids=J_10057276779'
+
+        // json
+        goodsPrice: 'https://p.3.cn/prices/mgets?skuids=J_10057276779',
+        commentJson: 'https://item.m.jd.com/ware/getDetailCommentList.json?wareId=10940760573',
+        goodsList: 'https://shop.m.jd.com/search/searchWareAjax.json',
+        /*
+            post
+            shopId:170564(沈币)/207641(河南钱币)
+            searchPage:1 或 2
+            searchSort:0(推荐)/1销量/5新品/2降价/3升价
+        */
     },
     cncoin: {
         homePage: 'http://www.chinagoldcoin.net/',
