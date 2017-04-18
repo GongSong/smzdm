@@ -10,6 +10,9 @@ async function init() {
     if (flag) {
         console.log(`${++idx}.开始同步商品列表.`);
         goodsList = await read.getGoodsByShopName();
+        if (goodsList.length == 0) {
+            return;
+        }
         await save.setGoodsData(goodsList);
         await db.setCrawlerStatus('yz_goods');
     }

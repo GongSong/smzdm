@@ -19,6 +19,9 @@ async function setGoodsData(arr) {
     if (typeof arr == 'undefined') {
         arr = require('../data/goodsList.json');
     }
+    if (arr.length == 0) {
+        return;
+    }
     let spiderData = {
         data: arr,
         shopName: '上海造币旗舰店'
@@ -31,6 +34,9 @@ async function setStockData(arr) {
     if (typeof arr == 'undefined') {
         arr = require('../data/saleDetail.json');
     }
+    if (arr.length == 0) {
+        return;
+    }
     let spiderData = {
         data: arr,
         shopName: '上海造币旗舰店'
@@ -42,6 +48,9 @@ async function setStockData(arr) {
 async function setSaleDetail(arr) {
     if (typeof arr == 'undefined') {
         arr = require('../data/goodsItemSaleDetail.json');
+    }
+    if (arr.length == 0) {
+        return;
     }
     let spiderData = {
         data: arr,
