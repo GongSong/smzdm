@@ -69,7 +69,7 @@ async function saveGoldPrice(todayPrice) {
 }
 
 module.exports = {
-    getNewestPriceList,
+    // getNewestPriceList,
     getGoldPrice,
     saveGoldPrice
 };

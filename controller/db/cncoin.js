@@ -157,25 +157,11 @@ async function saveQuestionSegByRecord(Record, type) {
       }
       cmb.wtype = cmb.cls;
       question.tokens.push(cmb);
-    }
-
-    for (let j = 0; j < question.tokens.length; j++) {
-      let item = question.tokens[j];
-      if (item == null) {
-        continue;
-      }
-      item.item_id = question.item_id;
-      item.replyTime = question.replyTime;
-      item.account = question.account;
-      item.postTime = question.postTime;
-      let sql = sqlParser.handleCncoinQuestionSeg(item, type);
-      // 有可能分词失败，继续下一条信息
-      if (sql.includes('undefined')) {
-        continue;
-      }
-      console.log(sql);
+    } 
+    let sql = sqlParser.handleCncoinQuestionSeg(question, type);
+    if(sql){
       await query(sql);
-    }
+    }    
     console.log(`${i},第${k}/${Record.length}条商品咨询SEG信息插入完毕`);
   }
 }
@@ -184,7 +170,6 @@ async function saveQuestionSeg() {
   let goodsList = require('../data/cncoinGoodsList.json');
   let MAX_NUM = goodsList.length;
   let start = 1;
-
   for (let i = start; i <= MAX_NUM; i++) {
     for (let type = 0; type <= 1; type++) {
       let Record = getCommentById(i, type ? 'AnswerSeg' : 'QuestionSeg');
@@ -205,7 +190,6 @@ async function saveQuestionNlpByRecord(Record, type) {
     if (sql.includes('undefined')) {
       continue;
     }
-    console.log(sql);
     await query(sql);
     console.log(`第${k}/${Record.length}条商品咨询NLP信息插入完毕`);
   }
@@ -242,20 +226,11 @@ async function saveCommentSegByRecord(Record) {
     if(question.tokens.length == 0){
         continue;
     }
-    // for (let j = 0; j < question.tokens.length; j++) {
-    //     let item = question.tokens[j];
-    //     if (item == null) {
-    //         continue;
-    //     }
-    //     item.item_id = question.item_id;
-    //     item.comment_id = question.comment_id;
-    //     let url = sqlParser.handleCncoinCommentSeg(item);
-    //     url = url.replace('\\','\\\\');
-    //     await query(url);
-    // }
     let url = sqlParser.handleCncoinCommentSeg(question);
-    await query(url);
-    console.lot(`第${k}/${Record.length}项评论分词插入完毕`);
+    if(url){
+        await query(url);
+    }    
+    console.log(`第${k}/${Record.length}项评论分词插入完毕`);
   }
 }
 
@@ -263,7 +238,6 @@ async function saveCommentSeg() {
   let goodsList = require('../data/cncoinGoodsList.json');
   let MAX_NUM = goodsList.length;
   let start = 1;
-  start = 134;
   for (let i = start; i <= MAX_NUM; i++) {
     let Record = getCommentById(i, 'CommentSeg');
     await saveCommentSegByRecord(Record);

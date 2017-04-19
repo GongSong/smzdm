@@ -159,10 +159,18 @@ function handleCncoinQuestion (obj) {
 }
 
 // type=1 时，客服回答信息
-function handleCncoinQuestionSeg (obj, type = 0) {
+function handleCncoinQuestionSeg (question, type = 0) {
   let url = type ? sql.insert.cncoin_answer_seg : sql.insert.cncoin_question_seg
-  let sqlValues = `(${obj.item_id},'${obj.account}','${obj.replyTime}','${obj.postTime}','${obj.word}','${obj.wtype}',${obj.pos})`
-  url = url.replace('?', sqlValues)
+  let sqlList = question.tokens.map(item => {
+    if (item != null) {
+      item.word = item.word.replace('\\', '\\\\')
+      return `(${question.item_id},'${question.account}','${question.replyTime}','${question.postTime}','${item.word}','${item.wtype}',${item.pos})`
+    }
+  })
+  if (sqlList[0] == undefined) {
+    return false
+  }
+  url = url.replace('?', sqlList.join(','))
   return url
 }
 
@@ -174,22 +182,18 @@ function handleCncoinQuestionNlp (obj, type = 0) {
   return url
 }
 
-// function handleCncoinCommentSeg(obj) {
-//     let url = sql.insert.cncoin_comment_seg
-//     let sqlValues = `(${obj.item_id},${obj.comment_id},'${obj.word}','${obj.wtype}',${obj.pos})`
-//     url = url.replace('?', sqlValues)
-//     return url
-// }
-
 function handleCncoinCommentSeg (question) {
   let url = sql.insert.cncoin_comment_seg
-  let valueList = question.tokens.map(item => {
+  let sqlList = question.tokens.map(item => {
     if (item != null) {
-        item.word = item.word.replace('\\','\\\\');
+      item.word = item.word.replace('\\', '\\\\')
       return `(${question.item_id},${question.comment_id},'${item.word}','${item.wtype}',${item.pos})`
     }
   })
-  url = url.replace('?', valueList.join(','))
+  if (sqlList[0] == undefined) {
+    return false
+  }
+  url = url.replace('?', sqlList.join(','))
   return url
 }
 
