@@ -28,6 +28,7 @@ let settings = {
     jdShenyang: {
         homePage: 'https://mall.jd.com/index-170564.html',
         goodList: 'https://mall.jd.com/view_search-517384-0-5-1-24-1.html',
+        goodListMobile:'https://shop.m.jd.com/search/search?shopId=170564',
         goodDetail: 'https://item.jd.com/10325434111.html',
         comment: 'https://club.jd.com/comment/productPageComments.action?productId=10057276779&score=0&sortType=5&page=1&pageSize=100&isShadowSku=0',
 

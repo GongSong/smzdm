@@ -14,10 +14,6 @@ async function init() {
   console.log('今日数据已上传，无需重复采集!\n');
 }
 
-async function asyncData() {
-
-}
-
 module.exports = {
   init
 };
