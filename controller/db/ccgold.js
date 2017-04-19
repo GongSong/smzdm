@@ -2,25 +2,15 @@ let query = require('../../schema/mysql')
 let sqlParser = require('../util/sqlParser')
 let sql = require('../../schema/sql')
 
-async function insertData(sql) {
-    return await query(sql, function(result) {
-        let string = JSON.stringify(result)
-        return string;
-    });
-}
+async function setGoodList(goods) {
+    if(typeof goods=='undefined'){
+        goods = require('../data/ccgoldDetail.json')
+    }
+    for(let i=0;i<goods.length;i++){
+        await query(sqlParser.handelCcgoldGoodsDetail(goods[i]));
+        console.log(`第${i}/${goods.length}条库存数据插入完毕.ccgold`);
+    }
 
-function setGoodList(goods) {
-    // let goods = require('../data/ccgoldDetail.json')
-    let promises = [];
-    goods.forEach(function(element) {
-        promises.push(insertData(sqlParser.handelCcgoldGoodsDetail(element)));
-    }, this);
-
-    Promise.all(promises).then(item => {
-        console.log({
-            msg: '共' + promises.length + ' 条数据插入完毕'
-        });
-    });
 }
 
 module.exports = {
