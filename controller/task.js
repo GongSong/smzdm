@@ -26,7 +26,7 @@ async function loadDefault() {
 
     // ccgold 无需初始化载入数据，直接加载即可
 
-    // cncoin.loadDefault();
+    cncoin.loadDefault();
 
     // wfx.loadDefault();
 

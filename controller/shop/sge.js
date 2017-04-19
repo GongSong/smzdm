@@ -1,43 +1,43 @@
 let axios = require('axios');
-let util = require('../util/common');
+// let util = require('../util/common');
 let sql_lastRecordDate = require('../../schema/sql').query.sge_lastRecordDate;
 let query = require('../../schema/mysql');
 let parser = require('../util/sqlParser');
 
 // 获取一年内历史金价
-async function getPriceYearly() {
-    console.log('正在抓取' + util.getNow() + '之前一年的每日上海金历史基准价');
-    let config = {
-        method: 'get',
-        url: 'http://www.sge.com.cn/graph/DayilyJzj'
-    }
-    return await axios(config).then(res => res.data).catch(e => console.log(e));
-}
+// async function getPriceYearly() {
+//     console.log('正在抓取' + util.getNow() + '之前一年的每日上海金历史基准价');
+//     let config = {
+//         method: 'get',
+//         url: 'http://www.sge.com.cn/graph/DayilyJzj'
+//     }
+//     return await axios(config).then(res => res.data).catch(e => console.log(e));
+// }
 
-async function getNewestPriceList() {
-    let priceYearly = await getPriceYearly();
-    let lastRecordDate = await query(sql_lastRecordDate);
+// async function getNewestPriceList() {
+//     let priceYearly = await getPriceYearly();
+//     let lastRecordDate = await query(sql_lastRecordDate);
 
-    if (!lastRecordDate) {
-        return priceYearly;
-    }
+//     if (!lastRecordDate) {
+//         return priceYearly;
+//     }
 
-    let milliseconds = isNaN(lastRecordDate) ? 0 : lastRecordDate.getMilliseconds();
-    console.log('last record date is ' + milliseconds);
-    let priceList = [];
-    let i = 0;
-    let zp = Reflect.get(priceYearly, 'zp');
-    let wp = Reflect.get(priceYearly, 'wp');
-    for (let daily in zp) {
-        console.log(daily);
-        if (daily[0] > milliseconds) {
-            let p = { date: new Date(daily[0]), "zp": daily[1], "wp": wp[i++][1] };
-            console.log(p);
-            priceList.push(p);
-        }
-    }
-    return priceList;
-}
+//     let milliseconds = isNaN(lastRecordDate) ? 0 : lastRecordDate.getMilliseconds();
+//     console.log('last record date is ' + milliseconds);
+//     let priceList = [];
+//     let i = 0;
+//     let zp = Reflect.get(priceYearly, 'zp');
+//     let wp = Reflect.get(priceYearly, 'wp');
+//     for (let daily in zp) {
+//         console.log(daily);
+//         if (daily[0] > milliseconds) {
+//             let p = { date: new Date(daily[0]), "zp": daily[1], "wp": wp[i++][1] };
+//             console.log(p);
+//             priceList.push(p);
+//         }
+//     }
+//     return priceList;
+// }
 
 function formatData(arr) {
     return arr.map(item => {
@@ -49,7 +49,7 @@ function formatData(arr) {
 }
 
 async function getGoldPrice() {
-    let priceYearly = await getPriceYearly();
+    let priceYearly = await axios.get('http://www.sge.com.cn/graph/DayilyJzj').then(res => res.data).catch(e => console.log(e));
     priceYearly = {
         zp: formatData(priceYearly.zp),
         wp: formatData(priceYearly.wp)
