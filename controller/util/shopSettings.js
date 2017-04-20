@@ -28,7 +28,7 @@ let settings = {
     jdShenyang: {
         homePage: 'https://mall.jd.com/index-170564.html',
         goodList: 'https://mall.jd.com/view_search-517384-0-5-1-24-1.html',
-        goodListMobile:'https://shop.m.jd.com/search/search?shopId=170564',
+        goodListMobile: 'https://shop.m.jd.com/search/search?shopId=170564',
         goodDetail: 'https://item.jd.com/10325434111.html',
         comment: 'https://club.jd.com/comment/productPageComments.action?productId=10057276779&score=0&sortType=5&page=1&pageSize=100&isShadowSku=0',
 
@@ -51,6 +51,10 @@ let settings = {
             searchPage:1 或 2
             searchSort:0(推荐)/1销量/5新品/2降价/3升价
         */
+        goodsDetail: 'https://item.m.jd.com/ware/detail.json?wareId=10015827231',
+        //get
+        // 包含下钻数据，包含商品属性信息
+        // 下钻的商品包含对应的评论信息
     },
     cncoin: {
         homePage: 'http://www.chinagoldcoin.net/',
