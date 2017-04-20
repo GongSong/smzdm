@@ -124,7 +124,10 @@ async function getComment(goodsList, shopId = '170564') {
 
     for (let i = 0; i < goodsList.length; i++) {
         let record = await getCommentById(shopId, goodsList[i]);
-        await query(sqlParser.handleJDCommentList(record));
+        if (record.length) {
+            console.log(record);
+            await query(sqlParser.handleJDCommentList(record));
+        }
         console.log(`jd:第${i+1}/${goodsList.length}条商品评论信息插入完毕`);
     }
     return comments;

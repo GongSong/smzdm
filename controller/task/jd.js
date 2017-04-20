@@ -13,14 +13,12 @@ async function init() {
         db.setCrawlerStatus('jd_goods');
     }
 
-    // flag = await db.needUpdate('jd_comment');
+    flag = await db.needUpdate('jd_comment');
     flag = 1;
     if (flag) {
         goodsList = goodsList.filter(item => item.totalCount > 0);
-        let comment = await read.getComment(goodsList);
-        console.log(comment);
-        // await save.setComment(comment);
-        // db.setCrawlerStatus('jd_comment');
+        await read.getComment(goodsList);
+        db.setCrawlerStatus('jd_goods');
     }
 
 }
