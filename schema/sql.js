@@ -70,6 +70,8 @@ var query = {
     // yz最近交易时间
     youzan_trad_maxid: "SELECT a.goodId,max(cast(a.update_time AS CHAR)) as last_date FROM yz_trade_record a group by a.goodId order by 1",
 
+    // cncoin 最大库存id
+    cncoin_storage_maxid:"SELECT max(item_id) item_id FROM `cncoin_storage` where DATE_FORMAT(rec_date,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d')",
 }
 
 module.exports = {
