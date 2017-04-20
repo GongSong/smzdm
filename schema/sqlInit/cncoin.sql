@@ -51,7 +51,7 @@ CREATE TABLE `cncoin_comment_seg` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `item_id` int(11) DEFAULT NULL,
   `comment_id` int(11) DEFAULT NULL,
-  `word` varchar(40) DEFAULT NULL,
+  `word` varchar(80) DEFAULT NULL,
   `wtype` varchar(10) DEFAULT NULL,
   `pos` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
