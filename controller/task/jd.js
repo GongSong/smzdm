@@ -8,8 +8,8 @@ async function init() {
   if (flag) {
     let goodsList = await read.getGoodsList();
     console.log(goodsList);
-    await save.setGoodList(goodsList);
-    db.setCrawlerStatus('jd_goods');
+   //  await save.setGoodList(goodsList);
+   // db.setCrawlerStatus('jd_goods');
   }  
 }
 
