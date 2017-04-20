@@ -1,9 +1,11 @@
-var parser = require('../util/htmlParser');
-var spiderSetting = require('../util/spiderSetting');
-
-let util = require('../util/common');
 let querystring = require('querystring');
+
+let spiderSetting = require('../util/spiderSetting');
+let db = require('../db/jd');
+let util = require('../util/common');
 let jdCookies = require('../util/jdCookies');
+let query = require('../../schema/mysql');
+let sql = require('../../schema/sql');
 
 let config = {
     method: 'POST',
@@ -57,11 +59,36 @@ async function getGoodsList(shopId = '170564') {
     return goodsList;
 }
 
-async function getComment(goodsList) {
+async function getCommentByPage(wareId, page) {
+
+}
+
+async function getCommentById(wareId) {
+    let isEnd = false;
+    let totalPage = 1;
+    let isEnd = false;
+    for (let page = 1; page <= totalPage && !isEnd; page++) {
+        let comment = await getCommentByPage(wareId, page);
+        totalPage = comment.totalPage;
+        let data = comment.commentInfoList;
+        let commentLength = data.length;
+        // jd评论为升序排列，需处理更简易的评论获取方式
+        // data = data.filter(item => item.commentId < lastId);
+    }
+}
+
+async function getComment(goodsList, shopId = '170564') {
 
     let comments = [];
-    // 添加读数据逻辑
+    if (typeof goodsList == 'undefined' || goodsList.length == 0) {
+        // 此查询中需同时关联查询出最近评论的id
+        goodsList = await query(sql.query.jd_goods_havecomment);
+    }
 
+    for (let i = 0; i < goodsList.length; i++) {
+        let record = await getCommentById(goodsList[i].wareId);
+
+    }
     return comments;
 }
 

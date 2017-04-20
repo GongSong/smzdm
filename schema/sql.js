@@ -29,7 +29,7 @@ var insert = {
 
     sge: 'insert into sge_trends(history_date,zp,wp) values ?',
 
-    jd_goods: 'insert into jd_goods(shopId,wareId,wname,imageurl,jdPrice,good,flashSale,totalCount) values ?',
+    jd_goods: 'insert into jd_goods(shopId,wareId,wname,imageurl,jdPrice,good,flashSale,totalCount,rec_date) values ?',
 
     // 添加表单字段
     jd_comment: 'insert into jd_comment( ) values ?',
@@ -75,6 +75,8 @@ var query = {
 
     // cncoin 最大库存id
     cncoin_storage_maxid: "SELECT max(item_id) item_id FROM `cncoin_storage` where DATE_FORMAT(rec_date,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d')",
+
+    jd_goods_havecomment: "SELECT wareId,totalCount FROM jd_goods where totalCount>0 and DATE_FORMAT(rec_date,'%Y%m%d')=(select max(DATE_FORMAT(rec_date,'%Y%m%d')) from jd_goods)"
 }
 
 module.exports = {
