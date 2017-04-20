@@ -2,7 +2,7 @@ let cheerio = require('cheerio');
 let POSTAG = require('segment').POSTAG;
 let nlp = require('./nlp');
 
-let http = require('http');
+let http = require('https');
 let querystring = require('querystring');
 
 function getParameter(a, b) {

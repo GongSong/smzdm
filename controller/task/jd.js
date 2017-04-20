@@ -19,6 +19,8 @@ async function init() {
         goodsList = goodsList.filter(item => item.totalCount > 0);
         let comment = await read.getComment(goodsList);
         console.log(comment);
+        // await save.setComment(comment);
+        // db.setCrawlerStatus('jd_comment');
     }
 
 }

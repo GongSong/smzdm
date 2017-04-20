@@ -1,7 +1,6 @@
 var parser = require('../util/htmlParser');
 var spiderSetting = require('../util/spiderSetting');
 
-let http = require('https');
 let util = require('../util/common');
 let querystring = require('querystring');
 let jdCookies = require('../util/jdCookies');
@@ -26,32 +25,14 @@ let config = {
 
 async function getListByPage(searchPage = 1, shopId = '170564') {
     config.headers.Referer = config.headers.Referer + shopId;
-
     let postData = querystring.stringify({
         shopId,
         searchPage,
         searchSort: 1
     });
-
-    return new Promise((resolve, reject) => {
-        let request = http.request(config, (response) => {
-            let result = '';
-            response.on('data', (chunk) => {
-                result += chunk;
-            }).on('end', () => {
-                resolve(JSON.parse(result));
-            });
-        }).on('error', (e) => {
-            console.log(`problem with request: ${e.message}`);
-            reject(e);
-        });
-        request.write(postData);
-        request.end();
-    });
-
-    return json;
+    let result = await util.getPostData(config, postData);
+    return JSON.parse(result);
 }
-
 
 // 获取商品列表
 async function getGoodsList(shopId = '170564') {
@@ -86,5 +67,5 @@ async function getComment(goodsList) {
 
 module.exports = {
     getGoodsList,
-    getCommetn
+    getComment
 };
