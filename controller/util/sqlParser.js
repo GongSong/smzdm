@@ -215,7 +215,8 @@ function handleSGEData(arr) {
 
 function handleJDGoods(data) {
     let url = sql.insert.jd_goods;
-    let sqlList = data.map(item => `(${item.shopId},${item.wareId},'${item.wname}','${item.imageurl}',${item.jdPrice},'${item.good}',${item.flashSale},${item.totalCount})`)
+    let rec_date = getNow();
+    let sqlList = data.map(item => `(${item.shopId},${item.wareId},'${item.wname}','${item.imageurl}',${item.jdPrice},'${item.good}',${item.flashSale},${item.totalCount},'${rec_date}')`)
     url = url.replace('?', sqlList.join(','));
     return url;
 }

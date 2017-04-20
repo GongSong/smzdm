@@ -59,8 +59,19 @@ async function getGoodsList(shopId = '170564') {
     return goodsList;
 }
 
-async function getCommentByPage(wareId, offset) {
-    config.headers.Referer = `https://item.m.jd.com/product/${wareId}.html`;
+async function getCommentByPage(shopId, wareId, offset) {
+    let Cookie = await jdCookies.getCookies(shopId);
+    config = Object.assign(config, {
+        host: 'item.m.jd.com',
+        path: '/newComments/newCommentsDetail.json',
+        headers: {
+            Referer: `https://item.m.jd.com/product/${wareId}.html`,
+            Cookie,
+            scheme: 'https',
+            Origin: 'https://item.m.jd.com'
+        }
+    })
+
     let postData = querystring.stringify({
         wareId,
         offset,
@@ -72,13 +83,13 @@ async function getCommentByPage(wareId, offset) {
     return JSON.parse(result);
 }
 
-async function getCommentById(goods) {
+async function getCommentById(shopId, goods) {
     let startPage = Math.ceil(goods.totalCount / 10);
     let isEnd = false;
     let comments = [];
     // jd评论为升序排列，需从后向前获取
     for (let page = startPage; page && !isEnd; page--) {
-        let comment = await getCommentByPage(goods.wareId, page);
+        let comment = await getCommentByPage(shopId, goods.wareId, page);
         totalPage = comment.totalPage;
         let data = comment.commentInfoList;
         let lengthBeforeFilter = data.length;
@@ -106,7 +117,7 @@ async function getComment(goodsList, shopId = '170564') {
     }
 
     for (let i = 0; i < goodsList.length; i++) {
-        let record = await getCommentById(goodsList[i]);
+        let record = await getCommentById(shopId, goodsList[i]);
         await query(sqlParser.handleJDCommentList(record));
         console.log(`jd:第${i+1}/${goodsList.length}条商品评论信息插入完毕`);
     }
