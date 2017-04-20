@@ -81,6 +81,8 @@ async function getGoodsList(shopId = '170564') {
     let record = await getListByPage(i,shopId);
     let item = record.results;
     totalPage = item.totalPage;
+    // 2017-04-20
+    // 此处可考虑将商品名称中属性信息分离存储
     let wareInfo = item.wareInfo.map(item=>{
       item.shopId = shopId;
       return item;
