@@ -7,4 +7,8 @@ router.get('/', function(req, res, next) {
     res.sendFile(dirname + '/index.html');
 });
 
+router.get('/jdtest', function(req, res, next) {
+    require('../controller/shop/jd_comment').getCommentByGoods();
+});
+
 module.exports = router;
