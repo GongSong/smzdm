@@ -3,7 +3,7 @@ DROP TABLE IF EXISTS `jd_goods`;
 CREATE TABLE `jd_goods` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `shopId` int(11) DEFAULT NULL,
-  `wareId` int(11) DEFAULT NULL,
+  `wareId` varchar(30) DEFAULT NULL,
   `wname` varchar(255) DEFAULT NULL,
   `imageurl` varchar(255) DEFAULT NULL,
   `jdPrice` float DEFAULT NULL,
@@ -11,4 +11,4 @@ CREATE TABLE `jd_goods` (
   `flashSale` varchar(255) DEFAULT NULL,
   `totalCount` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;

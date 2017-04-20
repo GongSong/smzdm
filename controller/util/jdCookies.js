@@ -16,39 +16,11 @@ function getHashDomain() {
     return genHash(a)
 }
 
-// let hash = getHash();
-let hash = 122270672;
 
 function genUuid() {
     return (new Date).getTime() + "" + parseInt(2147483647 * Math.random())
 }
 
-let uuid = genUuid();
-let lr = {
-    ckJda: "__jda",
-    ckJdb: "__jdb",
-    ckJdc: "__jdc",
-    ckJdv: "__jdv",
-    ckJdaExp: 15552000000,
-    ckJdbExp: 1800000,
-    ckDomain: "jd.com",
-    ckJdvEmbeddedExp: 86400000,
-    ckJdvExp: 1296000000,
-    _mbaSidSeq: []
-}
-
-let shortTime = uuid.substr(0, 10);
-let k = 1;
-let __jda = [hash, uuid, shortTime, shortTime, shortTime, 1].join(".");
-let __jdb = [hash, k, uuid + "|" + 1, shortTime].join(".");
-let __jdc = hash;
-let __jdv = [hash, "direct", "-", "none", "-", (new Date).getTime()].join("|");
-let __jdu = uuid;
-let mba_muid = uuid;
-let mobilev = 'html5';
-let MSid = (new Date).getTime() + "" + parseInt(1e16 * Math.random());
-let mba_sid = MSid + k;
-let sid = MSid;
 
 function updateMSid(a) {
     lr._mbaSidSeq[0] = (new Date).getTime() + "" + parseInt(1e16 * Math.random());
@@ -64,3 +36,38 @@ function getMSidSeq() {
         a[b] = a[b] + "";
     return a
 }
+
+function getCookies() {
+    // let hash = getHash();
+    let hash = 122270672;
+    let uuid = genUuid();
+    let lr = {
+        ckJda: "__jda",
+        ckJdb: "__jdb",
+        ckJdc: "__jdc",
+        ckJdv: "__jdv",
+        ckJdaExp: 15552000000,
+        ckJdbExp: 1800000,
+        ckDomain: "jd.com",
+        ckJdvEmbeddedExp: 86400000,
+        ckJdvExp: 1296000000,
+        _mbaSidSeq: []
+    }
+    let shortTime = uuid.substr(0, 10);
+    let k = 1;
+    let __jda = [hash, uuid, shortTime, shortTime, shortTime, 1].join(".");
+    let __jdb = [hash, k, uuid + "|" + 1, shortTime].join(".");
+    let __jdc = hash;
+    let __jdv = [hash, "direct", "-", "none", "-", (new Date).getTime()].join("|");
+    let __jdu = uuid;
+    let mba_muid = uuid;
+    let mobilev = 'html5';
+    let MSid = (new Date).getTime() + "" + parseInt(1e16 * Math.random());
+    let mba_sid = MSid + k;
+    let strList = `__jda=${__jda}; __jdb=${__jdb}; __jdc=${__jdc}; __jdv=${__jdv}; __jdu=${__jdu}; mba_muid=${mba_muid}; mba_sid=${mba_sid}; `
+    return strList;
+}
+
+module.exports = {
+    getCookies
+};
