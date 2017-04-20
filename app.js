@@ -78,8 +78,8 @@ app.use(function(err, req, res, next) {
 
 // 开始自动任务,目前仅用于交易原始信息的保存，个人开发时需注释该部分内容
 let task = require('./controller/task');
- task.init();
-// task.loadDefault();
+//  task.init();
+task.loadDefault();
 
 process.env.PORT = 8000;
 

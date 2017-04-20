@@ -16,7 +16,7 @@ async function init() {
   cncoin.init();
   ccgold.init();
   wfx.init();
-  // youzan.init();
+  youzan.init();
 }
 
 // 初次执行时初始化数据库，载入默认数据
@@ -27,11 +27,11 @@ async function loadDefault() {
 
   // ccgold 无需初始化载入数据， 直接加载即可
 
-  await cncoin.loadDefault();
+//   await cncoin.loadDefault();
 
-  wfx.loadDefault();
+//   wfx.loadDefault();
 
-  youzan.loadDefault();
+//   youzan.loadDefault();
 }
 
 
