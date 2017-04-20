@@ -63,18 +63,28 @@ async function getCommentByPage(wareId, page) {
 
 }
 
-async function getCommentById(wareId) {
+async function getCommentById(goods) {
+    let startPage = Math.ceil(goods.totalCount / 10);
     let isEnd = false;
-    let totalPage = 1;
-    let isEnd = false;
-    for (let page = 1; page <= totalPage && !isEnd; page++) {
-        let comment = await getCommentByPage(wareId, page);
+    let comments = [];
+    // jd评论为升序排列，需从后向前获取
+    for (let page = startPage; page && !isEnd; page--) {
+        let comment = await getCommentByPage(goods.wareId, page);
         totalPage = comment.totalPage;
         let data = comment.commentInfoList;
-        let commentLength = data.length;
-        // jd评论为升序排列，需处理更简易的评论获取方式
-        // data = data.filter(item => item.commentId < lastId);
+        let lengthBeforeFilter = data.length;
+        if (typeof goods.lastId == 'undefined') {
+            goods.lastId = 0;
+        }
+        data = data.filter(item => item.commentId > goods.lastId);
+
+        // 如果有数据被过滤，停止抓取
+        if (data.length < lengthBeforeFilter) {
+            isEnd = true;
+        }
+        comments = [...comments, ...data];
     }
+    return comments;
 }
 
 async function getComment(goodsList, shopId = '170564') {
@@ -86,7 +96,7 @@ async function getComment(goodsList, shopId = '170564') {
     }
 
     for (let i = 0; i < goodsList.length; i++) {
-        let record = await getCommentById(goodsList[i].wareId);
+        let record = await getCommentById(goodsList[i]);
 
     }
     return comments;
