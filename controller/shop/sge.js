@@ -60,7 +60,7 @@ async function getGoldPrice() {
         return zpItem;
     });
     let newestDate = await query(sql_lastRecordDate);
-    return (newestDate.his_date == null) ? data : data.filter(item => item.history_date > newestDate.his_date);
+    return (newestDate[0].his_date == null) ? data : data.filter(item => item.history_date > newestDate[0].his_date);
 }
 
 async function saveGoldPrice(todayPrice) {
