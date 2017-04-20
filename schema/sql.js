@@ -29,7 +29,10 @@ var insert = {
 
     sge: 'insert into sge_trends(history_date,zp,wp) values ?',
 
-    jd_goods:'insert into jd_goods(shopId,wareId,wname,imageurl,jdPrice,good,flashSale,totalCount) values ?',
+    jd_goods: 'insert into jd_goods(shopId,wareId,wname,imageurl,jdPrice,good,flashSale,totalCount) values ?',
+
+    // 添加表单字段
+    jd_comment: 'insert into jd_comment( ) values ?',
 };
 
 var update = {
@@ -71,7 +74,7 @@ var query = {
     youzan_trad_maxid: "SELECT a.goodId,max(cast(a.update_time AS CHAR)) as last_date FROM yz_trade_record a group by a.goodId order by 1",
 
     // cncoin 最大库存id
-    cncoin_storage_maxid:"SELECT max(item_id) item_id FROM `cncoin_storage` where DATE_FORMAT(rec_date,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d')",
+    cncoin_storage_maxid: "SELECT max(item_id) item_id FROM `cncoin_storage` where DATE_FORMAT(rec_date,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d')",
 }
 
 module.exports = {

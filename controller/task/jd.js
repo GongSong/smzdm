@@ -5,12 +5,22 @@ let db = require('./db');
 async function init() {
     let flag = await db.needUpdate('jd_goods');
     console.log('\n\n正在同步jd');
+    let goodsList = [];
     if (flag) {
-        let goodsList = await read.getGoodsList();
+        goodsList = await read.getGoodsList();
         // console.log(goodsList);
         await save.setGoodList(goodsList);
         db.setCrawlerStatus('jd_goods');
     }
+
+    // flag = await db.needUpdate('jd_comment');
+    flag = 1;
+    if (flag) {
+        goodsList = goodsList.filter(item => item.totalCount > 0);
+        let comment = await read.getComment(goodsList);
+        console.log(comment);
+    }
+
 }
 
 module.exports = {

@@ -223,6 +223,15 @@ function handleJDGoods(data) {
     return url;
 }
 
+function handleJDCommentList(data) {
+    let url = sql.insert.jd_comment;
+    let sqlList = data.map(item = {
+        // 添加代码逻辑
+    });
+    url = url.replace('?', sqlList.join(','));
+    return url;
+}
+
 module.exports = {
     handleSaleDetailData,
     handleStockData,

@@ -76,6 +76,15 @@ async function getGoodsList(shopId = '170564') {
     return goodsList;
 }
 
+async function getComment(goodsList) {
+
+    let comments = [];
+    // 添加读数据逻辑
+
+    return comments;
+}
+
 module.exports = {
-    getGoodsList
+    getGoodsList,
+    getCommetn
 };
