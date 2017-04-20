@@ -16,7 +16,7 @@ DROP TABLE IF EXISTS `jd_comment`;
 CREATE TABLE `jd_comment` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `wareId` varchar(40) DEFAULT NULL,
-  `commentId` int(11) DEFAULT NULL,
+  `commentId` varchar(40) DEFAULT NULL,
   `commentData` varchar(400) DEFAULT NULL,
   `commentDate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)

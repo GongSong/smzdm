@@ -215,19 +215,14 @@ function handleSGEData(arr) {
 
 function handleJDGoods(data) {
     let url = sql.insert.jd_goods;
-    let sqlList = data.map(item => {
-        // ,${item.isNew},${item.isHot},${item.isUnderCarriage}  三个字段未写入
-        return `(${item.shopId},${item.wareId},'${item.wname}','${item.imageurl}',${item.jdPrice},'${item.good}',${item.flashSale},${item.totalCount})`;
-    })
+    let sqlList = data.map(item => `(${item.shopId},${item.wareId},'${item.wname}','${item.imageurl}',${item.jdPrice},'${item.good}',${item.flashSale},${item.totalCount})`)
     url = url.replace('?', sqlList.join(','));
     return url;
 }
 
 function handleJDCommentList(data) {
     let url = sql.insert.jd_comment;
-    let sqlList = data.map(item = {
-        // 添加代码逻辑
-    });
+    let sqlList = data.map(item = `(${data.wareId},${data.commentId},'${data.commentData}','${data.commentDate}')`);
     url = url.replace('?', sqlList.join(','));
     return url;
 }
@@ -255,5 +250,6 @@ module.exports = {
     handleCncoinCommentSeg,
     handleCncoinCommentNlp,
     handleSGEData,
-    handleJDGoods
+    handleJDGoods,
+    handleJDCommentList
 }

@@ -59,8 +59,17 @@ async function getGoodsList(shopId = '170564') {
     return goodsList;
 }
 
-async function getCommentByPage(wareId, page) {
-
+async function getCommentByPage(wareId, offset) {
+    config.headers.Referer = `https://item.m.jd.com/product/${wareId}.html`;
+    let postData = querystring.stringify({
+        wareId,
+        offset,
+        num: 10,
+        type: 0,
+        checkParam: 'LUIPPTP'
+    });
+    let result = await util.getPostData(config, postData);
+    return JSON.parse(result);
 }
 
 async function getCommentById(goods) {
@@ -73,9 +82,9 @@ async function getCommentById(goods) {
         totalPage = comment.totalPage;
         let data = comment.commentInfoList;
         let lengthBeforeFilter = data.length;
-        if (typeof goods.lastId == 'undefined') {
-            goods.lastId = 0;
-        }
+        // if (typeof goods.lastId == 'undefined') {
+        //     goods.lastId = 0;
+        // }
         data = data.filter(item => item.commentId > goods.lastId);
 
         // 如果有数据被过滤，停止抓取
@@ -83,6 +92,7 @@ async function getCommentById(goods) {
             isEnd = true;
         }
         comments = [...comments, ...data];
+        console.log(`jd:第${startPage-page}/${startPage}条商品评论信息读取完毕`);
     }
     return comments;
 }
@@ -97,7 +107,8 @@ async function getComment(goodsList, shopId = '170564') {
 
     for (let i = 0; i < goodsList.length; i++) {
         let record = await getCommentById(goodsList[i]);
-
+        await query(sqlParser.handleJDCommentList(record));
+        console.log(`jd:第${i+1}/${goodsList.length}条商品评论信息插入完毕`);
     }
     return comments;
 }
