@@ -29,6 +29,7 @@ async function init() {
     console.log(`${++idx}.开始同步库存信息.`);
     flag = await db.needUpdate('cncoin_storage');
     if (flag) {
+        // let startId = await save.getStorageMaxId();
         let storages = await storage.getStorage(maxId);
         await save.saveStorage(storages);
         await db.setCrawlerStatus('cncoin_storage');

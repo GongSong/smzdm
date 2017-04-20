@@ -5,22 +5,29 @@ let nlp = require('./nlp');
 let http = require('http');
 let querystring = require('querystring');
 
-async function getPostData(config,data){
-  return new Promise((resolve, reject) => {
-    let request = http.request(config, (response) => {
-      let result = '';
-      response.on('data', (chunk) => {
-        result += chunk;
-      }).on('end', () => {
-        resolve(result)
-      });
-    }).on('error', (e) => {
-      console.log(`problem with request: ${e.message}`);
-      reject(e);
+function getParameter(a, b) {
+    var c = b || document.location.href,
+        d = new RegExp("(?:^|&|[?]|[/])" + a + "=([^&]*)"),
+        e = d.exec(c);
+    return e ? decodeURIComponent(e[1]) : null
+}
+
+async function getPostData(config, data) {
+    return new Promise((resolve, reject) => {
+        let request = http.request(config, (response) => {
+            let result = '';
+            response.on('data', (chunk) => {
+                result += chunk;
+            }).on('end', () => {
+                resolve(result)
+            });
+        }).on('error', (e) => {
+            console.log(`problem with request: ${e.message}`);
+            reject(e);
+        });
+        request.write(data);
+        request.end();
     });
-    request.write(data);
-    request.end();
-  });
 }
 
 function jsRight(sr, rightn) {
