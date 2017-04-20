@@ -213,6 +213,16 @@ function handleSGEData (arr) {
   return url
 }
 
+function handleJDGoods(data){
+  let url = sql.insert.jd_goods;
+  let sqlList = data.map(item=>{
+    // ,${item.isNew},${item.isHot},${item.isUnderCarriage}  三个字段未写入
+    return `(${item.shopId},${item.wareId},'${item.wname}','${item.imageurl}',${item.jdPrice},'${item.good}',${item.flashSale},${item.totalCount})`;
+  })
+  url = url.replace('?', sqlValues.join(','))
+  return url;
+}
+
 module.exports = {
   handleSaleDetailData,
   handleStockData,

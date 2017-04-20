@@ -15,7 +15,7 @@ let config = {
     'Accept-Encoding': 'gzip, deflate, br',
     'Accept-Language': 'zh-CN,zh;q=0.8,en;q=0.6',
     'Connection': 'keep-alive',
-    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    // 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
     // 'Cookie': 'abtest=20170419222215359_20; USER_FLAG_CHECK=64831f4e530dff8fdf891989b96aa3bd; m_uuid_new=868DF0A49BAC1C7F7894753281A9D712; __jdv=122270672|www.jd.com|-|tuiguang|-|1492611804118; __jda=122270672.483510958.1484723490.1492611744.1492611804.7; __jdb=122270672.7.483510958|7.1492611804; __jdc=122270672; mba_muid=483510958; mba_sid=14926117443997004124795642934.9; mobilev=html5; __jdu=483510958; sid=e2b9906d7d7c9ecb7d58f162549e1ba4',
     'Host': 'shop.m.jd.com',
     'Origin': 'https://shop.m.jd.com',
@@ -25,7 +25,7 @@ let config = {
   }
 };
 
-async function getListByPage(searchPage, shopId = '170564') {
+async function getListByPage(searchPage = 1, shopId = '170564') {
   config.headers.Referer = config.headers.Referer + shopId;
 
   let postData = querystring.stringify({
@@ -74,11 +74,20 @@ async function getListByPage(searchPage, shopId = '170564') {
 // }
 
 // 获取商品列表
-async function getGoodsList() {
-
-  let goods = await getListByPage(1);
-
-  return goods;
+async function getGoodsList(shopId = '170564') {
+  let goodsList = [];
+  let totalPage = 1;
+  for (let i = 1; i <= totalPage; i++) {
+    let record = await getListByPage(i,shopId);
+    let item = record.results;
+    totalPage = item.totalPage;
+    let wareInfo = item.wareInfo.map(item=>{
+      item.shopId = shopId;
+      return item;
+    })
+    goodsList = [...goodsList, ...wareInfo];
+  }
+  return goodsList;
 }
 
 module.exports = {

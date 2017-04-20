@@ -28,6 +28,8 @@ var insert = {
     crawler_list: `insert into crawler_list (tbl_name,rec_date) values ('?','${rec_date()}')`,
 
     sge: 'insert into sge_trends(history_date,zp,wp) values ?',
+
+    jd_goods:'insert into jd_goods(shopId,wareId,wname,imageurl,jdPrice,good,flashSale,totalCount) values ?',
 };
 
 var update = {

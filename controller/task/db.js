@@ -20,7 +20,7 @@ async function initDbByName(name) {
 
 async function dbInit() {
     // 此处crawler记录表单数据抓取状态
-    let shopList = ['ccgold', 'wfx', 'yz', 'cncoin', 'crawler', 'sge'];
+    let shopList = ['ccgold', 'wfx', 'yz', 'cncoin', 'crawler', 'sge','jd'];
 
     let sql = sqlStr.query.tbl_num;
     let data = await query(sql);
@@ -37,7 +37,8 @@ async function dbInit() {
         crawler: 1,
         wfx: 5,
         yz: 3,
-        sge: 1
+        sge: 1,
+        jd:1
     }
 
     // 此处四家店铺初始化语句中需删除导出语句的注释内容
