@@ -1,4 +1,3 @@
-var axios = require('axios');
 var parser = require('../util/htmlParser');
 var spiderSetting = require('../util/spiderSetting');
 
@@ -50,23 +49,16 @@ async function getListByPage(searchPage = 1, shopId = '170564') {
         request.end();
     });
 
-
     return json;
 }
+
 
 // 获取商品列表
 async function getGoodsList(shopId = '170564') {
     let goodsList = [];
     let totalPage = 1;
-    let cookies = jdCookies.getCookies();
 
-    await axios.post('https://mapi.m.jd.com/config/display.action?_format_=json&domain=https://shop.m.jd.com/?shopId=170564').then(res => {
-        let exCookies = res.headers['set-cookie'].filter(item => {
-            return item.includes('.jd.hk; Expires=');
-        });
-        exCookies = exCookies.map(item => item.split(';')[0])
-        config.headers.Cookie = cookies + exCookies.join('; ');
-    })
+    config.headers.Cookie = await jdCookies.getCookies(shopId);
 
     for (let i = 1; i <= totalPage; i++) {
         // console.log(config.headers.Cookie);

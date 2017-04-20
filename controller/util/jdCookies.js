@@ -1,3 +1,7 @@
+var axios = require('axios');
+let fs = require('fs');
+let util = require('../util/common');
+
 function genHash(a) {
     var b, c = 1,
         d = 0;
@@ -37,7 +41,7 @@ function getMSidSeq() {
     return a
 }
 
-function getCookies() {
+function getCookieStr() {
     // let hash = getHash();
     let hash = 122270672;
     let uuid = genUuid();
@@ -66,6 +70,37 @@ function getCookies() {
     let mba_sid = MSid + k;
     let strList = `__jda=${__jda}; __jdb=${__jdb}; __jdc=${__jdc}; __jdv=${__jdv}; __jdu=${__jdu}; mba_muid=${mba_muid}; mba_sid=${mba_sid}; `
     return strList;
+}
+
+async function getCookiesFromUrl(shopId, fileName) {
+    let cookies = getCookieStr();
+    let res = await axios.post('https://mapi.m.jd.com/config/display.action?_format_=json&domain=https://shop.m.jd.com/?shopId=' + shopId).then(res => res);
+    let exCookies = res.headers['set-cookie'].filter(item => {
+        return item.includes('.jd.hk; Expires=');
+    });
+    exCookies = exCookies.map(item => item.split(';')[0])
+    let cookieStr = cookies + exCookies.join('; ');
+    let data = {
+        time: (new Date).getTime() / 1000,
+        cookieStr
+    }
+    fs.writeFileSync(fileName, JSON.stringify(data), 'utf8');
+    return cookieStr;
+}
+
+async function getCookies(shopId) {
+    let fileName = `${util.getMainContent()}/controller/data/jdCookie/${shopId}.json`;
+    try {
+        let str = fs.readFileSync(fileName, 'utf-8');
+        let cookieJson = JSON.parse(str);
+        let dateDiff = (new Date).getTime() / 1000 - cookieJson.time;
+        if (dateDiff > 80000) {
+            return await getCookiesFromUrl(shopId, fileName);
+        }
+        return cookieJson.cookieStr;
+    } catch (e) {
+        return await getCookiesFromUrl(shopId, fileName);
+    }
 }
 
 module.exports = {
