@@ -12,11 +12,11 @@ async function init() {
     console.log('2.此处需添加任务的定时器，如 setInterval()\n');
 
     jd.init();
-    sge.init();
-    cncoin.init();
-    ccgold.init();
-    wfx.init();
-    youzan.init();
+    // sge.init();
+    // cncoin.init();
+    // ccgold.init();
+    // wfx.init();
+    // youzan.init();
 }
 
 // 初次执行时初始化数据库，载入默认数据

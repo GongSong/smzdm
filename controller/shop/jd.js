@@ -6,6 +6,7 @@ let util = require('../util/common');
 let jdCookies = require('../util/jdCookies');
 let query = require('../../schema/mysql');
 let sql = require('../../schema/sql');
+let sqlParser = require('../util/sqlParser');
 
 let config = {
     method: 'POST',
@@ -68,7 +69,9 @@ async function getCommentByPage(shopId, wareId, offset) {
             Referer: `https://item.m.jd.com/product/${wareId}.html`,
             Cookie,
             scheme: 'https',
-            Origin: 'https://item.m.jd.com'
+            Origin: 'https://item.m.jd.com',
+            'content-type': 'application/x-www-form-urlencoded',
+            'accept-language': 'zh-CN,zh;q=0.8',
         }
     })
 
@@ -88,10 +91,9 @@ async function getCommentById(shopId, goods) {
     let isEnd = false;
     let comments = [];
     // jd评论为升序排列，需从后向前获取
-    for (let page = startPage; page && !isEnd; page--) {
+    for (let page = startPage; page > 0 && !isEnd; page--) {
         let comment = await getCommentByPage(shopId, goods.wareId, page);
-        totalPage = comment.totalPage;
-        let data = comment.commentInfoList;
+        let data = comment.wareDetailComment.commentInfoList;
         let lengthBeforeFilter = data.length;
         // if (typeof goods.lastId == 'undefined') {
         //     goods.lastId = 0;
@@ -103,6 +105,10 @@ async function getCommentById(shopId, goods) {
             isEnd = true;
         }
         comments = [...comments, ...data];
+        comments = comments.map(item => {
+            item.wareId = goods.wareId;
+            return item;
+        })
         console.log(`jd:第${startPage-page}/${startPage}条商品评论信息读取完毕`);
     }
     return comments;
