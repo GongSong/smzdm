@@ -1,4 +1,3 @@
-SET FOREIGN_KEY_CHECKS=0;
 DROP TABLE IF EXISTS `jd_goods`;
 CREATE TABLE `jd_goods` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -10,5 +9,15 @@ CREATE TABLE `jd_goods` (
   `good` varchar(20) DEFAULT NULL,
   `flashSale` varchar(255) DEFAULT NULL,
   `totalCount` int(11) DEFAULT NULL,
+  `rec_date` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=79 DEFAULT CHARSET=utf8;
+DROP TABLE IF EXISTS `jd_comment`;
+CREATE TABLE `jd_comment` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `wareId` varchar(40) DEFAULT NULL,
+  `commentId` int(11) DEFAULT NULL,
+  `commentData` varchar(400) DEFAULT NULL,
+  `commentDate` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
