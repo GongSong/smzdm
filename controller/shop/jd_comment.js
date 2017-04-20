@@ -86,48 +86,44 @@ async function getGoodsList(shopId = '170564') {
 
 // 获取商品评论
 async function getCommentByGoods(goodsId = 10088990410) {
+    let cookie = await jdCookies.getCookies('170564');
     let _config = {
-        method: 'post',
-        url: 'http://item.m.jd.com/newComments/newCommentsDetail.json',
-        data: {
-            wareId: 10088990410,
-            offset: 0,
-            num: 10,
-            type: 0,
-            checkParam: 'LUIPPTP'
-        },
+        hostname: 'item.m.jd.com',
+        path: '/newComments/newCommentsDetail.json',
         headers: {
-            Host: 'item.m.jd.com',
-            "User-Agent": 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1',
-            Accept: 'application/json',
-            "Accept-Language": 'zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3',
-            "Accept-Encoding": 'gzip, deflate, br',
-            "X-Requested-With": 'XMLHttpRequest',
-            "Content-Type": 'application/x-www-form-urlencoded',
-            "Referer": 'https://item.m.jd.com/product/10088990410.html',
-            Connection: 'keep-alive'
+            Referer: `https://item.m.jd.com/product/${goodsId}.html`,
+            cookie,
+            scheme: 'https',
+            Origin: 'https://item.m.jd.com',
+            'content-type': 'application/x-www-form-urlencoded',
+            'accept-language': 'zh-CN,zh;q=0.8',
         }
-    }
-
-    let cookies = jdCookies.getCookies();
-
-    await axios.post('https://mapi.m.jd.com/config/display.action?_format_=json&domain=https://shop.m.jd.com/?shopId=170564').then(res => {
-        let exCookies = res.headers['set-cookie'].filter(item => {
-            return item.includes('.jd.hk; Expires=');
-        });
-        exCookies = exCookies.map(item => item.split(';')[0])
-        _config.headers.Cookie = 'JAMCookie: true;' + cookies + exCookies.join('; ');
+    };
+    let postData = querystring.stringify({
+        wareId: 10088990410,
+        offset: 1,
+        num: 10,
+        type: 0,
+        checkParam: 'LUIPPTP',
+        evokeType: ''
     });
-
     console.log(_config);
-
-    console.log('-----------');
-
-    await axios(_config).then(res => {
-        console.log(res.data);
-    }, e => {
-        console.log(e);
-    })
+    return new Promise((resolve, reject) => {
+        let request = http.request(_config, (response) => {
+            let result = '';
+            response.on('data', (chunk) => {
+                result += chunk;
+            }).on('end', () => {
+                console.log(result);
+                resolve(result);
+            });
+        }).on('error', (e) => {
+            console.log(`problem with request: ${e.message}`);
+            reject(e);
+        });
+        request.write(postData);
+        request.end();
+    });
 }
 
 module.exports = {

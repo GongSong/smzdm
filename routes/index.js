@@ -8,7 +8,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/jdtest', function(req, res, next) {
-    require('../controller/shop/jd_comment').getCommentByGoods();
+    require('../controller/shop/jd_comment').getCommentByGoods().then(e => res.json(e));
 });
 
 module.exports = router;
