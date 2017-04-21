@@ -18,7 +18,7 @@ async function init() {
     if (flag) {
         goodsList = goodsList.filter(item => item.totalCount > 0);
         await read.getComment(goodsList);
-        db.setCrawlerStatus('jd_goods');
+        db.setCrawlerStatus('jd_comment');
     }
 
 }
