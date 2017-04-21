@@ -328,16 +328,26 @@ let jd = {
     },
     getShopDetail(html, detailUrl) {
         let $ = cheerio.load(html);
+        let commentScore = 0,
+            serviceScore = 0,
+            expressScore = 0;
+
         let score = $('.score-num').text().split('分');
-        let desc = $('.cell-desc').text();
-        let shopDate = desc.match(/\d+-\d+-\d+$/g)[0];
-        let companyName = desc.replace(shopDate, '');
+        if (score.length > 2) {
+            commentScore = score[0].trim();
+            serviceScore = score[1].trim();
+            expressScore = score[2].trim();
+        }
+        let dom = $('.cell-desc');
+        let i = dom.length == 3 ? 1 : 0;
+        let shopDate = dom.eq(i + 1).text();
+        let companyName = dom.eq(i).text();
         return {
             shopDate,
             companyName,
-            commentScore: score[0].trim(),
-            serviceScore: score[1].trim(),
-            expressScore: score[2].trim(),
+            commentScore,
+            serviceScore,
+            expressScore,
             detailUrl
         }
     }

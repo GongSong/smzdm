@@ -72,7 +72,8 @@ function getCookieStr() {
     return strList;
 }
 
-async function getCookiesFromUrl(shopId, fileName) {
+async function getCookiesFromUrl(shopId) {
+    let fileName = `${util.getMainContent()}/controller/data/jdCookie/${shopId}.json`;
     let cookies = getCookieStr();
     let res = await axios.post('https://mapi.m.jd.com/config/display.action?_format_=json&domain=https://shop.m.jd.com/?shopId=' + shopId).then(res => res);
     let exCookies = res.headers['set-cookie'].filter(item => {
@@ -95,14 +96,15 @@ async function getCookies(shopId) {
         let cookieJson = JSON.parse(str);
         let dateDiff = (new Date).getTime() / 1000 - cookieJson.time;
         if (dateDiff > 80000) {
-            return await getCookiesFromUrl(shopId, fileName);
+            return await getCookiesFromUrl(shopId);
         }
         return cookieJson.cookieStr;
     } catch (e) {
-        return await getCookiesFromUrl(shopId, fileName);
+        return await getCookiesFromUrl(shopId);
     }
 }
 
 module.exports = {
-    getCookies
+    getCookies,
+    getCookiesFromUrl
 };

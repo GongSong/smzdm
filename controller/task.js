@@ -12,10 +12,12 @@ async function init() {
     console.log('2.此处需添加任务的定时器，如 setInterval()\n');
 
     jd.init();
+
     // sge.init();
     // cncoin.init();
     // ccgold.init();
     // wfx.init();
+
     // youzan.init();
 }
 

@@ -61,15 +61,17 @@ async function getGoodsList(shopId = '170564') {
     return goodsList;
 }
 
-async function getShopTemplate(shopId = '170564') {
-    let mainInfo = await axios.get('https://shop.m.jd.com/index/getShopTemplate.json?shopId=' + shopId).then(res => res.data.shopInfo);
-    let detailUrl = await axios.get('https://shop.m.jd.com/?shopId=' + shopId).then(res => parser.jd.getDetailUrl(res.data));
+async function getShopTemplate(shopInfo) {
+    let detailUrl = 'https://shop.m.jd.com/detail/detailInfo?shopId=' + shopInfo.id;
+    console.log(`正在采集【${shopInfo.name}】店铺信息,url:${detailUrl}`);
+    let mainInfo = await axios.get('https://shop.m.jd.com/index/getShopTemplate.json?shopId=' + shopInfo.id).then(res => res.data.shopInfo);
+    // let detailUrl = await axios.get('https://shop.m.jd.com/?shopId=' + shopId).then(res => parser.jd.getDetailUrl(res.data));
     let extraInfo = await axios.get(detailUrl).then(res => parser.jd.getShopDetail(res.data, detailUrl));
     return Object.assign(mainInfo, extraInfo);
 }
 
-async function getCommentByPage(shopId, wareId, offset) {
-    let Cookie = await jdCookies.getCookies(shopId);
+async function getCommentByPage(Cookie, shopId, wareId, offset) {
+    // let Cookie = await jdCookies.getCookies(shopId);
     config = Object.assign(config, {
         host: 'item.m.jd.com',
         path: '/newComments/newCommentsDetail.json',
@@ -95,12 +97,13 @@ async function getCommentByPage(shopId, wareId, offset) {
 }
 
 async function getCommentById(shopId, goods) {
+    let Cookie = await jdCookies.getCookiesFromUrl(shopId);
     let startPage = Math.ceil(goods.totalCount / 10);
     let isEnd = false;
     let comments = [];
     // jd评论为升序排列，需从后向前获取
     for (let page = startPage; page > 0 && !isEnd; page--) {
-        let comment = await getCommentByPage(shopId, goods.wareId, page);
+        let comment = await getCommentByPage(Cookie, shopId, goods.wareId, page);
         let data = comment.wareDetailComment.commentInfoList;
         let lengthBeforeFilter = data.length;
         // if (typeof goods.lastId == 'undefined') {
@@ -117,28 +120,64 @@ async function getCommentById(shopId, goods) {
             item.wareId = goods.wareId;
             return item;
         })
-        console.log(`jd:第${startPage-page}/${startPage}条商品评论信息读取完毕`);
+        console.log(`jd:第${startPage-page}/${startPage}条商品评论信息读取并插入完毕`);
     }
     return comments;
 }
 
+async function getCommentAndSavedById(shopId, goods) {
+    let Cookie = await jdCookies.getCookiesFromUrl(shopId);
+    let startPage = Math.ceil(goods.totalCount / 10);
+    let isEnd = false;
+    // jd评论为升序排列，需从后向前获取
+    for (let page = startPage; page > 0 && !isEnd; page--) {
+        let comment = await getCommentByPage(Cookie, shopId, goods.wareId, page);
+        let data = comment.wareDetailComment.commentInfoList;
+        let lengthBeforeFilter = data.length;
+        // if (typeof goods.lastId == 'undefined') {
+        //     goods.lastId = 0;
+        // }
+        data = data.filter(item => item.commentId > goods.lastId);
+
+        // 如果有数据被过滤，停止抓取
+        if (data.length < lengthBeforeFilter) {
+            isEnd = true;
+        }
+
+        data = data.map(item => {
+            item.wareId = goods.wareId;
+            return item;
+        })
+
+        if (data.length) {
+            let url = sqlParser.handleJDCommentList(data);
+            console.log(url)
+            await query(url);
+        } else {
+            console.log(`${goods.wareId}无评论信息,url:https://item.m.jd.com/product/${goods.wareId}.html`);
+        }
+        // 下次读取至少等待0-20秒
+        let sleepTimeLength = (Math.random() * 20000).toFixed(0);
+        console.log(`jd:第${startPage-page}/${startPage}条商品评论信息读取并插入完毕,接下来我将休息${sleepTimeLength}ms`);
+        await util.sleep(sleepTimeLength);
+    }
+}
+
 async function getComment(goodsList, shopId = '170564') {
 
-    let comments = [];
     if (typeof goodsList == 'undefined' || goodsList.length == 0) {
         // 此查询中需同时关联查询出最近评论的id
         goodsList = await query(sql.query.jd_goods_havecomment);
     }
 
     for (let i = 0; i < goodsList.length; i++) {
-        let record = await getCommentById(shopId, goodsList[i]);
-        if (record.length) {
-            // console.log(record);
-            await query(sqlParser.handleJDCommentList(record));
-        }
-        console.log(`jd:第${i+1}/${goodsList.length}条商品评论信息插入完毕`);
+        // 获取评论内容跟存储评论内容同步完成，对于销量较多的店铺很必要
+        await getCommentAndSavedById(shopId, goodsList[i]);
+        // if (record.length) {
+        //     await query(sqlParser.handleJDCommentList(record));
+        // }
+        // console.log(`jd:第${i+1}/${goodsList.length}条商品评论信息插入完毕`);
     }
-    return comments;
 }
 
 module.exports = {

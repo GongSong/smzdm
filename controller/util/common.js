@@ -219,7 +219,8 @@ function text_filter(text) {
     return text;
 }
 
-function sleep(ms = 0) {
+// 随机休眠x秒
+function sleep(ms = 1000) {
     return new Promise(r => setTimeout(r, ms));
 }
 
