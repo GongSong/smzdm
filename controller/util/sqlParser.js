@@ -216,14 +216,28 @@ function handleSGEData(arr) {
 function handleJDGoods(data) {
     let url = sql.insert.jd_goods;
     let rec_date = getNow();
-    let sqlList = data.map(item => `(${item.shopId},${item.wareId},'${item.wname}','${item.imageurl}',${item.jdPrice},'${item.good}',${item.flashSale},${item.totalCount},'${rec_date}')`)
+    let sqlList = data.map((item, i) => `(${item.shopId},${item.wareId},'${item.wname}','${item.imageurl}',${item.jdPrice},'${item.good}',${item.flashSale},${item.totalCount},${i+1},'${rec_date}')`)
     url = url.replace('?', sqlList.join(','));
     return url;
 }
 
 function handleJDCommentList(data) {
     let url = sql.insert.jd_comment;
-    let sqlList = data.map(item => `(${item.wareId},${item.commentId},'${item.commentData.replace(/\r/g,'').replace(/\n/g,'')}','${item.commentDate}')`);
+    let sqlList = data.map(item => `(${item.wareId},${item.commentId},'${item.commentData.replace(/\r/g,'').replace(/\n/g,'')}','${item.commentDate}',${item.commentScore},'${item.commentShareUrl}',${item.commentType},'${item.orderDate}','${item.userImgURL}',${item.userLevel},'${item.userNickName}')`);
+    url = url.replace('?', sqlList.join(','));
+    return url;
+}
+
+function handleJDShops(item) {
+    let url = sql.insert.jd_shop;
+    let sqlList = `(${item.venderId},${item.shopId},'${item.shopName}','${item.companyName}','${item.shopDate}',${item.commentScore},${item.serviceScore},${item.expressScore},${item.followCount},'${item.logoUrl}','${item.shareLink}',${item.totalNum},'${item.detailUrl}')`
+    url = url.replace('?', sqlList);
+    return url;
+}
+
+function handleJDCategory(data) {
+    let url = sql.insert.jd_shop_category;
+    let sqlList = data.map(item => `(${item.shopId},${item.id},'${item.title}')`);
     url = url.replace('?', sqlList.join(','));
     return url;
 }
@@ -252,5 +266,7 @@ module.exports = {
     handleCncoinCommentNlp,
     handleSGEData,
     handleJDGoods,
-    handleJDCommentList
+    handleJDCommentList,
+    handleJDShops,
+    handleJDCategory
 }

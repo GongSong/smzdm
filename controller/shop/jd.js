@@ -1,5 +1,5 @@
 let querystring = require('querystring');
-
+let axios = require('axios');
 let spiderSetting = require('../util/spiderSetting');
 let db = require('../db/jd');
 let util = require('../util/common');
@@ -7,6 +7,7 @@ let jdCookies = require('../util/jdCookies');
 let query = require('../../schema/mysql');
 let sql = require('../../schema/sql');
 let sqlParser = require('../util/sqlParser');
+let parser = require('../util/htmlParser');
 
 let config = {
     method: 'POST',
@@ -58,6 +59,13 @@ async function getGoodsList(shopId = '170564') {
         goodsList = [...goodsList, ...wareInfo];
     }
     return goodsList;
+}
+
+async function getShopTemplate(shopId = '170564') {
+    let mainInfo = await axios.get('https://shop.m.jd.com/index/getShopTemplate.json?shopId=' + shopId).then(res => res.data.shopInfo);
+    let detailUrl = await axios.get('https://shop.m.jd.com/?shopId=' + shopId).then(res => parser.jd.getDetailUrl(res.data));
+    let extraInfo = await axios.get(detailUrl).then(res => parser.jd.getShopDetail(res.data, detailUrl));
+    return Object.assign(mainInfo, extraInfo);
 }
 
 async function getCommentByPage(shopId, wareId, offset) {
@@ -125,7 +133,7 @@ async function getComment(goodsList, shopId = '170564') {
     for (let i = 0; i < goodsList.length; i++) {
         let record = await getCommentById(shopId, goodsList[i]);
         if (record.length) {
-            console.log(record);
+            // console.log(record);
             await query(sqlParser.handleJDCommentList(record));
         }
         console.log(`jd:第${i+1}/${goodsList.length}条商品评论信息插入完毕`);
@@ -135,5 +143,6 @@ async function getComment(goodsList, shopId = '170564') {
 
 module.exports = {
     getGoodsList,
-    getComment
+    getComment,
+    getShopTemplate
 };

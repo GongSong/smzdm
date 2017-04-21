@@ -320,9 +320,33 @@ let cncoin = {
     }
 }
 
+let jd = {
+    getDetailUrl(html) {
+        let $ = cheerio.load(html);
+        let url = $('#J-tabbar .J-other').attr('url');
+        return 'https://shop.m.jd.com' + url;
+    },
+    getShopDetail(html, detailUrl) {
+        let $ = cheerio.load(html);
+        let score = $('.score-num').text().split('分');
+        let desc = $('.cell-desc').text();
+        let shopDate = desc.match(/\d+-\d+-\d+$/g)[0];
+        let companyName = desc.replace(shopDate, '');
+        return {
+            shopDate,
+            companyName,
+            commentScore: score[0].trim(),
+            serviceScore: score[1].trim(),
+            expressScore: score[2].trim(),
+            detailUrl
+        }
+    }
+}
+
 module.exports = {
     youzan,
     wfx,
     ccgold,
-    cncoin
+    cncoin,
+    jd
 }

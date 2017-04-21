@@ -29,10 +29,16 @@ var insert = {
 
     sge: 'insert into sge_trends(history_date,zp,wp) values ?',
 
-    jd_goods: 'insert into jd_goods(shopId,wareId,wname,imageurl,jdPrice,good,flashSale,totalCount,rec_date) values ?',
+    jd_goods: 'insert into jd_goods(shopId,wareId,wname,imageurl,jdPrice,good,flashSale,totalCount,saleLevel,rec_date) values ?',
 
     // 添加表单字段
-    jd_comment: 'insert into jd_comment(wareId,commentId,commentData,commentDate) values ?',
+    jd_comment: 'insert into jd_comment(wareId,commentId,commentData,commentDate,commentScore,commentShareUrl,commentType,orderDate,userImgURL,userLevel,userNickName) values ?',
+
+    // 店铺信息
+    jd_shop: 'insert into jd_shop(venderId,shopId,shopName,companyName,shopDate,commentScore,serviceScore,expressScore,followCount,logoUrl,shareLink,totalNum,detailUrl) values ?',
+
+    // 店铺商品分类
+    jd_shop_category: 'insert into jd_shop_category(shopId,cateId,title) values ?',
 };
 
 var update = {
