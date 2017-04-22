@@ -5,13 +5,21 @@ let shopList = require('./jdShopList').list;
 let util = require('../util/common');
 
 async function init() {
-    // await initJDShopInfo();
+    // 载入店铺信息
+    // await loadDefault();
 
     let localShopList = await save.getShopList();
     for (let i = 1; i < localShopList.length; i++) {
         let shopId = localShopList[i].id;
-        console.log(`正在获取${localShopList[i].name} 的数据`);
-        await getInfoByShopId(shopId);
+        console.log(`正在获取${localShopList[i].name} 的商品列表数据`);
+        await getGoodsByShopId(shopId, localShopList);
+        await util.sleep(1000);
+    }
+
+    for (let i = 1; i < localShopList.length; i++) {
+        let shopId = localShopList[i].id;
+        console.log(`正在获取${localShopList[i].name} 的评论数据`);
+        await getCommentShopId(shopId, localShopList);
     }
     // let i = 1;
     // let shopId = localShopList[i].id;
@@ -19,18 +27,21 @@ async function init() {
     // await getInfoByShopId(shopId);
 }
 
-// 根据店铺id获取对应数据
-async function getInfoByShopId(shopId) {
+async function getGoodsByShopId(shopId, goodsList) {
     let flag = await db.needUpdate('jd_goods' + shopId);
     console.log('\n\n正在同步jd');
-    let goodsList = [];
+    // let goodsList = [];
     if (flag) {
-        goodsList = await read.getGoodsList(shopId);
-        // console.log(goodsList);
-        await save.setGoodList(goodsList);
+        // goodsList = await read.getGoodsList(shopId);
+        // // console.log(goodsList);
+        // await save.setGoodList(goodsList);
+        await read.getGoodsListAndSave(shopId);
         db.setCrawlerStatus('jd_goods' + shopId);
     }
+}
 
+// 根据店铺id获取对应数据
+async function getCommentShopId(shopId, goodsList) {
     flag = await db.needUpdate('jd_comment' + shopId);
     if (flag) {
         goodsList = goodsList.filter(item => item.totalCount > 0);
@@ -59,7 +70,12 @@ async function initJDShopInfo() {
     }
 }
 
+async function loadDefault() {
+    // 商店信息初始化一次即可
+    await initJDShopInfo();
+}
 
 module.exports = {
-    init
+    init,
+    loadDefault
 };

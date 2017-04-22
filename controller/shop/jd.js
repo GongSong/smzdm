@@ -61,6 +61,27 @@ async function getGoodsList(shopId = '170564') {
     return goodsList;
 }
 
+async function getGoodsListAndSave(shopId = '170564') {
+    let totalPage = 1;
+
+    config.headers.Cookie = await jdCookies.getCookies(shopId);
+
+    for (let i = 1; i <= totalPage; i++) {
+        // console.log(config.headers.Cookie);
+        let record = await getListByPage(i, shopId);
+        let item = record.results;
+        totalPage = item.totalPage;
+        // 2017-04-20
+        // 此处可考虑将商品名称中属性信息分离存储
+        let wareInfo = item.wareInfo.map(item => {
+            item.shopId = shopId;
+            return item;
+        })
+        db.setGoodList(wareInfo);
+        console.log(`${util.getNow()}:id:${shopId},第${i}/${totalPage}页商品列表插入完毕`);
+    }
+}
+
 async function getShopTemplate(shopInfo) {
     let detailUrl = 'https://shop.m.jd.com/detail/detailInfo?shopId=' + shopInfo.id;
     console.log(`正在采集【${shopInfo.name}】店铺信息,url:${detailUrl}`);
@@ -183,5 +204,6 @@ async function getComment(goodsList, shopId = '170564') {
 module.exports = {
     getGoodsList,
     getComment,
-    getShopTemplate
+    getShopTemplate,
+    getGoodsListAndSave
 };

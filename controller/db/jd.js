@@ -17,6 +17,9 @@ async function setShopDetail(shopDetail) {
         return;
     }
     await query(url);
+    if (shopDetail.shopCategories.length == 0) {
+        return;
+    }
     await query(sqlParser.handleJDCategory(shopDetail.shopCategories));
 }
 
