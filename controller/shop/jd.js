@@ -193,7 +193,7 @@ async function getComment(shop) {
     if (goodsList.length > 1) {
         await util.mail.send({
             subject: '采集JD用户评论数据',
-            html: `正在获取${shop.name}(https://shop.m.jd.com/detail/detailInfo?shopId=${shop.id})评论数据,共${goodsList.length}条,@ ${util.getNow()}`
+            html: `正在获取${shop.name}( https://shop.m.jd.com/?shopId=${shop.id} )的评论数据,共${goodsList.length}件商品,@ ${util.getNow()}`
         });
     }
     for (let i = 0; i < goodsList.length; i++) {
