@@ -83,8 +83,10 @@ var query = {
     // cncoin 最大库存id
     cncoin_storage_maxid: "SELECT max(item_id) item_id FROM `cncoin_storage` where DATE_FORMAT(rec_date,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d')",
 
-    jd_goods_havecomment: "SELECT a.wareId,a.totalCount,ifnull(max(c.commentId),0) lastId FROM jd_goods a INNER JOIN (select max(DATE_FORMAT(rec_date,'%Y%m%d')) rec_date from jd_goods) b on DATE_FORMAT(a.rec_date,'%Y%m%d')=b.rec_date left join jd_comment c on c.wareId = a.wareId where totalCount>0 group by a.wareId,a.totalCount",
+    // jd_goods_havecomment: "SELECT a.wareId,a.totalCount,ifnull(max(c.commentId),0) lastId FROM jd_goods a INNER JOIN (select max(DATE_FORMAT(rec_date,'%Y%m%d')) rec_date from jd_goods) b on DATE_FORMAT(a.rec_date,'%Y%m%d')=b.rec_date left join jd_comment c on c.wareId = a.wareId where totalCount>0 group by a.wareId,a.totalCount",
 
+    // 临时从后续取评论列表
+    jd_goods_havecomment: "select wareId,totalCount,lastId from (SELECT a.wareId,a.totalCount,ifnull(max(c.commentId),0) lastId FROM jd_goods a left join jd_comment c on c.wareId = a.wareId where totalCount>0 group by a.wareId,a.totalCount) a where lastId=0",
     // 已存储的店铺列表
     jd_shopList: 'SELECT shopId id,shopName name FROM jd_shop',
 

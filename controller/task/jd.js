@@ -5,16 +5,18 @@ let shopList = require('./jdShopList').list;
 let util = require('../util/common');
 
 async function init() {
+    // await initJDShopInfo();
+
     let localShopList = await save.getShopList();
-    // for (let i = 0; i < localShopList.length; i++) {
-    //     let shopId = localShopList[i].id;
-    //     console.log(`正在获取${localShopList[i].name} 的数据`);
-    //     await getInfoByShopId(shopId);
-    // }
-    let i = 1;
-    let shopId = localShopList[i].id;
-    console.log(`正在获取${localShopList[i].name} 的数据`);
-    await getInfoByShopId(shopId);
+    for (let i = 1; i < localShopList.length; i++) {
+        let shopId = localShopList[i].id;
+        console.log(`正在获取${localShopList[i].name} 的数据`);
+        await getInfoByShopId(shopId);
+    }
+    // let i = 1;
+    // let shopId = localShopList[i].id;
+    // console.log(`正在获取${localShopList[i].name} 的数据`);
+    // await getInfoByShopId(shopId);
 }
 
 // 根据店铺id获取对应数据

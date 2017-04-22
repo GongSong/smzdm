@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50621
 File Encoding         : 65001
 
-Date: 2017-04-22 00:53:39
+Date: 2017-04-22 15:22:06
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -23,7 +23,7 @@ CREATE TABLE `jd_comment` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `wareId` varchar(40) DEFAULT NULL,
   `commentId` varchar(40) DEFAULT NULL,
-  `commentData` varchar(400) CHARACTER SET utf8mb4 DEFAULT NULL,
+  `commentData` varchar(800) CHARACTER SET utf8mb4 DEFAULT NULL,
   `commentDate` datetime DEFAULT NULL,
   `commentScore` int(11) DEFAULT NULL,
   `commentShareUrl` varchar(255) DEFAULT NULL,

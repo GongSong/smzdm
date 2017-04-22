@@ -38,7 +38,7 @@ async function dbInit() {
         wfx: 5,
         yz: 3,
         sge: 1,
-        jd: 2
+        jd: 4
     }
 
     // 此处四家店铺初始化语句中需删除导出语句的注释内容
