@@ -177,8 +177,8 @@ async function getCommentAndSavedById(shopId, goods) {
         } else {
             console.log(`${goods.wareId}无评论信息,url:https://item.m.jd.com/product/${goods.wareId}.html`);
         }
-        // 下次读取至少等待1-10秒
-        let sleepTimeLength = (1000 + Math.random() * 10000).toFixed(0);
+        // 下次读取至少等待1-5秒
+        let sleepTimeLength = (1000 + Math.random() * 5000).toFixed(0);
         console.log(`${util.getNow()},id:${goods.wareId},第${startPage-page}/${startPage}条商品评论信息读取并插入完毕,接下来我休息${sleepTimeLength}ms`);
         await util.sleep(sleepTimeLength);
     }
