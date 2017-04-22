@@ -188,21 +188,18 @@ async function getCommentAndSavedById(shopId, goods) {
     }
 }
 
-async function getComment(goodsList, shopId = '170564') {
-
-    if (typeof goodsList == 'undefined' || goodsList.length == 0) {
-        // 此查询中需同时关联查询出最近评论的id
-        goodsList = await query(sql.query.jd_goods_havecomment);
+async function getComment(shop) {
+    goodsList = await query(sql.query.jd_goods_havecomment + ' and a.shopId = ' + shop.id);
+    if (goodsList.length > 1) {
+        await util.mail.send({
+            subject: '采集JD用户评论数据',
+            html: `正在获取${shop.name}(https://shop.m.jd.com/detail/detailInfo?shopId=${shop.id})评论数据,共${goodsList.length}条,@ ${util.getNow()}`
+        });
     }
-
     for (let i = 0; i < goodsList.length; i++) {
         // 获取评论内容跟存储评论内容同步完成，对于销量较多的店铺很必要
-        await getCommentAndSavedById(shopId, goodsList[i]);
-        console.log(`${i}/${goodsList.length}评论信息获取完毕.`);
-        // if (record.length) {
-        //     await query(sqlParser.handleJDCommentList(record));
-        // }
-        // console.log(`jd:第${i+1}/${goodsList.length}条商品评论信息插入完毕`);
+        await getCommentAndSavedById(shop.id, goodsList[i]);
+        console.log(`${shop.name}:${i}/${goodsList.length}评论信息获取完毕,${util.getNow()}.`);
     }
 }
 

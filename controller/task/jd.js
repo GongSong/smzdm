@@ -2,7 +2,7 @@ let read = require('../shop/jd');
 let save = require('../db/jd');
 let db = require('./db');
 let shopList = require('./jdShopList').list;
-let util = require('../util/common');
+// let util = require('../util/common');
 
 async function init() {
     // 载入店铺信息
@@ -17,12 +17,8 @@ async function init() {
 
     for (let i = 1; i < localShopList.length; i++) {
         let shopId = localShopList[i].id;
-        await util.mail.send({
-            subject: '采集JD用户评论数据',
-            html: `正在获取${localShopList[i].name} 的评论数据`
-        });
         console.log(`正在获取${localShopList[i].name} 的评论数据`);
-        await getCommentShopId(shopId, localShopList);
+        await getCommentByShopInfo(localShopList[i]);
     }
     // let i = 1;
     // let shopId = localShopList[i].id;
@@ -43,13 +39,12 @@ async function getGoodsByShopId(shopId, goodsList) {
     }
 }
 
-// 根据店铺id获取对应数据
-async function getCommentShopId(shopId, goodsList) {
-    flag = await db.needUpdate('jd_comment' + shopId);
+// 根据店铺信息获取对应数据
+async function getCommentByShopInfo(shop) {
+    flag = await db.needUpdate('jd_comment' + shop.id);
     if (flag) {
-        goodsList = goodsList.filter(item => item.totalCount > 0);
-        await read.getComment(goodsList, shopId);
-        db.setCrawlerStatus('jd_comment' + shopId);
+        await read.getComment(shop);
+        db.setCrawlerStatus('jd_comment' + shop.id);
     }
 }
 
