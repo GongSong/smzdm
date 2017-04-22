@@ -178,7 +178,7 @@ async function getCommentAndSavedById(shopId, goods) {
             console.log(`${goods.wareId}无评论信息,url:https://item.m.jd.com/product/${goods.wareId}.html`);
         }
         // 下次读取至少等待1-5秒
-        let sleepTimeLength = (1000 + Math.random() * 5000).toFixed(0);
+        let sleepTimeLength = (1000 + Math.random() * 6000).toFixed(0);
         console.log(`${util.getNow()},id:${goods.wareId},第${startPage-page}/${startPage}条商品评论信息读取并插入完毕,接下来我休息${sleepTimeLength}ms`);
         await util.sleep(sleepTimeLength);
     }
@@ -194,6 +194,7 @@ async function getComment(goodsList, shopId = '170564') {
     for (let i = 0; i < goodsList.length; i++) {
         // 获取评论内容跟存储评论内容同步完成，对于销量较多的店铺很必要
         await getCommentAndSavedById(shopId, goodsList[i]);
+        console.log(`${i}/${goodsList.length}评论信息获取完毕.`);
         // if (record.length) {
         //     await query(sqlParser.handleJDCommentList(record));
         // }

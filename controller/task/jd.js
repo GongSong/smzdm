@@ -13,7 +13,6 @@ async function init() {
         let shopId = localShopList[i].id;
         console.log(`正在获取${localShopList[i].name} 的商品列表数据`);
         await getGoodsByShopId(shopId, localShopList);
-        await util.sleep(1000);
     }
 
     for (let i = 1; i < localShopList.length; i++) {
