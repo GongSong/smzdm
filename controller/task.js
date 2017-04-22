@@ -5,11 +5,17 @@ let youzan = require('./task/youzan');
 let sge = require('./task/sge');
 let jd = require('./task/jd');
 let db = require('./task/db');
+let mail = require('./util/mail');
 
 async function init() {
 
     console.log('1.自动化任务队伍已开始,你可以定位到此处添加自己的任务');
     console.log('2.此处需添加任务的定时器，如 setInterval()\n');
+
+    // await mail.send({
+    //     subject: '啥都不干，就为发邮件',
+    //     html: '不要指望在这里面写什么内容'
+    // });
 
     jd.init();
 

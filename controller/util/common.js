@@ -1,6 +1,7 @@
 let cheerio = require('cheerio');
 let POSTAG = require('segment').POSTAG;
 let nlp = require('./nlp');
+let mail = require('./mail');
 
 let http = require('https');
 let querystring = require('querystring');
@@ -233,5 +234,6 @@ module.exports = {
     getMainContent,
     text_filter,
     sleep,
-    getPostData
+    getPostData,
+    mail
 }

@@ -26,6 +26,7 @@
     "helmet": "^3.5.0",
     "less-middleware": "^2.2.0",
     "mysql": "^2.13.0",
+    "nodemailer": "^4.0.1",
     "winston": "^2.3.1"
   }
 }

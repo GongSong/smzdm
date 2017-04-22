@@ -175,7 +175,11 @@ async function getCommentAndSavedById(shopId, goods) {
             console.log(url);
             await query(url);
         } else {
-            console.log(`${goods.wareId}无评论信息,url:https://item.m.jd.com/product/${goods.wareId}.html`);
+            await util.mail.send({
+                subject: '接口数据读取异常',
+                html: `${util.getNow()},${goods.wareId}无评论信息,url:https://item.m.jd.com/product/${goods.wareId}.html`
+            });
+            console.log(`${util.getNow()},${goods.wareId}无评论信息,url:https://item.m.jd.com/product/${goods.wareId}.html`);
         }
         // 下次读取至少等待1-5秒
         let sleepTimeLength = (1000 + Math.random() * 6000).toFixed(0);

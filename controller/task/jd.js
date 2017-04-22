@@ -17,6 +17,10 @@ async function init() {
 
     for (let i = 1; i < localShopList.length; i++) {
         let shopId = localShopList[i].id;
+        await util.mail.send({
+            subject: '采集JD用户评论数据',
+            html: `正在获取${localShopList[i].name} 的评论数据`
+        });
         console.log(`正在获取${localShopList[i].name} 的评论数据`);
         await getCommentShopId(shopId, localShopList);
     }

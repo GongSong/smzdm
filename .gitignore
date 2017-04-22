@@ -1,4 +1,4 @@
-# Windows image file caches
+﻿# Windows image file caches
 Thumbs.db
 ehthumbs.db
 
@@ -53,3 +53,6 @@ doc
 
 # 交易记录
 cncoinRecord
+
+# 邮箱设置
+mailAuth.js
