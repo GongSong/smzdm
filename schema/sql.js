@@ -40,6 +40,8 @@ var insert = {
     // 店铺商品分类
     jd_shop_category: 'insert into jd_shop_category(shopId,cateId,title) values ?',
 
+    // tmall 商品列表
+    tmall_shop: 'insert into tmall_shop(shopId,uid,title,nick,url,goodsScore,serviceScore,expressScore,sellerGoodPercent,rankType,prov,city,collectNum,logoUrl,isBrandShop,shopAge,shopTypeLogo,wwUrl,rankNum,collectCount) values ?'
 };
 
 var update = {
@@ -91,6 +93,7 @@ var query = {
     // 已存储的店铺列表
     jd_shopList: 'SELECT shopId id,shopName name FROM jd_shop',
 
+    tmall_shopList: 'SELECT shopId id,uid,title name,url from tmall_shop',
 }
 
 module.exports = {

@@ -1,10 +1,15 @@
 let mysql = require('mysql')
 let config = require('./config').mysql
 let logger = require('winston')
+let mail = require('../controller/util/mail');
 
 let pool = mysql.createPool(config)
 let errorHandle = (errInfo, sql = 'none') => {
     if (errInfo) {
+        mail.send({
+            subject: '数据库读写异常',
+            html: `${util.getNow()},errorInfo:<br>${errInfo}`
+        });
         logger.error('Error occured.', {
             time: new Date().toLocaleString(),
             sql,
@@ -23,12 +28,19 @@ async function query(sql, data, callback) {
             conn.query(sql, data, (err, result) => {
                 errorHandle(err, sql);
                 conn.release();
-                result = JSON.stringify(result);
-                result = JSON.parse(result);
-                if (typeof callback == 'function') {
-                    callback(result);
+                try {
+                    result = JSON.stringify(result);
+                    result = JSON.parse(result);
+                    if (typeof callback == 'function') {
+                        callback(result);
+                    }
+                    resolve(result);
+                } catch (e) {
+                    mail.send({
+                        subject: '数据库读写异常',
+                        html: `${util.getNow()},errorInfo:<br>${e.message}<br> ${JSON.stringify(e)} `
+                    });
                 }
-                resolve(result);
             });
         });
     });

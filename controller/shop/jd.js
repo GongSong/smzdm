@@ -175,15 +175,16 @@ async function getCommentAndSavedById(shopId, goods) {
             console.log(url);
             await query(url);
         } else {
+            let html = `${util.getNow()},第${page}/${startPage}页无评论信息,url:https://item.m.jd.com/product/${goods.wareId}.html`;
             await util.mail.send({
                 subject: '接口数据读取异常',
-                html: `${util.getNow()},${goods.wareId}无评论信息,url:https://item.m.jd.com/product/${goods.wareId}.html`
+                html
             });
-            console.log(`${util.getNow()},${goods.wareId}无评论信息,url:https://item.m.jd.com/product/${goods.wareId}.html`);
+            console.log(html);
         }
-        // 下次读取至少等待1-5秒
-        let sleepTimeLength = (1000 + Math.random() * 3000).toFixed(0);
-        console.log(`${util.getNow()},id:${goods.wareId},第${startPage-page}/${startPage}条商品评论信息读取并插入完毕,休息${sleepTimeLength}ms 后继续`);
+        // 下次读取至少等待1-2秒
+        let sleepTimeLength = (1000 + Math.random() * 1000).toFixed(0);
+        console.log(`${util.getNow()},id:${goods.wareId},第${startPage-page+1}/${startPage}条商品评论信息读取并插入完毕,休息${sleepTimeLength}ms 后继续`);
         await util.sleep(sleepTimeLength);
     }
 }
@@ -199,7 +200,7 @@ async function getComment(shop) {
     for (let i = 0; i < goodsList.length; i++) {
         // 获取评论内容跟存储评论内容同步完成，对于销量较多的店铺很必要
         await getCommentAndSavedById(shop.id, goodsList[i]);
-        console.log(`${shop.name}:${i}/${goodsList.length}评论信息获取完毕,${util.getNow()}.`);
+        console.log(`\n${shop.name}:${i+1}/${goodsList.length}评论信息获取完毕,${util.getNow()}.`);
     }
 }
 

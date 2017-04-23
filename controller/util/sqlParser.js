@@ -242,6 +242,13 @@ function handleJDCategory(data) {
     return url;
 }
 
+function handleTmallGoods(item) {
+    let url = sql.insert.tmall_shop;
+    let sqlList = `(${shopId},${uid},'${title}','${nick}','${url}',${goodsScore},${serviceScore},${expressScore},${sellerGoodPercent},${rankType},'${prov}','${city}',${collectNum},'${logoUrl}',${isBrandShop},${shopAge},'${shopTypeLogo}','${wwUrl}',${rankNum},${collectCount})`
+    url = url.replace('?', sqlList);
+    return url;
+}
+
 module.exports = {
     handleSaleDetailData,
     handleStockData,
@@ -264,9 +271,13 @@ module.exports = {
     handleCncoinQuestionNlp,
     handleCncoinCommentSeg,
     handleCncoinCommentNlp,
+
     handleSGEData,
+
     handleJDGoods,
     handleJDCommentList,
     handleJDShops,
-    handleJDCategory
+    handleJDCategory,
+
+    handleTmallGoods,
 }
