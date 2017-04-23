@@ -1,0 +1,151 @@
+ {
+   "shopDetail": {
+     "shopDSRScore": {
+       "sg": "28.19",
+       "cg": "46.73",
+       "serviceScore": "4.8",
+       "consignmentScore": "4.8",
+       "mg": "5.84",
+       "sellerGoodPercent": "100.00%",
+       "merchandisScore": "4.8"
+     },
+     "hideDsr": false,
+     "rankType": 3,
+     "city": "北京市",
+     "collectNum": 208000,
+     "backImgTarget": "//shop105217346.m.taobao.com/#list?catId=1149099997",
+     "fuzzyUrl": "//gw2.alicdn.com/bao/uploaded//0d/29/TB1ycKSQXXXXXcWXVXXSutbFXXX.jpg",
+     "title": "中国黄金官方旗舰店",
+     "nick": "中国黄金官方旗舰店",
+     "picUrl": "//gw2.alicdn.com/bao/uploaded//0d/29/TB1ycKSQXXXXXcWXVXXSutbFXXX.jpg",
+     "backImg": "//img.alicdn.com/imgextra/i4/1720024852/TB2ZNhqbXXXXXcyXXXXXXXXXXXX-1720024852.jpg",
+     "sellerId": 1720024852,
+     "rateSum": "12",
+     "logoSize": "70,18",
+     "id": "105217346",
+     "starts": 1373253459000,
+     "isBrandShop": 1,
+     "prov": "北京",
+     "shopAge": 4,
+     "shopTypeLogo": "//gtms02.alicdn.com/tps/i2/TB1JM7jJVXXXXcVXVXX7HlLFpXX-141-36.png",
+     "ret": "success",
+     "phoneExt": "",
+     "shopInfoUrl": "//chinagold.m.tmall.com/shop/shop_info.htm?seller_id=1720024852",
+     "zhizhao": {
+       "icon": "//assets.alicdn.com/app/marketing/xfile/national_emblem_light.png",
+       "target": "//zhaoshang.tmall.com/maintaininfo/liangzhao.htm?spm=a1z10.1-b-s.1997427721.5.4jwv0j&xid=0d29a47d437a3e8e9c91fc8a081b186f"
+     },
+     "wwUrl": "//im.m.taobao.com/ww/ad_ww_dialog.htm?to_user=1tC5 rvGvfC52be9xuy9orXq&shop_id=105217346",
+     "shopUrl": "chinagold.m.tmall.com",
+     "phone": "",
+     "rankNum": 2,
+     "collectorCount": 234004,
+     "searchWord": {
+       "hint": "戒指",
+       "query": "戒指"
+     },
+     "backOriginImg": "//img.alicdn.com/imgextra/i4/1720024852/TB2ZNhqbXXXXXcyXXXXXXXXXXXX-1720024852.jpg",
+     "isMall": true,
+     "shopType": 1
+   },
+   "haveCoupon": false,
+   "offerCode": {
+     "hasGift": false
+   },
+   "bottomMenu": {
+     "list": [{
+       "menuId": 23213691,
+       "menuName": "宝贝分类",
+       "subMenuItemList": [{
+         "menuId": 23216645,
+         "menuName": "全部宝贝",
+         "type": "openItemCat",
+         "target": "//shop.m.taobao.com/goods/index.htm?shop_id=105217346&user_id=1720024852&gotoSearch=0&_tb_user_menu=abb38c7670a240bdbd269cc5dd998a5a8defd7318e83c06a0ee77ed4d1574bd66d7e2787b0c9bfecb879ce95d2365552262a4db94cbdff4ff6d74d4336c3191f"
+       }, {
+         "menuId": 23220636,
+         "menuName": "项链",
+         "type": "openItemCat",
+         "target": "//shop.m.taobao.com/shop/shopIndex.htm?shop_id=105217346&user_id=1720024852&_tb_user_menu=abb38c7670a240bdbd269cc5dd998a5a8defd7318e83c06a0ee77ed4d1574bd694b2b27f9b0f71bfd79f6b68504ebceda03ff0f0ef948a08ace970eba17b1bd1#list?catId=1149100462"
+       }, {
+         "menuId": 23220637,
+         "menuName": "戒指",
+         "type": "openItemCat",
+         "target": "//shop.m.taobao.com/shop/shopIndex.htm?shop_id=105217346&user_id=1720024852&_tb_user_menu=abb38c7670a240bdbd269cc5dd998a5a8defd7318e83c06a0ee77ed4d1574bd694b2b27f9b0f71bfd79f6b68504ebcedffb67d91f35aa3c5f492ae93ba2a6959#list?catId=1149100465"
+       }, {
+         "menuId": 23220638,
+         "menuName": "耳饰",
+         "type": "openItemCat",
+         "target": "//shop.m.taobao.com/shop/shopIndex.htm?shop_id=105217346&user_id=1720024852&_tb_user_menu=abb38c7670a240bdbd269cc5dd998a5a8defd7318e83c06a0ee77ed4d1574bd694b2b27f9b0f71bfd79f6b68504ebcede0b5d28140ce12fdf0516dd885ad3023#list?catId=1149100464"
+       }, {
+         "menuId": 23220639,
+         "menuName": "吊坠",
+         "type": "openItemCat",
+         "target": "//shop.m.taobao.com/shop/shopIndex.htm?shop_id=105217346&user_id=1720024852&_tb_user_menu=abb38c7670a240bdbd269cc5dd998a5a8defd7318e83c06a0ee77ed4d1574bd694b2b27f9b0f71bfd79f6b68504ebcedaf199cc4abf1c553c0c07caca6d0bdb5#list?catId=1149100461"
+       }],
+       "type": "openL2Menu"
+     }, {
+       "menuId": 23213692,
+       "menuName": "热门专区",
+       "subMenuItemList": [{
+         "menuId": 23213693,
+         "menuName": "投资金专区",
+         "type": "openUrl",
+         "target": "//h5.m.taobao.com/weapp/view_page.htm?page=shop/activity&userId=1720024852&pageId=33946690&_tb_user_menu=abb38c7670a240bdbd269cc5dd998a5a8defd7318e83c06a0ee77ed4d1574bd6d40022e76db1fb3ceaab8fc0e542329df3f179ea254f6685039a4e5463680236"
+       }, {
+         "menuId": 23213694,
+         "menuName": "金饰专区",
+         "type": "openItemCat",
+         "target": "//shop.m.taobao.com/shop/shopIndex.htm?shop_id=105217346&user_id=1720024852&_tb_user_menu=abb38c7670a240bdbd269cc5dd998a5a8defd7318e83c06a0ee77ed4d1574bd6d40022e76db1fb3ceaab8fc0e542329d79a3f227e12573a863be1845441de9fe#list?catId=1149100000"
+       }, {
+         "menuId": 23213695,
+         "menuName": "K金专区",
+         "type": "openItemCat",
+         "target": "//shop.m.taobao.com/shop/shopIndex.htm?shop_id=105217346&user_id=1720024852&_tb_user_menu=abb38c7670a240bdbd269cc5dd998a5a8defd7318e83c06a0ee77ed4d1574bd6d40022e76db1fb3ceaab8fc0e542329d262a4db94cbdff4ff6d74d4336c3191f#list?catId=1149101303"
+       }, {
+         "menuId": 23237093,
+         "menuName": "新品专区",
+         "type": "openItemCat",
+         "target": "//shop.m.taobao.com/goods/index.htm?shop_id=105217346&user_id=1720024852&isNew=true&sort=first_new&_tb_user_menu=abb38c7670a240bdbd269cc5dd998a5a8defd7318e83c06a0ee77ed4d1574bd62c0a8e207ec4f9d6e5d04b4262f36ebbf3f179ea254f6685039a4e5463680236"
+       }, {
+         "menuId": 23237094,
+         "menuName": "店长推荐",
+         "type": "openItemCat",
+         "target": "//shop.m.taobao.com/goods/index.htm?shop_id=105217346&user_id=1720024852&isSoldCount=true&sort=_sale&_tb_user_menu=abb38c7670a240bdbd269cc5dd998a5a8defd7318e83c06a0ee77ed4d1574bd62c0a8e207ec4f9d6e5d04b4262f36ebb79a3f227e12573a863be1845441de9fe"
+       }],
+       "type": "openL2Menu"
+     }, {
+       "menuId": 23213696,
+       "menuName": "福利活动",
+       "subMenuItemList": [{
+         "menuId": 23216647,
+         "menuName": "签到赢好礼",
+         "type": "openUrl",
+         "target": "//checkin.we.app.jae.m.taobao.com/?seller_nick=中国黄金官方旗舰店&_tb_user_menu=abb38c7670a240bdbd269cc5dd998a5a8defd7318e83c06a0ee77ed4d1574bd66d7e2787b0c9bfecb879ce95d2365552ffb67d91f35aa3c5f492ae93ba2a6959"
+       }],
+       "type": "openL2Menu"
+     }]
+   },
+   "udfMenu": {
+     "ret": "success",
+     "menus": [{
+       "menuName": "全部商品",
+       "type": "allItems",
+       "content": "475",
+       "target": ""
+     }, {
+       "menuName": "上新",
+       "type": "newItems",
+       "target": ""
+     }, {
+       "menuName": "店铺活动",
+       "lastModified": "1490770802713",
+       "type": "h5",
+       "target": "//chinagold.m.tmall.com/shop/shop-dynamic.htm?hideHead=1"
+     }]
+   },
+   "message": {
+     "utParams": {
+       "showSceneRecommend": false
+     }
+   }
+ };

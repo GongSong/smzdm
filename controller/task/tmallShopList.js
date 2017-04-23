@@ -1,0 +1,263 @@
+// cdn.bootcss.com/jquery/2.2.3/jquery.min.js
+// data from : https://list.tmall.com/search_product.htm?q=%B9%F3%BD%F0%CA%F4&type=p&spm=a220m.6910245.a2227oh.d100&from=mallfp..m_1_searchbutton&style=w
+// let shopList = [];
+// let dom = $('.shop-info-wrapper');
+// for (let i = 0; i < dom.length; i++) {
+//   let url = dom.eq(i).find('.shop-info-header').attr('href');
+//   let name = dom.eq(i).find('.shop-title label').text();
+//   shopList.push({
+//     url,
+//     name
+//   });
+// }
+// console.log(JSON.stringify(shopList));
+
+// 天猫-  keyword:贵金属,去除掉主要卖钻石/的商家,得到共81家店铺
+let list = [{
+  "url": "https://caibai.m.tmall.com",
+  "name": "菜百旗舰店"
+}, {
+  "url": "https://chinagold.m.tmall.com",
+  "name": "中国黄金官方旗舰店"
+}, {
+  "url": "https://hanjinguojizb.m.tmall.com",
+  "name": "汉今国际旗舰"
+}, {
+  "url": "https://laomiao.m.tmall.com",
+  "name": "老庙官方旗舰店"
+}, {
+  "url": "https://ctf.m.tmall.com",
+  "name": "周大福官方旗舰店"
+}, {
+  "url": "https://lukfook.m.tmall.com",
+  "name": "六福珠宝官方旗舰店"
+}, {
+  "url": "https://chowsangsang.m.tmall.com",
+  "name": "周生生官方旗舰店"
+}, {
+  "url": "https://gofugold.m.tmall.com",
+  "name": "国富黄金旗舰店"
+}, {
+  "url": "https://jinyizb.m.tmall.com",
+  "name": "金一珠宝旗舰店"
+}, {
+  "url": "https://spdbank.m.tmall.com",
+  "name": "浦发银行旗舰店"
+}, {
+  "url": "https://zhendian.m.tmall.com",
+  "name": "真典旗舰店"
+}, {
+  "url": "https://tianzhongjin.m.tmall.com",
+  "name": "天中金旗舰店"
+}, {
+  "url": "https://jicang.m.tmall.com",
+  "name": "集藏旗舰店"
+}, {
+  "url": "https://tianxinzhubao.m.tmall.com",
+  "name": "天鑫珠宝旗舰店"
+}, {
+  "url": "https://baoquanqianbi.m.tmall.com",
+  "name": "宝泉钱币旗舰店"
+}, {
+  "url": "https://jinduoxi.m.tmall.com",
+  "name": "金多喜珠宝旗舰店"
+}, {
+  "url": "https://hengfu.m.tmall.com",
+  "name": "恒孚旗舰店"
+}, {
+  "url": "https://cuidazb.m.tmall.com",
+  "name": "翠达珠宝旗舰店"
+}, {
+  "url": "https://baoxiangzb.m.tmall.com",
+  "name": "宝祥旗舰店"
+}, {
+  "url": "https://letstogether.m.tmall.com",
+  "name": "letstogether旗舰店"
+}, {
+  "url": "https://yongyin.m.tmall.com",
+  "name": "永银旗舰店"
+}, {
+  "url": "https://jinzhidao.m.tmall.com",
+  "name": "金之道旗舰店"
+}, {
+  "url": "https://zuanshikuaixian.m.tmall.com",
+  "name": "钻石快线旗舰店"
+}, {
+  "url": "https://fookchakyan.m.tmall.com",
+  "name": "福泽人珠宝旗舰店"
+}, {
+  "url": "https://luxinzb.m.tmall.com",
+  "name": "鲁鑫旗舰店"
+}, {
+  "url": "https://zhongjinyipin.m.tmall.com",
+  "name": "中金一品旗舰店"
+}, {
+  "url": "https://jinyan.m.tmall.com",
+  "name": "金言旗舰店"
+}, {
+  "url": "https://zongjinquan.m.tmall.com",
+  "name": "纵金泉旗舰店"
+}, {
+  "url": "https://lingduijinhao.m.tmall.com",
+  "name": "零兑金号旗舰店"
+}, {
+  "url": "https://dongfangjinyu.m.tmall.com",
+  "name": "东方金钰珠宝旗舰店"
+}, {
+  "url": "https://shengyizb.m.tmall.com",
+  "name": "绳艺旗舰店"
+}, {
+  "url": "https://jindasheng.m.tmall.com",
+  "name": "金大生旗舰店"
+}, {
+  "url": "https://chjjewellery.m.tmall.com",
+  "name": "潮宏基珠宝旗舰店"
+}, {
+  "url": "https://zhedi.m.tmall.com",
+  "name": "浙地旗舰店"
+}, {
+  "url": "https://fengzbps.m.tmall.com",
+  "name": "凤珠宝配饰旗舰店"
+}, {
+  "url": "https://kafuyazb.m.tmall.com",
+  "name": "卡弗亚旗舰店"
+}, {
+  "url": "https://shanjinfang.m.tmall.com",
+  "name": "善金坊旗舰店"
+}, {
+  "url": "https://shande.m.tmall.com",
+  "name": "善德旗舰店"
+}, {
+  "url": "https://kaidiqizhubao.m.tmall.com",
+  "name": "凯蒂琦珠宝旗舰店"
+}, {
+  "url": "https://kelaxiaoxiong.m.tmall.com",
+  "name": "克拉小熊旗舰店"
+}, {
+  "url": "https://shihuazhubao.m.tmall.com",
+  "name": "诗华珠宝旗舰店"
+}, {
+  "url": "https://wlzb.m.tmall.com",
+  "name": "沃兰珠宝旗舰店"
+}, {
+  "url": "https://chowtaiseng.m.tmall.com",
+  "name": "周大生旗舰店"
+}, {
+  "url": "https://redyear.m.tmall.com",
+  "name": "红色年轮旗舰店"
+}, {
+  "url": "https://baitaishoushi.m.tmall.com",
+  "name": "百泰首饰旗舰店"
+}, {
+  "url": "https://dingfuxiang.m.tmall.com",
+  "name": "鼎福祥珠宝旗舰店"
+}, {
+  "url": "https://cnuti.m.tmall.com",
+  "name": "cnuti旗舰店"
+}, {
+  "url": "https://xiyunjin.m.tmall.com",
+  "name": "喜运金旗舰店"
+}, {
+  "url": "https://mokingran.m.tmall.com",
+  "name": "梦金园旗舰店"
+}, {
+  "url": "https://jinjiafu.m.tmall.com",
+  "name": "金嘉福旗舰店"
+}, {
+  "url": "https://xinjin.m.tmall.com",
+  "name": "新金旗舰店"
+}, {
+  "url": "https://jifujin.m.tmall.com",
+  "name": "吉福金旗舰店"
+}, {
+  "url": "https://furunlai.m.tmall.com",
+  "name": "福润莱旗舰店"
+}, {
+  "url": "https://xizuansz.m.tmall.com",
+  "name": "喜钻深圳专卖店"
+}, {
+  "url": "https://guanjinyuan.m.tmall.com",
+  "name": "观金缘旗舰店"
+}, {
+  "url": "https://zhengdaking.m.tmall.com",
+  "name": "正大金珠宝旗舰店"
+}, {
+  "url": "https://yiboqianjin.m.tmall.com",
+  "name": "ybqianjin一搏千金旗舰店"
+}, {
+  "url": "https://jinyuezhenpinzh.m.tmall.com",
+  "name": "金悦珍品珠海专卖店"
+}, {
+  "url": "https://afanni.m.tmall.com",
+  "name": "阿梵尼旗舰店"
+}, {
+  "url": "https://baosheng.m.tmall.com",
+  "name": "宝生旗舰店"
+}, {
+  "url": "https://fengrun.m.tmall.com",
+  "name": "凤润旗舰店"
+}, {
+  "url": "https://baishidaizb.m.tmall.com",
+  "name": "百世代旗舰店"
+}, {
+  "url": "https://ideal.m.tmall.com",
+  "name": "ideal旗舰店"
+}, {
+  "url": "https://kingold.m.tmall.com",
+  "name": "金凰首饰旗舰店"
+}, {
+  "url": "https://qidupinshang.m.tmall.com",
+  "name": "七度品尚旗舰店"
+}, {
+  "url": "https://zhenbaoyinlou.m.tmall.com",
+  "name": "珍宝银楼旗舰店"
+}, {
+  "url": "https://baohengda.m.tmall.com",
+  "name": "宝亨达珠宝旗舰店"
+}, {
+  "url": "https://3dgold.m.tmall.com",
+  "name": "金至尊旗舰店"
+}, {
+  "url": "https://zuanqizhubao.m.tmall.com",
+  "name": "钻祺珠宝旗舰店"
+}, {
+  "url": "https://qilixiangzb.m.tmall.com",
+  "name": "七里香珠宝旗舰店"
+}, {
+  "url": "https://airui.m.tmall.com",
+  "name": "瑷瑞旗舰店"
+}, {
+  "url": "https://yongkunzhubao.m.tmall.com",
+  "name": "永坤旗舰"
+}, {
+  "url": "https://cgczb.m.tmall.com",
+  "name": "cgc珠宝旗舰店"
+}, {
+  "url": "https://weibaozhubao.m.tmall.com",
+  "name": "微宝珠宝旗舰店"
+}, {
+  "url": "https://ouruidezhubao.m.tmall.com",
+  "name": "欧瑞德珠宝旗舰"
+}, {
+  "url": "https://celius.m.tmall.com",
+  "name": "凯俪思旗舰店"
+}, {
+  "url": "https://wanhuang.m.tmall.com",
+  "name": "万凰旗舰店"
+}, {
+  "url": "https://ruinuo.m.tmall.com",
+  "name": "瑞诺旗舰店"
+}, {
+  "url": "https://jaff.m.tmall.com",
+  "name": "捷夫珠宝旗舰店"
+}, {
+  "url": "https://mengkela.m.tmall.com",
+  "name": "梦克拉旗舰店"
+}, {
+  "url": "https://hafilogl.m.tmall.com",
+  "name": "hafilo国隆专卖店"
+}];
+
+module.exports = {
+  list
+};
