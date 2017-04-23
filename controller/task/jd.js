@@ -21,10 +21,6 @@ async function init() {
         console.log(`正在获取${localShopList[i].name} 的评论数据`);
         await getCommentByShopInfo(localShopList[i]);
     }
-    // let i = 1;
-    // let shopId = localShopList[i].id;
-    // console.log(`正在获取${localShopList[i].name} 的数据`);
-    // await getInfoByShopId(shopId);
 }
 
 async function getGoodsByShopId(shopId, goodsList) {

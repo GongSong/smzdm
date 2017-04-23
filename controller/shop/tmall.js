@@ -3,97 +3,88 @@ let axios = require('axios');
 let spiderSetting = require('../util/spiderSetting');
 let db = require('../db/tmall');
 let util = require('../util/common');
-// let jdCookies = require('../util/jdCookies');
 let query = require('../../schema/mysql');
 let sql = require('../../schema/sql');
 let sqlParser = require('../util/sqlParser');
 let parser = require('../util/htmlParser');
 
-// async function getListByPage(searchPage = 1, shopId = '170564') {
-//     config.headers.Referer = config.headers.Referer + shopId;
-//     let postData = querystring.stringify({
-//         shopId,
-//         searchPage,
-//         searchSort: 1
-//     });
-//     let result = await util.getPostData(config, postData);
-//     return JSON.parse(result);
-// }
+let config = {
+    method: 'GET',
+    headers: {
+        'Accept': 'application/json, text/javascript, */*; q=0.01',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Accept-Language': 'zh-CN,zh;q=0.8,en;q=0.6',
+        'Connection': 'keep-alive',
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1',
+        'X-Requested-With': 'XMLHttpRequest'
+    }
+};
 
-// // 获取商品列表
-// async function getGoodsList(shopId = '170564') {
-//     let goodsList = [];
-//     let totalPage = 1;
+async function getGoodsListAndSave(shopInfo) {
+    let totalPage = 1;
+    // 商品详情页：https://detail.m.tmall.com/item.htm?id=39792032232
+    let configObj = {
+        host: shopInfo.url.replace(/https:\/\//, ''),
+        path: '/shop/shop_auction_search.do'
+    };
+    let configHeaders = {
+        Host: configObj.host,
+        Origin: shopInfo.url,
+        Refer: shopInfo.url + '/shop/shop_auction_search.do'
+    }
+    config.headers = Object.assign(config.headers, configHeaders);
+    config = Object.assign(config, configObj);
 
-//     config.headers.Cookie = await jdCookies.getCookies(shopId);
+    let url = shopInfo.url + '/shop/shop_auction_search.do?sort=s&p='
+    for (let i = 1; i <= totalPage; i++) {
 
-//     for (let i = 1; i <= totalPage; i++) {
-//         // console.log(config.headers.Cookie);
-//         let record = await getListByPage(i, shopId);
-//         let item = record.results;
-//         totalPage = item.totalPage;
-//         // 2017-04-20
-//         // 此处可考虑将商品名称中属性信息分离存储
-//         let wareInfo = item.wareInfo.map(item => {
-//             item.shopId = shopId;
-//             return item;
-//         })
-//         goodsList = [...goodsList, ...wareInfo];
-//     }
-//     return goodsList;
-// }
+        let postData = querystring.stringify({
+            sort: 's',
+            p: i
+        });
 
-// async function getGoodsListAndSave(shopId = '170564') {
-//     let totalPage = 1;
+        // console.log(config.headers.Cookie);
+        // let record = await axios.get(url + i).then(res => res.data);
+        let record = await util.getPostData(config, postData);
+        totalPage = record.total_page;
+        await db.setGoodList(record);
 
-//     config.headers.Cookie = await jdCookies.getCookies(shopId);
-
-//     for (let i = 1; i <= totalPage; i++) {
-//         // console.log(config.headers.Cookie);
-//         let record = await getListByPage(i, shopId);
-//         let item = record.results;
-//         totalPage = item.totalPage;
-//         // 2017-04-20
-//         // 此处可考虑将商品名称中属性信息分离存储
-//         let wareInfo = item.wareInfo.map(item => {
-//             item.shopId = shopId;
-//             return item;
-//         })
-//         db.setGoodList(wareInfo);
-//         console.log(`${util.getNow()}:id:${shopId},第${i}/${totalPage}页商品列表插入完毕`);
-//     }
-// }
+        // 10-30秒后进行下一次获取
+        let sleepTimeLength = (10000 + Math.random() * 30000).toFixed(0);
+        console.log(`${util.getNow()}:${shopInfo.name},第${i}/${totalPage}页商品列表插入完毕,休息${sleepTimeLength}ms 后继续`);
+    }
+}
 
 async function getShopTemplate(shopInfo) {
     let detailUrl = shopInfo.url + '/shop/shop_info.htm';
     console.log(`正在采集【${shopInfo.name}】店铺信息,url:${detailUrl}`);
-    let shopDetail = await axios.get(detailUrl).then(res => res.data.split('shopData =')[1].split(';')[0]).catch(e => { console.log(e) });
+    let shopDetail = await axios.get(detailUrl).then(res => res.data.split('shopData =')[1].split('}}};')[0] + '}}}').catch(e => { console.log(e) });
     let detail = JSON.parse(shopDetail);
-    let shopInfo = {
-            shopId: detail.id,
-            uid: detail.sellerId,
-            title: detail.title,
-            nick: detail.nick,
-            url: 'https://' + detail.shopUrl,
-            goodsScore: detail.shopDSRScore.merchandisScore,
-            serviceScore: detail.shopDSRScore.serviceScore,
-            expressScore: detail.shopDSRScore.consignment,
-            sellerGoodPercent: detail.shopDSRScore.sellerGoodPercent.replace('%', ''),
-            rankType: detail.rankType,
-            prov: detail.prov,
-            city: detail.city,
-            collectNum: detail.collectNum,
-            logoUrl: detail.fuzzyUrl,
-            isBrandShop: detail.isBrandShop,
-            shopAge: detail.shopAge,
-            shopTypeLogo: detail.shopTypeLogo,
-            wwUrl: detail.wwUrl,
-            rankNum: detail.rankNum,
-            collectCount: detail.collectCount,
-        }
-        // 商品分类信息受店铺修改化设置影响较大，此处不做处理
-
-    return shopInfo;
+    detail = detail.shopDetail;
+    // 商品分类信息受店铺修改化设置影响较大，此处不做处理
+    return {
+        shopId: detail.id,
+        uid: detail.sellerId,
+        title: detail.title,
+        nick: detail.nick,
+        url: 'https://' + detail.shopUrl,
+        goodsScore: detail.shopDSRScore.merchandisScore,
+        serviceScore: detail.shopDSRScore.serviceScore,
+        expressScore: detail.shopDSRScore.consignmentScore,
+        sellerGoodPercent: detail.shopDSRScore.sellerGoodPercent.replace('%', ''),
+        rankType: detail.rankType,
+        prov: detail.prov,
+        city: detail.city,
+        collectNum: detail.collectNum,
+        logoUrl: detail.fuzzyUrl,
+        isBrandShop: detail.isBrandShop || 0,
+        shopAge: detail.shopAge,
+        shopTypeLogo: detail.shopTypeLogo || '',
+        wwUrl: detail.wwUrl,
+        rankNum: detail.rankNum,
+        collectorCount: detail.collectorCount,
+    };
 }
 
 // async function getCommentByPage(Cookie, shopId, wareId, offset) {
@@ -210,7 +201,7 @@ async function getShopTemplate(shopInfo) {
 
 module.exports = {
     getShopTemplate,
+    getGoodsListAndSave,
     // getGoodsList,
     // getComment,
-    // getGoodsListAndSave
 };

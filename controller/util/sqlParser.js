@@ -223,7 +223,7 @@ function handleJDGoods(data) {
 
 function handleJDCommentList(data) {
     let url = sql.insert.jd_comment;
-    let sqlList = data.map(item => `(${item.wareId},${item.commentId},'${item.commentData.replace(/\r/g,'').replace(/\n/g,'').replace(/'/g,'').replace(/\\/g,'')}','${item.commentDate}',${item.commentScore},'${item.commentShareUrl}',${item.commentType},'${item.orderDate}','${item.userImgURL}',${item.userLevel},'${item.userNickName}')`);
+    let sqlList = data.map(item => `(${item.wareId},${item.commentId},'${item.commentData.replace(/&+|#|\$|\\|\r|\n|'/g,'')}','${item.commentDate}',${item.commentScore},'${item.commentShareUrl}',${item.commentType},'${item.orderDate}','${item.userImgURL}',${item.userLevel},'${item.userNickName}')`);
     url = url.replace('?', sqlList.join(','));
     return url;
 }
@@ -242,10 +242,17 @@ function handleJDCategory(data) {
     return url;
 }
 
-function handleTmallGoods(item) {
+function handleTmallShops(item) {
     let url = sql.insert.tmall_shop;
-    let sqlList = `(${shopId},${uid},'${title}','${nick}','${url}',${goodsScore},${serviceScore},${expressScore},${sellerGoodPercent},${rankType},'${prov}','${city}',${collectNum},'${logoUrl}',${isBrandShop},${shopAge},'${shopTypeLogo}','${wwUrl}',${rankNum},${collectCount})`
+    let sqlList = `(${item.shopId},${item.uid},'${item.title}','${item.nick}','${item.url}',${item.goodsScore},${item.serviceScore},${item.expressScore},${item.sellerGoodPercent},${item.rankType},'${item.prov}','${item.city}',${item.collectNum},'${item.logoUrl}',${item.isBrandShop},${item.shopAge},'${item.shopTypeLogo}','${item.wwUrl}',${item.rankNum},${item.collectorCount})`
     url = url.replace('?', sqlList);
+    return url;
+}
+
+function handleTmallGoods(goods) {
+    let url = sql.insert.tmall_goods;
+    let sqlList = goods.items.map(item => `(${goods.shop_id},${goods.user_id},${item.item_id},'${item.title}','${item.img}',${item.sold},${item.quantity},${item.totalSoldQuantity},'${item.url}',${item.price},'${getNow()}')`);
+    url = url.replace('?', sqlList.join(','));
     return url;
 }
 
@@ -279,5 +286,6 @@ module.exports = {
     handleJDShops,
     handleJDCategory,
 
+    handleTmallShops,
     handleTmallGoods,
 }

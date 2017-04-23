@@ -6,25 +6,22 @@ let util = require('../util/common');
 
 async function init() {
     // 载入店铺信息
-    await loadDefault();
+    // await loadDefault();
 
-    // let localShopList = await save.getShopList();
+    let localShopList = await save.getShopList();
     // 商品列表暂时不增量获取
-    /*for (let i = 1; i < localShopList.length; i++) {
+
+    for (let i = 0; i < localShopList.length; i++) {
         let shopId = localShopList[i].id;
-        console.log(`正在获取${localShopList[i].name} 的商品列表数据`);
-        await getGoodsByShopId(shopId, localShopList);
-    }*/
+        console.log(`(${i}/${localShopList.length}) 正在获取 ${localShopList[i].name} 的商品列表数据`);
+        await read.getGoodsListAndSave(localShopList[i]);
+    }
 
     // for (let i = 1; i < localShopList.length; i++) {
     //     let shopId = localShopList[i].id;
     //     console.log(`正在获取${localShopList[i].name} 的评论数据`);
     //     await getCommentByShopInfo(localShopList[i]);
     // }
-    // let i = 1;
-    // let shopId = localShopList[i].id;
-    // console.log(`正在获取${localShopList[i].name} 的数据`);
-    // await getInfoByShopId(shopId);
 }
 
 // async function getGoodsByShopId(shopId, goodsList) {
@@ -49,8 +46,7 @@ async function initTmallShopInfo() {
     let shopInfo;
     let localShopList = await save.getShopList();
     let maxNum = shopList.length;
-    maxNum = 1;
-    for (let i = 0; i < maxNum; i++) {
+    for (let i = 42; i < maxNum; i++) {
         let url = shopList[i].url;
         let needSave = localShopList.filter(item => {
             if (url.includes(item.url)) {
@@ -60,9 +56,11 @@ async function initTmallShopInfo() {
         needSave = (needSave.length == 0);
         if (needSave) {
             shopInfo = await read.getShopTemplate(shopList[i]);
-            console.log(shopInfo);
             await save.setShopDetail(shopInfo);
         }
+        // let sleepTimeLength = (1000 + Math.random() * 1000).toFixed(0);
+        // await util.sleep(sleepTimeLength);
+        console.log(`Tmall:${util.getNow()},第${i+1}/${maxNum}条店铺数据采集完毕.`);
     }
 }
 

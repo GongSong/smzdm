@@ -40,8 +40,11 @@ var insert = {
     // 店铺商品分类
     jd_shop_category: 'insert into jd_shop_category(shopId,cateId,title) values ?',
 
+    // tmall 店铺列表
+    tmall_shop: 'insert into tmall_shop(shopId,uid,title,nick,url,goodsScore,serviceScore,expressScore,sellerGoodPercent,rankType,prov,city,collectNum,logoUrl,isBrandShop,shopAge,shopTypeLogo,wwUrl,rankNum,collectorCount) values ?',
+
     // tmall 商品列表
-    tmall_shop: 'insert into tmall_shop(shopId,uid,title,nick,url,goodsScore,serviceScore,expressScore,sellerGoodPercent,rankType,prov,city,collectNum,logoUrl,isBrandShop,shopAge,shopTypeLogo,wwUrl,rankNum,collectCount) values ?'
+    tmall_goods: 'insert into tmall_goods(shop_id,user_id,item_id,title,img,sold,quantity,totalSoldQuantity,url,price,rec_date) values ?'
 };
 
 var update = {

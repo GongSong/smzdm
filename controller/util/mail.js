@@ -2,6 +2,7 @@ let mailer = require('nodemailer');
 let auth = require('./mailAuth').auth;
 
 let transport = mailer.createTransport({
+    pool: true,
     host: 'smtp.qq.com',
     port: 465,
     secure: true,
@@ -23,7 +24,9 @@ async function send(settings) {
         generateTextFromHTML: true,
         html: settings.html
     }, function(err, response) {
-        if (err) { throw err }
+        if (err) {
+            console.log(err);
+        }
         console.log(`邮件 ${settings.subject} 发送成功`);
         transport.close();
     });

@@ -2,6 +2,7 @@ let mysql = require('mysql')
 let config = require('./config').mysql
 let logger = require('winston')
 let mail = require('../controller/util/mail');
+let util = require('../controller/util/common');
 
 let pool = mysql.createPool(config)
 let errorHandle = (errInfo, sql = 'none') => {
