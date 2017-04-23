@@ -2,18 +2,19 @@ let read = require('../shop/jd');
 let save = require('../db/jd');
 let db = require('./db');
 let shopList = require('./jdShopList').list;
-// let util = require('../util/common');
+let util = require('../util/common');
 
 async function init() {
     // 载入店铺信息
     // await loadDefault();
 
     let localShopList = await save.getShopList();
-    for (let i = 1; i < localShopList.length; i++) {
+    // 商品列表暂时不增量获取
+    /*for (let i = 1; i < localShopList.length; i++) {
         let shopId = localShopList[i].id;
         console.log(`正在获取${localShopList[i].name} 的商品列表数据`);
         await getGoodsByShopId(shopId, localShopList);
-    }
+    }*/
 
     for (let i = 1; i < localShopList.length; i++) {
         let shopId = localShopList[i].id;

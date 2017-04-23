@@ -23,7 +23,11 @@ async function getPostData(config, data) {
                 resolve(result)
             });
         }).on('error', (e) => {
-            console.log(`problem with request: ${e.message}`);
+            console.log(`errInfo: ${e.message}`);
+            mail.send({
+                subject: '接口数据读取异常',
+                html: `${util.getNow()},${shop.name},id:${shop.id}读取异常。errorInfo:<br>${e.message}<br> http://stackoverflow.com/search?q=${e.message} `
+            });
             reject(e);
         });
         request.write(data);

@@ -22,9 +22,9 @@ async function send(settings) {
         subject: settings.subject,
         generateTextFromHTML: true,
         html: settings.html
-    }, function(error, response) {
+    }, function(err, response) {
         if (err) { throw err }
-        console.log(`邮件 ${settings.subject} 发送成功，Message sent:${ response.message}`);
+        console.log(`邮件 ${settings.subject} 发送成功`);
         transport.close();
     });
 }
