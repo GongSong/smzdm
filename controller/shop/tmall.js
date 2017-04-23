@@ -10,43 +10,62 @@ let parser = require('../util/htmlParser');
 
 let config = {
     method: 'GET',
-    headers: {
-        'Accept': 'application/json, text/javascript, */*; q=0.01',
-        'Accept-Encoding': 'gzip, deflate, br',
-        'Accept-Language': 'zh-CN,zh;q=0.8,en;q=0.6',
-        'Connection': 'keep-alive',
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1',
-        'X-Requested-With': 'XMLHttpRequest'
-    }
+};
+
+let headers = {
+    'Accept': '*/*',
+    'Accept-Encoding': 'gzip, deflate, sdch, br',
+    'Accept-Language': 'zh-CN,zh;q=0.8',
+    'Connection': 'keep-alive',
+    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1'
 };
 
 async function getGoodsListAndSave(shopInfo) {
     let totalPage = 1;
     // 商品详情页：https://detail.m.tmall.com/item.htm?id=39792032232
-    let configObj = {
-        host: shopInfo.url.replace(/https:\/\//, ''),
-        path: '/shop/shop_auction_search.do'
-    };
-    let configHeaders = {
-        Host: configObj.host,
-        Origin: shopInfo.url,
-        Refer: shopInfo.url + '/shop/shop_auction_search.do'
-    }
-    config.headers = Object.assign(config.headers, configHeaders);
-    config = Object.assign(config, configObj);
+    // let configObj = {
+    //     host: shopInfo.url.replace(/https:\/\//, ''),
+    //     path: '/shop/shop_auction_search.do'
+    // };
+    // let configHeaders = {
+    //     Host: configObj.host,
+    //     Origin: shopInfo.url,
+    //     Refer: shopInfo.url + '/?spm=a222m.7628550/A.0.0
+    // }
+    // config.headers = Object.assign(config.headers, configHeaders);
+    // config = Object.assign(config, configObj);
 
     let url = shopInfo.url + '/shop/shop_auction_search.do?sort=s&p='
     for (let i = 1; i <= totalPage; i++) {
 
-        let postData = querystring.stringify({
-            sort: 's',
-            p: i
-        });
+        // let postData = querystring.stringify({
+        //     sort: 's',
+        //     p: i
+        // });
+        // let record = await util.getPostData(config, postData);
 
         // console.log(config.headers.Cookie);
+        // headers.Host = shopInfo.url.replace(/https:\/\//, '');
+        headers.Referer = shopInfo.url + '/shop/shop_auction_search.htm?spm=a320p.7692171.0.0&suid=1720024852&sort=default';
+
+        let record = await axios({
+            method: 'get',
+            url,
+            params: {
+                spm: 'a320p.7692171.0.0',
+                suid: shopInfo.uid,
+                sort: 's',
+                p: i,
+                page_size: 12,
+                from: 'h5',
+                shop_id: shopInfo.id,
+                ajson: 1,
+                _tm_source: 'tmallsearch'
+            },
+            headers
+        }).then(res => res.data);
         // let record = await axios.get(url + i).then(res => res.data);
-        let record = await util.getPostData(config, postData);
         totalPage = record.total_page;
         await db.setGoodList(record);
 
