@@ -56,3 +56,6 @@ cncoinRecord
 
 # 邮箱设置
 mailAuth.js
+
+# JD Cookie
+jdCookie
