@@ -1,5 +1,5 @@
 // npm install send-mail
-var sendmail = require('../sendmail')()
+var sendmail = require('send-mail')()
 
 sendmail({
   from: 'nizhen.cbpc@gmail.com',
