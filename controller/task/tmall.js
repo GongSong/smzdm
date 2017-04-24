@@ -11,7 +11,7 @@ async function init() {
     // 封ip
     // getGoodsFromUrl();
 
-    // getGoodsFromJson();
+    getGoodsFromJson();
 }
 
 async function getGoodsFromUrl() {
@@ -31,7 +31,7 @@ async function getGoodsFromJson() {
 
     // 前7家店数据正常保存
     maxNum = 7;
-    for (let i = 0; i < maxNum; i++) {
+    for (let i = 3; i < maxNum; i++) {
         await read.getGoodsFromJsonAndSave(localShopList[i]);
     }
 }
