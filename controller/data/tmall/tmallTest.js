@@ -1,8 +1,8 @@
 // 进入 host中的网页，点击全部商品
 // 粘贴 jquery文件，运行以下文件。出现允许下载选项点确定。
 
-var host = 'https://gofugold.m.tmall.com'
-var suid = 648642632;
+var host = 'https://chinagold.m.tmall.com'
+var suid = 1720024852;
 var total_page = 1;
 
 function getData(i) {

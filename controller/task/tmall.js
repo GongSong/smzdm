@@ -30,8 +30,8 @@ async function getGoodsFromJson() {
     let maxNum = localShopList.length;
 
     let page = {
-        start: 9,
-        end: 10
+        start: 2,
+        end: 2
     }
     for (let i = page.start - 1; i <= page.end - 1; i++) {
         await read.getGoodsFromJsonAndSave(localShopList[i]);
