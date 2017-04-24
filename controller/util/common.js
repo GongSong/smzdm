@@ -26,7 +26,7 @@ async function getPostData(config, data) {
             console.log(`errInfo: ${e.message}`);
             mail.send({
                 subject: 'HTTP Post 请求出错',
-                html: `${getNow()},${shop.name},id:${shop.id}读取异常。errorInfo:<br>${e.message}<br> http://stackoverflow.com/search?q=${e.message} `
+                html: `${getNow()},errorInfo:<br>${e.message}<br> http://stackoverflow.com/search?q=${e.message} `
             });
             reject(e);
         });
