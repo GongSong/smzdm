@@ -1,5 +1,6 @@
 // npm install send-mail
-let sendmail = require('sendmail')()
+let sendmail = require('sendmail')();
+
 let errCode = [{
     code: 500,
     desc: '格式错误，命令不可识别（此错误也包括命令行过长）format error, command unrecognized (This error also includes command line too long)'
