@@ -29,8 +29,11 @@ async function getGoodsFromJson() {
     // 商品列表暂时不增量获取
     let maxNum = localShopList.length;
 
-    maxNum = 8;
-    for (let i = 7; i < maxNum; i++) {
+    let page = {
+        start: 9,
+        end: 10
+    }
+    for (let i = page.start - 1; i <= page.end - 1; i++) {
         await read.getGoodsFromJsonAndSave(localShopList[i]);
     }
 
