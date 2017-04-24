@@ -7,6 +7,7 @@ let query = require('../../schema/mysql');
 let sql = require('../../schema/sql');
 let sqlParser = require('../util/sqlParser');
 let parser = require('../util/htmlParser');
+let fs = require('fs');
 
 let config = {
     method: 'GET',
@@ -107,121 +108,36 @@ async function getShopTemplate(shopInfo) {
     };
 }
 
-// async function getCommentByPage(Cookie, shopId, wareId, offset) {
-//     // let Cookie = await jdCookies.getCookies(shopId);
-//     config = Object.assign(config, {
-//         host: 'item.m.jd.com',
-//         path: '/newComments/newCommentsDetail.json',
-//         headers: {
-//             Referer: `https://item.m.jd.com/product/${wareId}.html`,
-//             Cookie,
-//             scheme: 'https',
-//             Origin: 'https://item.m.jd.com',
-//             'content-type': 'application/x-www-form-urlencoded',
-//             'accept-language': 'zh-CN,zh;q=0.8',
-//         }
-//     })
+async function getGoodsFromJsonAndSave(shopInfo) {
+    let totalPage = 1;
+    let startIdx = 1;
+    if (shopInfo.id == '110384005') {
+        // 菜百已经存储8页数据
+        startIdx = 9;
+        totalPage = 9;
+    }
 
-//     let postData = querystring.stringify({
-//         wareId,
-//         offset,
-//         num: 10,
-//         type: 0,
-//         checkParam: 'LUIPPTP'
-//     });
-//     let result = await util.getPostData(config, postData);
-//     return JSON.parse(result);
-// }
-
-// async function getCommentById(shopId, goods) {
-//     let Cookie = await jdCookies.getCookiesFromUrl(shopId);
-//     let startPage = Math.ceil(goods.totalCount / 10);
-//     let isEnd = false;
-//     let comments = [];
-//     // jd评论为升序排列，需从后向前获取
-//     for (let page = startPage; page > 0 && !isEnd; page--) {
-//         let comment = await getCommentByPage(Cookie, shopId, goods.wareId, page);
-//         let data = comment.wareDetailComment.commentInfoList;
-//         let lengthBeforeFilter = data.length;
-//         // if (typeof goods.lastId == 'undefined') {
-//         //     goods.lastId = 0;
-//         // }
-//         data = data.filter(item => item.commentId > goods.lastId);
-
-//         // 如果有数据被过滤，停止抓取
-//         if (data.length < lengthBeforeFilter) {
-//             isEnd = true;
-//         }
-//         comments = [...comments, ...data];
-//         comments = comments.map(item => {
-//             item.wareId = goods.wareId;
-//             return item;
-//         })
-//         console.log(`jd:第${startPage-page}/${startPage}条商品评论信息读取并插入完毕`);
-//     }
-//     return comments;
-// }
-
-// async function getCommentAndSavedById(shopId, goods) {
-//     let Cookie = await jdCookies.getCookiesFromUrl(shopId);
-//     let startPage = Math.ceil(goods.totalCount / 10);
-//     let isEnd = false;
-//     // jd评论为升序排列，需从后向前获取
-//     for (let page = startPage; page > 0 && !isEnd; page--) {
-//         let comment = await getCommentByPage(Cookie, shopId, goods.wareId, page);
-//         let data = comment.wareDetailComment.commentInfoList;
-//         let lengthBeforeFilter = data.length;
-//         // if (typeof goods.lastId == 'undefined') {
-//         //     goods.lastId = 0;
-//         // }
-//         data = data.filter(item => item.commentId > goods.lastId);
-
-//         // 如果有数据被过滤，停止抓取
-//         if (data.length < lengthBeforeFilter) {
-//             isEnd = true;
-//         }
-
-//         data = data.map(item => {
-//             item.wareId = goods.wareId;
-//             return item;
-//         })
-
-//         if (data.length) {
-//             let url = sqlParser.handleJDCommentList(data);
-//             console.log(url);
-//             await query(url);
-//         } else {
-//             await util.mail.send({
-//                 subject: '接口数据读取异常',
-//                 html: `${util.getNow()},${goods.wareId}无评论信息,url:https://item.m.jd.com/product/${goods.wareId}.html`
-//             });
-//             console.log(`${util.getNow()},${goods.wareId}无评论信息,url:https://item.m.jd.com/product/${goods.wareId}.html`);
-//         }
-//         // 下次读取至少等待1-2秒
-//         let sleepTimeLength = (1000 + Math.random() * 1000).toFixed(0);
-//         console.log(`${util.getNow()},id:${goods.wareId},第${startPage-page}/${startPage}条商品评论信息读取并插入完毕,休息${sleepTimeLength}ms 后继续`);
-//         await util.sleep(sleepTimeLength);
-//     }
-// }
-
-// async function getComment(shop) {
-//     goodsList = await query(sql.query.jd_goods_havecomment + ' and a.shopId = ' + shop.id);
-//     if (goodsList.length > 1) {
-//         await util.mail.send({
-//             subject: '采集JD用户评论数据',
-//             html: `正在获取${shop.name}( https://shop.m.jd.com/?shopId=${shop.id} )的评论数据,共${goodsList.length}件商品,@ ${util.getNow()}`
-//         });
-//     }
-//     for (let i = 0; i < goodsList.length; i++) {
-//         // 获取评论内容跟存储评论内容同步完成，对于销量较多的店铺很必要
-//         await getCommentAndSavedById(shop.id, goodsList[i]);
-//         console.log(`${shop.name}:${i}/${goodsList.length}评论信息获取完毕,${util.getNow()}.`);
-//     }
-// }
+    for (let i = startIdx; i <= totalPage; i++) {
+        let curPage = ('0' + i).substr(('0' + i).length - 2, 2);
+        let fileName = `${util.getMainContent()}/controller/data/tmall/tmallData/${shopInfo.id}/${curPage}.json`;
+        let record;
+        try {
+            let str = fs.readFileSync(fileName, 'utf-8');
+            record = JSON.parse(str);
+        } catch (e) {
+            console.info('第' + i + '条信息读取失败');
+            continue;
+        }
+        totalPage = record.total_page;
+        await db.setGoodList(record);
+        console.log(`${util.getNow()}:${shopInfo.name},第${i}/${totalPage}页商品列表插入完毕`);
+    }
+}
 
 module.exports = {
     getShopTemplate,
     getGoodsListAndSave,
+    getGoodsFromJsonAndSave,
     // getGoodsList,
     // getComment,
 };

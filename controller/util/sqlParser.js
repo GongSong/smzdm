@@ -251,7 +251,7 @@ function handleTmallShops(item) {
 
 function handleTmallGoods(goods) {
     let url = sql.insert.tmall_goods;
-    let sqlList = goods.items.map(item => `(${goods.shop_id},${goods.user_id},${item.item_id},'${item.title}','${item.img}',${item.sold},${item.quantity},${item.totalSoldQuantity},'${item.url}',${item.price},'${getNow()}')`);
+    let sqlList = goods.items.map(item => `(${goods.shop_id},${goods.user_id},${item.item_id},'${item.title.replace(/&+|#|\$|\\|\r|\n|'/g,'')}','${item.img}',${item.sold},${item.quantity},${item.totalSoldQuantity},'${item.url}',${item.price},'${getNow()}')`);
     url = url.replace('?', sqlList.join(','));
     return url;
 }

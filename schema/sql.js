@@ -96,7 +96,7 @@ var query = {
     // 已存储的店铺列表
     jd_shopList: 'SELECT shopId id,shopName name FROM jd_shop',
 
-    tmall_shopList: 'SELECT shopId id,uid,title name,url from tmall_shop',
+    tmall_shopList: 'SELECT shopId id,uid,title name,url,id as sortName from tmall_shop order by sortName',
 }
 
 module.exports = {
