@@ -17,7 +17,6 @@ let headers = {
     'Accept-Encoding': 'gzip, deflate, sdch, br',
     'Accept-Language': 'zh-CN,zh;q=0.8',
     'Connection': 'keep-alive',
-    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
     'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1'
 };
 
@@ -46,8 +45,10 @@ async function getGoodsListAndSave(shopInfo) {
         // let record = await util.getPostData(config, postData);
 
         // console.log(config.headers.Cookie);
-        // headers.Host = shopInfo.url.replace(/https:\/\//, '');
-        headers.Referer = shopInfo.url + '/shop/shop_auction_search.htm?spm=a320p.7692171.0.0&suid=1720024852&sort=default';
+
+        headers.Host = shopInfo.url.replace(/https:\/\//, '');
+        headers.Referer = shopInfo.url + '/shop/shop_auction_search.htm?spm=a320p.7692171.0.0&suid=' + shopInfo.uid + '&sort=default';
+        headers.Cookie = '_m_h5_tk=98205868167370ef8e64ae64d7c3bf72_1493035389683; _m_h5_tk_enc=f405cb7026eb2fadffbfe1157d137218; cna=pwN0EBNOLAYCAd7UF9NP4NhG; isg=AnZ2ndVNMjziiMnIBViCALVqx6wBf7rRwbF0sOBfYtn0Ixa9SCcK4dzRSUWw; l=AkZGL3waXEyuwaPf-lq6pKpgFifIp4ph';
 
         let record = await axios({
             method: 'get',
