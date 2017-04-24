@@ -199,6 +199,9 @@ async function getComment(shop) {
     }
     for (let i = 0; i < goodsList.length; i++) {
         // 获取评论内容跟存储评论内容同步完成，对于销量较多的店铺很必要
+        if (goodsList[i].wareId == '10294082739') {
+            continue;
+        }
         await getCommentAndSavedById(shop.id, goodsList[i]);
         console.log(`\n${shop.name}:${i+1}/${goodsList.length}评论信息获取完毕,${util.getNow()}.`);
     }

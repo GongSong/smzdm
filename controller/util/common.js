@@ -1,7 +1,7 @@
 let cheerio = require('cheerio');
 let POSTAG = require('segment').POSTAG;
 let nlp = require('./nlp');
-let mail = require('./mail');
+let mail = require('./sendmail');
 
 let http = require('https');
 let querystring = require('querystring');
