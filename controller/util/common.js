@@ -25,8 +25,8 @@ async function getPostData(config, data) {
         }).on('error', (e) => {
             console.log(`errInfo: ${e.message}`);
             mail.send({
-                subject: '接口数据读取异常',
-                html: `${util.getNow()},${shop.name},id:${shop.id}读取异常。errorInfo:<br>${e.message}<br> http://stackoverflow.com/search?q=${e.message} `
+                subject: 'HTTP Post 请求出错',
+                html: `${getNow()},${shop.name},id:${shop.id}读取异常。errorInfo:<br>${e.message}<br> http://stackoverflow.com/search?q=${e.message} `
             });
             reject(e);
         });
