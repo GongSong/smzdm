@@ -114,6 +114,7 @@ async function getGoodsFromJsonAndSave(shopInfo) {
     if (shopInfo.id == '110384005') {
         // 菜百已经存储8页数据
         startIdx = 9;
+        totalPage = 9;
     }
 
     for (let i = startIdx; i <= totalPage; i++) {

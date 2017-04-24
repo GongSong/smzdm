@@ -29,11 +29,11 @@ async function getGoodsFromJson() {
     // 商品列表暂时不增量获取
     let maxNum = localShopList.length;
 
-    // 前7家店数据正常保存
-    maxNum = 7;
-    for (let i = 3; i < maxNum; i++) {
+    maxNum = 8;
+    for (let i = 7; i < maxNum; i++) {
         await read.getGoodsFromJsonAndSave(localShopList[i]);
     }
+
 }
 
 
