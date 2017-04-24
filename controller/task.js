@@ -13,8 +13,7 @@ async function init() {
     console.log('1.自动化任务队伍已开始,你可以定位到此处添加自己的任务');
     console.log('2.此处需添加任务的定时器，如 setInterval()\n');
 
-    // tmall.init();
-    jd.init();
+    // jd.init();
 
     // 几个大爷单独传
     // getCbpcData();
@@ -26,6 +25,7 @@ async function getCbpcData() {
     ccgold.init();
     wfx.init();
     // youzan.init();
+    tmall.init();
 }
 
 // 初次执行时初始化数据库，载入默认数据
@@ -41,6 +41,7 @@ async function loadDefault() {
     //   wfx.loadDefault();
 
     //   youzan.loadDefault();
+    // tmall.loadDefault();
 }
 
 
