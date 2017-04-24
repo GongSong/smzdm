@@ -114,7 +114,21 @@ async function getCommentByPage(Cookie, shopId, wareId, offset) {
         checkParam: 'LUIPPTP'
     });
     let result = await util.getPostData(config, postData);
-    return JSON.parse(result);
+    try {
+        result = JSON.parse(result);
+        return result;
+    } catch (e) {
+        let html = `${util.getNow()}, 服务端无数据返回,url: https://item.m.jd.com/product/${wareId}.html`;
+        await util.mail.send({
+            subject: '接口数据读取异常',
+            html
+        });
+        return {
+            wareDetailComment: {
+                commentInfoList: []
+            }
+        }
+    }
 }
 
 async function getCommentById(shopId, goods) {
