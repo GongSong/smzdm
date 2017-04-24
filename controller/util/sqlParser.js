@@ -223,11 +223,13 @@ function handleJDGoods(data) {
 
 function handleJDCommentList(data) {
     let url = sql.insert.jd_comment;
-    let sqlList = data.map(item => {
+    let sqlList = [];
+    data.forEach(item => {
         item.commentData = item.commentData.replace(/&+|#|\$|\\|\r|\n|'/g, '');
         item.userNickName = item.userNickName.replace(/&+|#|\$|\\|\r|\n|'/g, '');
         if (item.commentData.length < 800) {
-            return `(${item.wareId},${item.commentId},'${item.commentData}','${item.commentDate}',${item.commentScore},'${item.commentShareUrl}',${item.commentType},'${item.orderDate}','${item.userImgURL}',${item.userLevel},'${item.userNickName}')`;
+            str = `(${item.wareId},${item.commentId},'${item.commentData}','${item.commentDate}',${item.commentScore},'${item.commentShareUrl}',${item.commentType},'${item.orderDate}','${item.userImgURL}',${item.userLevel},'${item.userNickName}')`;
+            sqlList.push(str);
         }
     });
     url = url.replace('?', sqlList.join(','));
