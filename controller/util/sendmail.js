@@ -78,7 +78,7 @@ let errCode = [{
 async function send(settings) {
     settings.subject = '【什么值得卖】 ' + settings.subject;
     await sendmail({
-        from: '什么值得卖 <nizhen.cbpc@gmail.com>',
+        from: '什么值得卖 <food.wenjiang@gmail.com>', // <nizhen.cbpc@gmail.com>',
         to: 'nizhen.cbpc@gmail.com,realeve@qq.com',
         subject: settings.subject,
         html: settings.html
