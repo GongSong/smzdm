@@ -97,6 +97,8 @@ var query = {
     jd_shopList: 'SELECT shopId id,shopName name FROM jd_shop',
 
     tmall_shopList: 'SELECT shopId id,uid,title name,url,id as sortName from tmall_shop order by sortName',
+
+    tmall_saleNum: 'SELECT b.title 店铺,count(1) 商品件数,sum(totalSoldQuantity) / 10000 销售数量,round(sum(totalSoldQuantity * price) / 10000,2) 销售金额,b.shopAge 店龄 FROM `tmall_goods` a INNER JOIN tmall_shop b ON a.shop_id = b.shopId GROUP BY b.title,b.shopAge ORDER BY 3 DESC'
 }
 
 module.exports = {
