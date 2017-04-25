@@ -112,37 +112,37 @@ async function getGoodsFromJsonAndSave(shopInfo) {
 }
 
 async function dataTest(shopInfo) {
-    'https://chjjewellery.m.tmall.com/shop/shop_auction_search.htm?spm=a320p.7692171.0.0&suid=279512537&sort=default'
 
-    headers.Referer = shopInfo.url;
-    // headers['upgrade-insecure-requests'] = 1;
+    // headers.Referer = shopInfo.url;
+    // let record = await axios({
+    //     method: 'get',
+    //     url: shopInfo.url + '/shop/shop_auction_search.htm',
+    //     params: {
+    //         spm: 'a320p.7692171.0.0',
+    //         suid: shopInfo.uid,
+    //         sort: 'default'
+    //     },
+    //     headers
+    // }).then(res => {
+    //     console.log(res);
+    //     console.log('\n');
+    //     console.log(res.headers);
+    //     console.log('\n');
 
-    let record = await axios({
+    //     let html = res.data;
+    //     html = html.split('req_url=')[1].split('");')[0];
+    //     html = decodeURIComponent(html);
+    //     console.log(obj);
+    // });
+
+    await axios({
         method: 'get',
-        url: shopInfo.url + '/shop/shop_auction_search.htm',
-        params: {
-            spm: 'a320p.7692171.0.0',
-            suid: shopInfo.uid,
-            sort: 'default'
-        },
-        headers
+        url: 'https://shop.m.tmall.com/shop/get_shop_new_item.do?seller_id=1128868353&size=10&page=1&ajson=1'
     }).then(res => {
         console.log(res);
-        console.log('\n');
         console.log(res.headers);
-        console.log('\n');
+    })
 
-        let html = res.data;
-        html = html.split('req_url=')[1].split('");')[0];
-        html = decodeURIComponent(html);
-
-        // let obj = {
-        //     cna: html.match(/cna=(\w+)&amp/)[1],
-        //     cookie2: html.match(/du=(\w+)/)[1]
-        // }
-        console.log(obj);
-
-    });
 }
 
 module.exports = {
