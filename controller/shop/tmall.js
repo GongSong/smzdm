@@ -9,10 +9,6 @@ let sqlParser = require('../util/sqlParser');
 let parser = require('../util/htmlParser');
 let fs = require('fs');
 
-let config = {
-    method: 'GET',
-};
-
 let headers = {
     'Accept': '*/*',
     'Accept-Encoding': 'gzip, deflate, sdch, br',
@@ -24,28 +20,9 @@ let headers = {
 async function getGoodsListAndSave(shopInfo) {
     let totalPage = 1;
     // 商品详情页：https://detail.m.tmall.com/item.htm?id=39792032232
-    // let configObj = {
-    //     host: shopInfo.url.replace(/https:\/\//, ''),
-    //     path: '/shop/shop_auction_search.do'
-    // };
-    // let configHeaders = {
-    //     Host: configObj.host,
-    //     Origin: shopInfo.url,
-    //     Refer: shopInfo.url + '/?spm=a222m.7628550/A.0.0
-    // }
-    // config.headers = Object.assign(config.headers, configHeaders);
-    // config = Object.assign(config, configObj);
 
     let url = shopInfo.url + '/shop/shop_auction_search.do?sort=s&p='
     for (let i = 1; i <= totalPage; i++) {
-
-        // let postData = querystring.stringify({
-        //     sort: 's',
-        //     p: i
-        // });
-        // let record = await util.getPostData(config, postData);
-
-        // console.log(config.headers.Cookie);
 
         headers.Host = shopInfo.url.replace(/https:\/\//, '');
         headers.Referer = shopInfo.url + '/shop/shop_auction_search.htm?spm=a320p.7692171.0.0&suid=' + shopInfo.uid + '&sort=default';
@@ -134,10 +111,45 @@ async function getGoodsFromJsonAndSave(shopInfo) {
     }
 }
 
+async function dataTest(shopInfo) {
+    'https://chjjewellery.m.tmall.com/shop/shop_auction_search.htm?spm=a320p.7692171.0.0&suid=279512537&sort=default'
+
+    headers.Referer = shopInfo.url;
+    // headers['upgrade-insecure-requests'] = 1;
+
+    let record = await axios({
+        method: 'get',
+        url: shopInfo.url + '/shop/shop_auction_search.htm',
+        params: {
+            spm: 'a320p.7692171.0.0',
+            suid: shopInfo.uid,
+            sort: 'default'
+        },
+        headers
+    }).then(res => {
+        console.log(res);
+        console.log('\n');
+        console.log(res.headers);
+        console.log('\n');
+
+        let html = res.data;
+        html = html.split('req_url=')[1].split('");')[0];
+        html = decodeURIComponent(html);
+
+        // let obj = {
+        //     cna: html.match(/cna=(\w+)&amp/)[1],
+        //     cookie2: html.match(/du=(\w+)/)[1]
+        // }
+        console.log(obj);
+
+    });
+}
+
 module.exports = {
     getShopTemplate,
     getGoodsListAndSave,
     getGoodsFromJsonAndSave,
+    dataTest,
     // getGoodsList,
     // getComment,
 };

@@ -15,7 +15,7 @@ async function init() {
 
     // tmall.init();
 
-    // jd.init();
+    jd.init();
 
     // 几个大爷单独传
     // getCbpcData();

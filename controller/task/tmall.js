@@ -10,8 +10,11 @@ async function init() {
 
     // 封ip
     // getGoodsFromUrl();
-
-    getGoodsFromJson();
+    // read.dataTest({
+    //     url:'https://jindasheng.m.tmall.com',
+    //     uid:'279512537'
+    // });
+    // getGoodsFromJson();
 }
 
 async function getGoodsFromUrl() {
