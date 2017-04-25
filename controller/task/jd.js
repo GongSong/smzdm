@@ -10,11 +10,11 @@ async function init() {
 
     let localShopList = await save.getShopList();
     // 商品列表暂时不增量获取
-    for (let i = 1; i < localShopList.length; i++) {
-        let shopId = localShopList[i].id;
-        console.log(`正在获取${localShopList[i].name} 的商品列表数据`);
-        await getGoodsByShopId(shopId, localShopList);
-    }
+    // for (let i = 1; i < localShopList.length; i++) {
+    //     let shopId = localShopList[i].id;
+    //     console.log(`正在获取${localShopList[i].name} 的商品列表数据`);
+    //     await getGoodsByShopId(shopId, localShopList);
+    // }
 
     for (let i = 1; i < localShopList.length; i++) {
         let shopId = localShopList[i].id;
