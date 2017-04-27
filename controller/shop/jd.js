@@ -144,17 +144,19 @@ async function getCommentById(shopId, goods) {
         // if (typeof goods.lastId == 'undefined') {
         //     goods.lastId = 0;
         // }
-        data = data.filter(item => item.commentId > goods.lastId);
 
+        data = data.filter(item => item.commentId > goods.lastId);
         // 如果有数据被过滤，停止抓取
         if (data.length < lengthBeforeFilter) {
             isEnd = true;
         }
+
         comments = [...comments, ...data];
         comments = comments.map(item => {
             item.wareId = goods.wareId;
             return item;
         })
+
         console.log(`jd:第${startPage-page}/${startPage}条商品评论信息读取并插入完毕`);
     }
     return comments;
@@ -185,11 +187,31 @@ async function getCommentAndSavedById(shopId, goods) {
         })
 
         if (data.length) {
-            let url = sqlParser.handleJDCommentList(data);
-            console.log(url);
-            await query(url);
+            if (startPage - page < 4) {
+                // 如果本页数据和数据库中条数相同，不插入数据。为提高效率，仅针对前5页采用本逻辑
+                let commentList = data.map(item => item.commentId);
+                let sqlStr = sql.query.jd_comment_distinct + `(${commentList.join(',')})`;
+                let dbCommentList = await query(sqlStr);
+                console.log(sqlStr);
+
+                // 如果数据库中有信息，不再继续读取后续信息
+                if (dbCommentList.length > 0) {
+                    console.log('有重复评论信息');
+                    isEnd = true;
+                }
+
+                if (dbCommentList.length != data.length) {
+                    let url = sqlParser.handleJDCommentList(data);
+                    console.log(url);
+                    await query(url);
+                }
+            } else {
+                let url = sqlParser.handleJDCommentList(data);
+                console.log(url);
+                await query(url);
+            }
         } else {
-            let html = `${util.getNow()},第${page}/${startPage}页无评论信息,url:https://item.m.jd.com/product/${goods.wareId}.html`;
+            let html = `${util.getNow()},第${startPage-page+1}/${startPage}页无评论信息,url:https://item.m.jd.com/product/${goods.wareId}.html`;
             await util.mail.send({
                 subject: '接口数据读取异常',
                 html
@@ -204,7 +226,8 @@ async function getCommentAndSavedById(shopId, goods) {
 }
 
 async function getComment(shop) {
-    goodsList = await query(sql.query.jd_goods_havecomment + ' and a.shopId = ' + shop.id);
+    // let goodsList = await query(sql.query.jd_goods_havecomment + ' and a.shopId = ' + shop.id);
+    let goodsList = await query(sql.query.jd_goods_havecomment); // + ' and a.shopId = ' + shop.id);
     if (goodsList.length > 1) {
         await util.mail.send({
             subject: '采集JD用户评论数据',

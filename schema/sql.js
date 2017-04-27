@@ -91,14 +91,16 @@ var query = {
     // jd_goods_havecomment: "SELECT a.wareId,a.totalCount,ifnull(max(c.commentId),0) lastId FROM jd_goods a INNER JOIN (select max(DATE_FORMAT(rec_date,'%Y%m%d')) rec_date from jd_goods) b on DATE_FORMAT(a.rec_date,'%Y%m%d')=b.rec_date left join jd_comment c on c.wareId = a.wareId where totalCount>0 group by a.wareId,a.totalCount",
 
     // 临时从后续取评论列表
-    jd_goods_havecomment: "SELECT  a.wareId,  max(a.totalCount) totalCount,  0 as lastId  FROM  jd_goods a  WHERE  totalCount > 0 and a.wareId not in (select distinct wareId from jd_comment) group by a.wareId order by 1",
+    jd_goods_havecomment: "SELECT  a.wareId,  max(a.totalCount) totalCount,  0 as lastId  FROM  jd_goods a  WHERE  totalCount > 0 and a.wareId not in (select distinct wareId from jd_comment) group by a.wareId order by 2",
 
     // 已存储的店铺列表
-    jd_shopList: 'SELECT shopId id,shopName name FROM jd_shop',
+    jd_shopList: 'SELECT distinct shopId id,shopName name FROM jd_shop',
 
     tmall_shopList: 'SELECT shopId id,uid,title name,url,id as sortName from tmall_shop order by sortName',
 
-    tmall_saleNum: 'SELECT b.title 店铺,count(1) 商品件数,sum(totalSoldQuantity) / 10000 销售数量,round(sum(totalSoldQuantity * price) / 10000,2) 销售金额,b.shopAge 店龄 FROM `tmall_goods` a INNER JOIN tmall_shop b ON a.shop_id = b.shopId GROUP BY b.title,b.shopAge ORDER BY 3 DESC'
+    tmall_saleNum: 'SELECT b.title 店铺,count(1) 商品件数,sum(totalSoldQuantity) / 10000 销售数量,round(sum(totalSoldQuantity * price) / 10000,2) 销售金额,b.shopAge 店龄 FROM `tmall_goods` a INNER JOIN tmall_shop b ON a.shop_id = b.shopId GROUP BY b.title,b.shopAge ORDER BY 3 DESC',
+
+    jd_comment_distinct: 'select distinct commentId from jd_comment where commentId in ',
 }
 
 module.exports = {
