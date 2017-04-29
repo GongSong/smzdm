@@ -245,24 +245,21 @@ async function getComment(shop) {
 }
 
 // 分词列表combtokens处理，分词结果入库
-async function handleSegData(segList){
-    for(let i=0;i<segList.length;i++){
-        let item = segList[i];
-        // 处理combtokens信息
-        for (let j = 0; j < item.combtokens.length; j++) {
-            let cmb = item.combtokens[i];
-            if (typeof cmb == 'undefined') {
-                continue;
-            }
-            cmb.wtype = cmb.cls;
-            item.tokens.push(cmb);
-        }
-        // 获取单条评论分词结果的sql
-        let sqlStr = sqlParser.handleJDCommentSeg(item);
-        console.log(sqlStr);
-        // 入库 
-        await query(sqlStr);
+async function handleSegData(item) {
+  // 处理combtokens信息
+  for (let j = 0; j < item.combtokens.length; j++) {
+    let cmb = item.combtokens[j];
+    if (typeof cmb == 'undefined') {
+      continue;
     }
+    cmb.wtype = cmb.cls;
+    item.tokens.push(cmb);
+  }
+  // 获取单条评论分词结果的sql
+  let sqlStr = sqlParser.handleJDCommentSeg(item);
+  console.log(sqlStr);
+  // 入库 
+  await query(sqlStr);
 }
 
 /**
@@ -277,7 +274,6 @@ async function getCommentFromDb() {
     let sqlStr = sqlParser.handleJDCommentFromDb(i, perNum);
     let commentList = await query(sqlStr);
     isEnd = commentList.length < perNum;
-    console.log(commentList);
     await splitComment(commentList);
   }
 }
@@ -291,27 +287,27 @@ async function splitComment(commentList) {
     await handleSegData(segData);
 
     let nlpData = await nlpOneComment(item);
-    let sqlStr = sqlParser.handleJDCommentSeg(nlpData);
+    let sqlStr = sqlParser.handleJDCommentNlp(nlpData);
     // Nlp数据直接入库
     await query(sqlStr);
   }
 }
 
-async function segOneComment(comments) {
-  let results = [];
+async function segOneComment(item) {
+  let results;
   await util.wordSegment(item.commentData).then(res => {
-    results.push({
+    results = {
       commentId: item.commentId,
       tokens: res.tokens,
       combtokens: res.combtokens
-    });
+    }
   }).catch(e => {
     console.log(e);
   });
   return results;
 }
 
-async function nlpOneComment(comments) {
+async function nlpOneComment(item) {
   let results;
   await util.getNegativeWords(item.commentData).then(res => {
     results = {

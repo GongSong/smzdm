@@ -288,6 +288,7 @@ function handleJDCommentSeg (comment) {
 }
 
 function handleJDCommentNlp (comment) {
+  let url = sql.insert.jd_comment_nlp;
   let sqlValues = `('${comment.commentId}',${comment.negative},${comment.positive})`
   url = url.replace('?', sqlValues)
   return url
