@@ -106,7 +106,7 @@ var query = {
 
     jd_comment_distinct: 'select distinct commentId from jd_comment where commentId in ',
 
-    jd_comment_bypage:'SELECT distinct commentId,commentData FROM jd_comment order by id limit ',
+    jd_comment_bypage:'SELECT distinct a.commentId,a.commentData FROM jd_comment a where a.commentId not in (select commentId from jd_comment_nlp) order by id limit ',
 }
 
 module.exports = {
