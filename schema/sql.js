@@ -44,7 +44,11 @@ var insert = {
     tmall_shop: 'insert into tmall_shop(shopId,uid,title,nick,url,goodsScore,serviceScore,expressScore,sellerGoodPercent,rankType,prov,city,collectNum,logoUrl,isBrandShop,shopAge,shopTypeLogo,wwUrl,rankNum,collectorCount) values ?',
 
     // tmall 商品列表
-    tmall_goods: 'insert into tmall_goods(shop_id,user_id,item_id,title,img,sold,quantity,totalSoldQuantity,url,price,rec_date) values ?'
+    tmall_goods: 'insert into tmall_goods(shop_id,user_id,item_id,title,img,sold,quantity,totalSoldQuantity,url,price,rec_date) values ?',
+
+    jd_comment_seg:'insert into jd_comment_seg (commentId,word,wtype,pos) values ?',
+
+    jd_comment_nlp:'insert into jd_comment_nlp (commentId,negative,positive) values ?',
 };
 
 var update = {
@@ -101,6 +105,8 @@ var query = {
     tmall_saleNum: 'SELECT b.title 店铺,count(1) 商品件数,sum(totalSoldQuantity) / 10000 销售数量,round(sum(totalSoldQuantity * price) / 10000,2) 销售金额,b.shopAge 店龄 FROM `tmall_goods` a INNER JOIN tmall_shop b ON a.shop_id = b.shopId GROUP BY b.title,b.shopAge ORDER BY 3 DESC',
 
     jd_comment_distinct: 'select distinct commentId from jd_comment where commentId in ',
+
+    jd_comment_bypage:'SELECT distinct commentId,commentData FROM jd_comment order by id limit ',
 }
 
 module.exports = {

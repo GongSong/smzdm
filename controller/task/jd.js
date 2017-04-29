@@ -8,13 +8,14 @@ async function init() {
     // 载入店铺初始信息
     // await loadDefault();
 
-    let localShopList = await save.getShopList();
-
     //  每日商品列表更新
-    // await updateGoodsList(localShopList);
+    // await updateGoodsList();
 
     // 评论列表更新
-    await updateComments(localShopList);
+    // await updateComments();
+
+    // 评论信息分词
+    await read.getCommentFromDb();
 }
 
 async function updateGoodsList(localShopList) {
