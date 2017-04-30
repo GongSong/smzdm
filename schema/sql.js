@@ -107,10 +107,18 @@ var query = {
     jd_comment_distinct: 'select distinct commentId from jd_comment where commentId in ',
 
     jd_comment_bypage: 'SELECT distinct a.commentId,a.commentData FROM jd_comment a where a.commentId not in (select commentId from jd_comment_nlp) order by id limit ',
+
+    // 数据统计任务全局SQL:查询需要更新的接口列表 更新接口状态
+    static_need_update: "SELECT tbl_name,DATE_FORMAT(rec_date, '%Y%m%d') < DATE_FORMAT(CURDATE(), '%Y%m%d') AS need_update FROM crawler_list where tbl_name like 'static_%' order by 1 limit 1",
+    set_static_status: `insert into crawler_list (tbl_name,rec_date) values ('static_?','${rec_date()}')`,
 }
 
 var static = {
-    ccgold_sales_bydate: "select DATE_FORMAT(rec_date,'%Y-%m-%d') rec_date,good_name, price*sales as cash,sales from ccgold_goods_detail order by 1",
+    // ccgold 商品每日销量 : 日期，早盘价，午盘价，商品名，销售金额，销量，库存金额，库存量
+    ccgold_sales_by_goods_date: "select DATE_FORMAT(rec_date,'%Y-%m-%d') rec_date,good_name, price*sales as cash,sales as saleNum, inventory*price as storage_cash,inventory as storage from ccgold_goods_detail order by 1",
+    // ccgold 各类商品每日销量: 日期，早盘价，午盘价，商品类别，销量，销售金额，库存金额，库存量
+    ccgold_sales_bycate: "select DATE_FORMAT(rec_date,'%Y-%m-%d') rec_date,b.zp,b.wp,(case when cate_id=1 then '投资类' when cate_id=2 then '工艺类' else '其它' end) cate, sum(price*sales) as cash,sum(sales) saleNum,sum(inventory*sales) storage_cash,sum(inventory) storage from ccgold_goods_detail LEFT JOIN sge_trends b on DATE_FORMAT(rec_date,'%Y-%m-%d')=b.history_date group by DATE_FORMAT(rec_date,'%Y-%m-%d'),cate_id order by 1",
+
 }
 
 module.exports = {

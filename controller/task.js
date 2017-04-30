@@ -7,6 +7,7 @@ let jd = require('./task/jd');
 let tmall = require('./task/tmall');
 let db = require('./task/db');
 let mail = require('./util/mail');
+let asyncAPI = require('./task/staticData');
 
 async function init() {
 
@@ -19,6 +20,9 @@ async function init() {
 
     // 几个大爷单独传
     // getCbpcData();
+
+    // 每日接口统计内容更新
+    // asyncAPI.setStaticData();
 }
 
 async function getCbpcData() {
