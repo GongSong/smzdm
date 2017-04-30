@@ -21,7 +21,7 @@ async function setStaticData() {
     let staticList = await query(sql.query.static_need_update);
 
     let rec_date = util.getNow();
-    for (let i = 0; i < nameList.length; i++) {
+    for (let i = 0; i <= nameList.length; i++) {
         let key = nameList[i];
 
         // 当前接口是否需要更新
