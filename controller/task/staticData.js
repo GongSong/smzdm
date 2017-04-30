@@ -26,7 +26,7 @@ async function setStaticData() {
         console.log(`${i+1}.正在同步${key}的API数据`);
         // 当前接口是否需要更新
         let needUpdate = staticList.filter(item => item.tbl_name == 'static_' + key);
-        if (!needUpdate.length) {
+        if (!needUpdate.length || needUpdate[0].need_update) {
             let data = await query(staticSql[key]);
             await saveJson2Disk({ rec_date, data }, key);
 
