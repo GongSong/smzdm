@@ -25,7 +25,7 @@ async function query(sql, data, callback) {
     }
     return new Promise((resolve, reject) => {
         pool.getConnection((err, conn) => {
-            if (sql.includes(' jd_comment ')) {
+            if (sql.includes(' jd_comment ') && sql.includes('insert into ')) {
                 conn.query('set names utf8mb4', (err, result) => {
                     if (err) {
                         conn.release();
