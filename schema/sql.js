@@ -109,8 +109,13 @@ var query = {
     jd_comment_bypage: 'SELECT distinct a.commentId,a.commentData FROM jd_comment a where a.commentId not in (select commentId from jd_comment_nlp) order by id limit ',
 }
 
+var static = {
+    ccgold_sales_bydate: "select DATE_FORMAT(rec_date,'%Y-%m-%d') rec_date,good_name, price*sales as cash,sales from ccgold_goods_detail order by 1",
+}
+
 module.exports = {
     insert,
     update,
-    query
+    query,
+    static
 };
