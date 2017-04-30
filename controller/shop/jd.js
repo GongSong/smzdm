@@ -301,10 +301,11 @@ async function splitComment(commentList) {
         await handleSegData(segData);
 
         let nlpData = await nlpOneComment(item);
-        let sqlStr = sqlParser.handleJDCommentNlp(nlpData);
-        // Nlp数据直接入库
-        await query(sqlStr);
-        let sleepTimeLength = (1000 + Math.random() * 1000).toFixed(0);
+        if (typeof nlpData.negative != 'undefined') {
+            let sqlStr = sqlParser.handleJDCommentNlp(nlpData);
+            await query(sqlStr);
+        }
+        let sleepTimeLength = (0 + Math.random() * 1000).toFixed(0);
         console.warn(`评论分词读取完毕,休息${sleepTimeLength}ms 后继续`);
         await util.sleep(sleepTimeLength);
     }

@@ -46,9 +46,9 @@ var insert = {
     // tmall 商品列表
     tmall_goods: 'insert into tmall_goods(shop_id,user_id,item_id,title,img,sold,quantity,totalSoldQuantity,url,price,rec_date) values ?',
 
-    jd_comment_seg:'insert into jd_comment_seg (commentId,word,wtype,pos) values ?',
+    jd_comment_seg: 'insert into jd_comment_seg (commentId,word,wtype,pos) values ?',
 
-    jd_comment_nlp:'insert into jd_comment_nlp (commentId,negative,positive) values ?',
+    jd_comment_nlp: 'insert into jd_comment_nlp (commentId,negative,positive) values ?',
 };
 
 var update = {
@@ -94,8 +94,8 @@ var query = {
 
     // jd_goods_havecomment: "SELECT a.wareId,a.totalCount,ifnull(max(c.commentId),0) lastId FROM jd_goods a INNER JOIN (select max(DATE_FORMAT(rec_date,'%Y%m%d')) rec_date from jd_goods) b on DATE_FORMAT(a.rec_date,'%Y%m%d')=b.rec_date left join jd_comment c on c.wareId = a.wareId where totalCount>0 group by a.wareId,a.totalCount",
 
-    // 临时从后续取评论列表
-    jd_goods_havecomment: "SELECT  a.wareId,  max(a.totalCount) totalCount,  0 as lastId  FROM  jd_goods a  WHERE  totalCount > 0 and a.wareId not in (select distinct wareId from jd_comment) group by a.wareId order by 2",
+    // 临时从后续取评论列表,20条评论以下的不取
+    jd_goods_havecomment: "SELECT  a.wareId,  max(a.totalCount) totalCount,  0 as lastId  FROM  jd_goods a  WHERE  totalCount > 20 and a.wareId not in (select distinct wareId from jd_comment) group by a.wareId order by 2",
 
     // 已存储的店铺列表
     jd_shopList: 'SELECT distinct shopId id,shopName name FROM jd_shop',
@@ -106,7 +106,7 @@ var query = {
 
     jd_comment_distinct: 'select distinct commentId from jd_comment where commentId in ',
 
-    jd_comment_bypage:'SELECT distinct a.commentId,a.commentData FROM jd_comment a where a.commentId not in (select commentId from jd_comment_nlp) order by id limit ',
+    jd_comment_bypage: 'SELECT distinct a.commentId,a.commentData FROM jd_comment a where a.commentId not in (select commentId from jd_comment_nlp) order by id limit ',
 }
 
 module.exports = {
