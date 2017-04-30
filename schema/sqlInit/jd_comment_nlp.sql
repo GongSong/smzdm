@@ -21,7 +21,7 @@ SET FOREIGN_KEY_CHECKS=0;
 DROP TABLE IF EXISTS `jd_comment_nlp`;
 CREATE TABLE `jd_comment_nlp` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `commentId` int(11) DEFAULT NULL,
+  `commentId` varchar(20) DEFAULT NULL,
   `negative` float unsigned zerofill DEFAULT NULL,
   `positive` float unsigned zerofill DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -33,7 +33,7 @@ CREATE TABLE `jd_comment_nlp` (
 DROP TABLE IF EXISTS `jd_comment_seg`;
 CREATE TABLE `jd_comment_seg` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `commentId` int(11) DEFAULT NULL,
+  `commentId` varchar(20)DEFAULT NULL,
   `word` varchar(200) DEFAULT NULL,
   `wtype` varchar(10) DEFAULT NULL,
   `pos` int(11) DEFAULT NULL,

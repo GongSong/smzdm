@@ -12,10 +12,10 @@ async function init() {
     // await updateGoodsList();
 
     // 评论列表更新
-    // await updateComments();
+    updateComments();
 
     // 评论信息分词
-    await read.getCommentFromDb();
+    read.getCommentFromDb();
 }
 
 async function updateGoodsList(localShopList) {
