@@ -271,7 +271,7 @@ async function handleSegData(item) {
     let sqlStr = sqlParser.handleJDCommentSeg(item);
     console.log(sqlStr);
     // 入库 
-    if (sqlStr && sqlStr.length < ) {
+    if (sqlStr) {
         await query(sqlStr);
     }
 }
