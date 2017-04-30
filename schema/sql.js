@@ -120,8 +120,7 @@ var static = {
     ccgold_sales_bycate: "select DATE_FORMAT(rec_date,'%Y-%m-%d') rec_date,b.zp,b.wp,(case when cate_id=1 then '投资类' when cate_id=2 then '工艺类' else '其它' end) cate, sum(price*sales) as cash,sum(sales) saleNum,sum(inventory*sales) storage_cash,sum(inventory) storage from ccgold_goods_detail LEFT JOIN sge_trends b on DATE_FORMAT(rec_date,'%Y-%m-%d')=b.history_date group by DATE_FORMAT(rec_date,'%Y-%m-%d'),cate_id order by 1",
 
     // 每日金价
-    gold_trend: "SELECT * FROM sge_trends",
-
+    gold_trend: "SELECT * FROM sge_trends"
 
 }
 

@@ -21,9 +21,9 @@ async function setStaticData() {
     let staticList = await query(sql.query.static_need_update);
 
     let rec_date = util.getNow();
-    for (let i = 0; i <= nameList.length; i++) {
+    for (let i = 0; i < nameList.length; i++) {
         let key = nameList[i];
-
+        console.log(`${i+1}.正在同步${key}的API数据`);
         // 当前接口是否需要更新
         let needUpdate = staticList.filter(item => item.tbl_name == 'static_' + key);
         if (!needUpdate.length) {
