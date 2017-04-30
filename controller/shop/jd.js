@@ -168,6 +168,11 @@ async function getCommentAndSavedById(shopId, goods) {
     let isEnd = false;
     // jd评论为升序排列，需从后向前获取
     for (let page = startPage; page > 0 && !isEnd; page--) {
+        // 2000条更新一次信息
+        if (page % 2000 == 0) {
+            Cookie = await jdCookies.getCookiesFromUrl(shopId);
+        }
+
         let comment = await getCommentByPage(Cookie, shopId, goods.wareId, page);
         if (comment.wareDetailComment == null) {
             isEnd = true;
@@ -223,7 +228,7 @@ async function getCommentAndSavedById(shopId, goods) {
             console.log(html);
         }
         // 下次读取至少等待1-2秒
-        let sleepTimeLength = (1000 + Math.random() * 1000).toFixed(0);
+        let sleepTimeLength = (1000 + Math.random() * 3000).toFixed(0);
         console.log(`${util.getNow()},id:${goods.wareId},第${startPage-page+1}/${startPage}条商品评论信息读取并插入完毕,休息${sleepTimeLength}ms 后继续`);
         await util.sleep(sleepTimeLength);
     }
@@ -251,6 +256,9 @@ async function getComment(shop) {
 // 分词列表combtokens处理，分词结果入库
 async function handleSegData(item) {
     // 处理combtokens信息
+    if (typeof item.combtokens == 'undefined') {
+        return;
+    }
     for (let j = 0; j < item.combtokens.length; j++) {
         let cmb = item.combtokens[j];
         if (typeof cmb == 'undefined' || cmb == null) {
@@ -263,7 +271,9 @@ async function handleSegData(item) {
     let sqlStr = sqlParser.handleJDCommentSeg(item);
     console.log(sqlStr);
     // 入库 
-    await query(sqlStr);
+    if (sqlStr) {
+        await query(sqlStr);
+    }
 }
 
 /**
@@ -294,6 +304,9 @@ async function splitComment(commentList) {
         let sqlStr = sqlParser.handleJDCommentNlp(nlpData);
         // Nlp数据直接入库
         await query(sqlStr);
+        let sleepTimeLength = (1000 + Math.random() * 1000).toFixed(0);
+        console.warn(`评论分词读取完毕,休息${sleepTimeLength}ms 后继续`);
+        await util.sleep(sleepTimeLength);
     }
 }
 
