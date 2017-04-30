@@ -76,9 +76,9 @@ let errCode = [{
 }];
 
 async function send(settings) {
-    settings.subject = '【什么值得卖】 ' + settings.subject;
+    settings.subject = '【SMZDM】 ' + settings.subject;
     await sendmail({
-        from: '什么值得卖 <nizhen.cbpc@sina.com>',
+        from: 'SMZDM <abutin.cbpc@sina.com>',
         to: 'nizhen.cbpc@gmail.com,realeve@qq.com',
         subject: settings.subject,
         html: settings.html
