@@ -187,7 +187,10 @@ function wordSegment(text) {
 
     return new Promise((resolve, reject) => {
         nlp.tencentNLPAnaly(postData, data => {
-            resolve(data);
+			if(data === 'timeout')
+				reject(data);
+			else
+				resolve(data);
         });
     }).catch(e => {
         console.log(e);
@@ -207,7 +210,10 @@ function getNegativeWords(content) {
 
     return new Promise((resolve, reject) => {
         nlp.tencentNLPAnaly(postData, data => {
-            resolve(data);
+			if(data === 'timeout')
+				reject(data);
+			else
+				resolve(data);
         });
     });
 }

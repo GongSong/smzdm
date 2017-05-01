@@ -69,7 +69,8 @@ function tencentNLPAnaly(postData, callback) {
         host: 'nlp.qq.com',
         method: 'post',
         path: '/public/wenzhi/api/common_api1469449716.php',
-        headers: spider.headers.tencent
+        headers: spider.headers.tencent,
+		timeout: 10000
     };
 
     let result = "";
@@ -93,7 +94,10 @@ function tencentNLPAnaly(postData, callback) {
         });
     }).on('error', e => {
         console.log(e);
-    })
+    }).on('timeout',() => {
+            console.warn('http request timeout:'+config.host+config.path);
+            callback('timeout');
+	});
     req.write(postData);
     req.end();
 }
