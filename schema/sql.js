@@ -52,7 +52,7 @@ var insert = {
 };
 
 var update = {
-
+    jd_goods_async_status: 'update jd_goods set isAsync = 1 where wareId = '
 };
 
 var query = {
@@ -95,7 +95,7 @@ var query = {
     // jd_goods_havecomment: "SELECT a.wareId,a.totalCount,ifnull(max(c.commentId),0) lastId FROM jd_goods a INNER JOIN (select max(DATE_FORMAT(rec_date,'%Y%m%d')) rec_date from jd_goods) b on DATE_FORMAT(a.rec_date,'%Y%m%d')=b.rec_date left join jd_comment c on c.wareId = a.wareId where totalCount>0 group by a.wareId,a.totalCount",
 
     // 临时从后续取评论列表,20条评论以下的不取
-    jd_goods_havecomment: "SELECT  a.wareId,  max(a.totalCount) totalCount,  0 as lastId  FROM  jd_goods a  WHERE  totalCount > 20 and a.wareId not in (select distinct wareId from jd_comment) group by a.wareId order by 2",
+    jd_goods_havecomment: "SELECT  a.wareId,  max(a.totalCount) totalCount,  0 as lastId  FROM  jd_goods a  WHERE a.isSync=0 and totalCount > 20 and a.wareId not in (select distinct wareId from jd_comment) group by a.wareId order by 2",
 
     // 已存储的店铺列表
     jd_shopList: 'SELECT distinct shopId id,shopName name FROM jd_shop',

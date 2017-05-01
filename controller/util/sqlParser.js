@@ -297,6 +297,12 @@ function handleJDCommentNlp(comment) {
     return url
 }
 
+function handleShCoinGoods(goods) {
+    let sqlStr = 'insert into shcoin_goods (item_id,title,price,imgSrc,storage,rec_date) values ';
+    let sqlList = goods.map(item => `(${item.item_id},'${item.title}',${item.price},'${item.imgSrc}','${item.storage}','${item.rec_date}')`);
+    return sqlStr + sqlList.join(',');
+}
+
 module.exports = {
     handleSaleDetailData,
     handleStockData,
@@ -332,5 +338,8 @@ module.exports = {
 
     handleJDCommentFromDb,
     handleJDCommentSeg,
-    handleJDCommentNlp
+    handleJDCommentNlp,
+
+    //04-19 上币升级
+    handleShCoinGoods,
 }

@@ -1,13 +1,15 @@
 let cncoin = require('./task/cncoin');
 let ccgold = require('./task/ccgold');
 let wfx = require('./task/wfx');
-let youzan = require('./task/youzan');
+// 上币有赞店
+// let youzan = require('./task/youzan');
 let sge = require('./task/sge');
 let jd = require('./task/jd');
 let tmall = require('./task/tmall');
 let db = require('./task/db');
 let mail = require('./util/mail');
 let asyncAPI = require('./task/staticData');
+let shangBi = require('./task/shangBi');
 
 async function init() {
 
@@ -16,7 +18,9 @@ async function init() {
 
     // tmall.init();
 
-    jd.init();
+    // jd.init();
+
+    shangBi.init();
 
     // 几个大爷单独传
     // getCbpcData();
@@ -30,6 +34,7 @@ async function getCbpcData() {
     cncoin.init();
     ccgold.init();
     wfx.init();
+    // 上币有赞店
     // youzan.init();
     // tmall.init();
 }
@@ -46,7 +51,7 @@ async function loadDefault() {
 
     //   wfx.loadDefault();
 
-    //   youzan.loadDefault();
+    // youzan.loadDefault();
     // tmall.loadDefault();
 }
 

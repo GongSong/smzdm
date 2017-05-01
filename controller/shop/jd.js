@@ -117,22 +117,22 @@ async function getCommentByPage(Cookie, shopId, wareId, offset) {
     try {
         let result;
         // 增加timeout 10s，重复5次
-        for(let times = 0; times < 5; times++){
+        for (let times = 0; times < 5; times++) {
             result = await util.getPostData(config, postData);
             //当无返回，或有返回且返回值不为timeout时终止
-            if(!result || result != 'timeout'){
+            if (!result || result != 'timeout') {
                 break;
             }
         }
 
-        if(typeof result === 'string' && result === 'timeout'){
-            console.error('超时错误:'+config.host+config.path);
+        if (typeof result === 'string' && result === 'timeout') {
+            console.error('超时错误:' + config.host + config.path);
             return {
                 wareDetailComment: {
                     commentInfoList: []
                 }
             }
-        }         
+        }
 
         result = JSON.parse(result);
         return result;
@@ -226,6 +226,8 @@ async function getCommentAndSavedById(shopId, goods) {
                 if (dbCommentList.length > 0) {
                     console.log('有重复评论信息');
                     isEnd = true;
+                    // 更新标志位
+                    await query(sql.update.jd_goods_async_status + goods.wareId);
                 }
 
                 if (dbCommentList.length != data.length) {
