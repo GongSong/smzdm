@@ -29,6 +29,9 @@ async function getPostData(config, data) {
                 html: `${getNow()},errorInfo:\n${e.message}\n http://stackoverflow.com/search?q=${e.message} `
             });
             reject(e);
+        }).on('timeout',() => {
+            console.warn('http request timeout:'+config.host+config.path);
+            resolve('timeout');
         });
         request.write(data);
         request.end();

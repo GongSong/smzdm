@@ -13,6 +13,7 @@ let config = {
     method: 'POST',
     host: 'shop.m.jd.com',
     path: '/search/searchWareAjax.json',
+    timeout: 10000,
     headers: {
         'Accept': 'application/json, text/javascript, */*; q=0.01',
         'Accept-Encoding': 'gzip, deflate, br',
@@ -113,8 +114,26 @@ async function getCommentByPage(Cookie, shopId, wareId, offset) {
         type: 0,
         checkParam: 'LUIPPTP'
     });
-    let result = await util.getPostData(config, postData);
     try {
+        let result;
+        // 增加timeout 10s，重复5次
+        for(let times = 0; times < 5; times++){
+            result = await util.getPostData(config, postData);
+            //当无返回，或有返回且返回值不为timeout时终止
+            if(!result || result != 'timeout'){
+                break;
+            }
+        }
+
+        if(typeof result === 'string' && result === 'timeout'){
+            console.error('超时错误:'+config.host+config.path);
+            return {
+                wareDetailComment: {
+                    commentInfoList: []
+                }
+            }
+        }         
+
         result = JSON.parse(result);
         return result;
     } catch (e) {
@@ -306,7 +325,7 @@ async function splitComment(commentList) {
             await query(sqlStr);
         }
         let sleepTimeLength = (1000 + Math.random() * 1000).toFixed(0);
-        console.warn(`评论分词读取完毕,休息${sleepTimeLength}ms 后继续`);
+        console.log(`评论分词读取完毕,休息${sleepTimeLength}ms 后继续`);
         await util.sleep(sleepTimeLength);
     }
 }
