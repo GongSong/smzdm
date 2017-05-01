@@ -115,17 +115,13 @@ async function getCommentByPage(Cookie, shopId, wareId, offset) {
         checkParam: 'LUIPPTP'
     });
     try {
-        let result;
+        let result = 'timeout';
         // 增加timeout 10s，重复5次
-        for(let times = 0; times < 5; times++){
+        for(let times = 0; result === 'timeout' && times < 5; times++){
             result = await util.getPostData(config, postData);
-            //当无返回，或有返回且返回值不为timeout时终止
-            if(!result || result != 'timeout'){
-                break;
-            }
         }
 
-        if(typeof result === 'string' && result === 'timeout'){
+        if(result === 'timeout'){
             console.error('超时错误:'+config.host+config.path);
             return {
                 wareDetailComment: {
@@ -138,6 +134,7 @@ async function getCommentByPage(Cookie, shopId, wareId, offset) {
         return result;
     } catch (e) {
         let html = `${util.getNow()}, 服务端无数据返回,url: https://item.m.jd.com/product/${wareId}.html`;
+		console.error(html);
         await util.mail.send({
             subject: '接口数据读取异常',
             html
@@ -246,8 +243,8 @@ async function getCommentAndSavedById(shopId, goods) {
             });
             console.log(html);
         }
-        // 下次读取至少等待1-2秒
-        let sleepTimeLength = (1000 + Math.random() * 3000).toFixed(0);
+        // 下次读取至少等待2.5-3秒
+        let sleepTimeLength = (2500 + Math.random() * 500).toFixed(0);
         console.log(`${util.getNow()},id:${goods.wareId},第${startPage-page+1}/${startPage}条商品评论信息读取并插入完毕,休息${sleepTimeLength}ms 后继续`);
         await util.sleep(sleepTimeLength);
     }
@@ -332,29 +329,48 @@ async function splitComment(commentList) {
 
 async function segOneComment(item) {
     let results;
-    await util.wordSegment(item.commentData).then(res => {
-        results = {
-            commentId: item.commentId,
-            tokens: res.tokens,
-            combtokens: res.combtokens
-        }
-    }).catch(e => {
-        console.log(e);
-    });
+    let bingo = false;
+	for(let times = 0; !bingo && times < 5 ; times++){
+		bingo = await util.wordSegment(item.commentData).then(res => {
+			results = {
+				commentId: item.commentId,
+				tokens: res.tokens,
+				combtokens: res.combtokens
+			};
+			return true;
+		}, rej => {
+			return false;
+		}).catch(e => {
+			console.log(e);
+		});
+	}
+	
+	if(!bingo){
+		console.error('timeout of comment seg:' + item.commentId + '/' + item.commentData);
+	}
     return results;
 }
 
 async function nlpOneComment(item) {
     let results;
-    await util.getNegativeWords(item.commentData).then(res => {
-        results = {
-            commentId: item.commentId,
-            negative: res.negative,
-            positive: res.positive
-        };
-    }).catch(e => {
-        console.log(e);
-    });
+	let bingo = false;
+	for(let times = 0; !bingo && times < 5; times++){
+		bingo = await util.getNegativeWords(item.commentData).then(res => {
+			results = {
+				commentId: item.commentId,
+				negative: res.negative,
+				positive: res.positive
+			};
+			return true;
+		},rej => {
+			return false;
+		}).catch(e => {
+			console.log(e);
+		});
+	}
+	if(!bingo){
+		console.error('timeout of comment nlp:' + item.commentId + '/' + item.commentData);
+	}
     return results;
 }
 
