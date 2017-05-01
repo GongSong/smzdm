@@ -2,47 +2,14 @@ let query = require('../../schema/mysql');
 let sqlParser = require('../util/sqlParser');
 let sql = require('../../schema/sql');
 
-// 最近评论记录
-async function getLastTrade() {
-    let sqlStr = sql.query.youzan_trad_maxid;
+async function setGoodsData(data) {
+    let sqlStr = sqlParser.handleShCoinGoods(data);
+    await query(sqlStr);
+}
+
+async function getGoodsList() {
+    let sqlStr = sql.query.sb_ireal_goods;
     return await query(sqlStr);
-}
-
-function getGoodsData(req, res) {
-    query('select * from yz_goods', function(result) {
-        let string = JSON.stringify(result)
-        res.send(string)
-    })
-}
-
-async function setGoodsData(arr) {
-    if (typeof arr == 'undefined') {
-        arr = require('../data/goodsList.json');
-    }
-    if (arr.length == 0) {
-        return;
-    }
-    let spiderData = {
-        data: arr,
-        shopName: '上海造币旗舰店'
-    };
-    let sql = sqlParser.handleGoodsData(spiderData);
-    await query(sql);
-}
-
-async function setStockData(arr) {
-    if (typeof arr == 'undefined') {
-        arr = require('../data/saleDetail.json');
-    }
-    if (arr.length == 0) {
-        return;
-    }
-    let spiderData = {
-        data: arr,
-        shopName: '上海造币旗舰店'
-    };
-    let sql = sqlParser.handleStockData(spiderData);
-    await query(sql);
 }
 
 async function setSaleDetail(arr) {
@@ -69,8 +36,5 @@ async function setSaleDetail(arr) {
 
 module.exports = {
     setSaleDetail,
-    setGoodsData,
-    setStockData,
-    getGoodsData,
-    getLastTrade
+    setGoodsData
 }

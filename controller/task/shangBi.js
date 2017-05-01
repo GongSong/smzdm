@@ -8,14 +8,22 @@ async function init() {
     console.log('\n\n正在同步shCoin');
 
     console.log(`${++idx}.开始同步商品列表.`);
-    // 商品列表
-    flag = await db.needUpdate('shcoin_goods');
+    flag = await db.needUpdate('sb_ireal_good');
+    let goodsList = [];
     if (flag) {
-        read.handleGoodsList();
-        await db.setCrawlerStatus('shcoin_goods');
+        goodsList = await read.handleGoodsList();
+        await save.setGoodsData(goodsList);
+        await db.setCrawlerStatus('sb_ireal_good');
     }
-    console.log(`${idx}.商品列表同步完毕.`);
 
+    console.log(`${++idx}.开始同步商品列表.`);
+    flag = await db.needUpdate('sb_ireal_good');
+    let goodsList = [];
+    if (flag) {
+        goodsList = await read.handleGoodsList();
+        await save.setGoodsData(goodsList);
+        await db.setCrawlerStatus('sb_ireal_good');
+    }
 }
 
 module.exports = {

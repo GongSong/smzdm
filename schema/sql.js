@@ -116,6 +116,8 @@ var query = {
     // 数据统计任务全局SQL:查询需要更新的接口列表 更新接口状态
     static_need_update: "SELECT tbl_name,DATE_FORMAT(rec_date, '%Y%m%d') < DATE_FORMAT(CURDATE(), '%Y%m%d') AS need_update FROM crawler_list where tbl_name like 'static_%'",
     set_static_status: `insert into crawler_list (tbl_name,rec_date) values ('static_?','${rec_date()}')`,
+
+    sb_ireal_goods: "select item_id from sbireal_good where DATE_FORMAT(a.rec_date, '%Y%m%d') = DATE_FORMAT(NOW(), '%Y%m%d')",
 }
 
 var static = {

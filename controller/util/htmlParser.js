@@ -353,10 +353,34 @@ let jd = {
     }
 }
 
+let shangBi = {
+    tradeRecord(html, item_id) {
+        let options = {
+            html,
+            parentNode: '.buy_tab tr',
+            children: [{
+                node: 'td',
+                name: 'data',
+                formatter(el) {
+                    return {
+                        user: el.eq(0).text(),
+                        order_time: el.eq(1).text(),
+                        buyer: el.eq(2).text(),
+                        item_id
+                    };
+                }
+            }],
+            formatter: res => res.data
+        }
+        return util.parseHTML(options)
+    }
+}
+
 module.exports = {
     youzan,
     wfx,
     ccgold,
     cncoin,
-    jd
+    jd,
+    shangBi
 }

@@ -298,9 +298,9 @@ function handleJDCommentNlp(comment) {
 }
 
 function handleShCoinGoods(goods) {
-    let sqlStr = 'insert into shcoin_goods (item_id,title,price,imgSrc,storage,rec_date) values ';
+    let sqlStr = sql.insert.sbireal_goods;
     let sqlList = goods.map(item => `(${item.item_id},'${item.title}',${item.price},'${item.imgSrc}','${item.storage}','${item.rec_date}')`);
-    return sqlStr + sqlList.join(',');
+    return sqlStr.replace('?', sqlList.join(','));
 }
 
 module.exports = {
