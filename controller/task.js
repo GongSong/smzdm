@@ -18,9 +18,9 @@ async function init() {
 
     // tmall.init();
 
-    // jd.init();
+    jd.init();
 
-    shangBi.init();
+    // shangBi.init();
 
     // 几个大爷单独传
     // getCbpcData();
