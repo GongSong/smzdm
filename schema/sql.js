@@ -51,7 +51,7 @@ var insert = {
     jd_comment_nlp: 'insert into jd_comment_nlp (commentId,negative,positive) values ?',
 
     // 艾睿上币
-    sbireal_goods: 'insert into sbireal_good(item_id,title,price,storage,imgSrc,rec_date) values ?',
+    sbireal_goods: 'insert into sbireal_good(item_id,title,price,imgSrc,storage,rec_date) values ?',
     sbireal_stock: 'insert into sbireal_stock(item_id,sales,storage,freight,rec_date) values ?',
     sbireal_trade: 'insert into sbireal_trade(item_id,buyer,order_time,quantity) values ?',
 };
@@ -117,7 +117,7 @@ var query = {
     static_need_update: "SELECT tbl_name,DATE_FORMAT(rec_date, '%Y%m%d') < DATE_FORMAT(CURDATE(), '%Y%m%d') AS need_update FROM crawler_list where tbl_name like 'static_%'",
     set_static_status: `insert into crawler_list (tbl_name,rec_date) values ('static_?','${rec_date()}')`,
 
-    sb_ireal_goods: "select item_id from sbireal_good where DATE_FORMAT(a.rec_date, '%Y%m%d') = DATE_FORMAT(NOW(), '%Y%m%d')",
+    sb_ireal_goods: "select a.item_id,date_format(max(b.order_time),'%Y-%m-%d %H:%i:%s') order_time from sbireal_good a INNER JOIN sbireal_trade b on a.item_id=b.item_id where DATE_FORMAT(a.rec_date, '%Y%m%d') = DATE_FORMAT(NOW(), '%Y%m%d') group by b.item_id",
 }
 
 var static = {

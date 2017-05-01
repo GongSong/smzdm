@@ -303,6 +303,12 @@ function handleShCoinGoods(goods) {
     return sqlStr.replace('?', sqlList.join(','));
 }
 
+function handleShCoinTrade(saleInfo) {
+    let sqlStr = sql.insert.sbireal_trade;
+    let sqlList = saleInfo.map(item => `('${item.item_id}','${item.buyer}','${item.order_time}','${item.quantity}')`);
+    return sqlStr.replace('?', sqlList.join(','));
+}
+
 module.exports = {
     handleSaleDetailData,
     handleStockData,
@@ -342,4 +348,5 @@ module.exports = {
 
     //04-19 上币升级
     handleShCoinGoods,
+    handleShCoinTrade,
 }

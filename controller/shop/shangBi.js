@@ -73,7 +73,7 @@ async function getGoodsList(req, res) {
 // 获取销售详情
 async function getSaleInfo(goods) {
     if (typeof goods == 'undefined') {
-        goods = db.getGoodsList();
+        goods = await db.getGoodsList();
     }
     let data = [],
         length = goods.length;
@@ -81,8 +81,10 @@ async function getSaleInfo(goods) {
     for (let i = 0; i < length; i++) {
         console.log(`正在 获取上币商品销售详情(${i+1}/${length})`);
         let item = goods[i];
-        let record = getSaleDetail(item.item_id);
-        data.push(record);
+        let record = await getSaleDetail(item.item_id);
+        record.shift(1);
+        record = record.filter(newItem => newItem.order_time > item.order_time);
+        data = [...data, ...record];
     }
     return data;
 }
@@ -92,7 +94,7 @@ async function getSaleDetail(goodId) {
     let html = await axios.get(`http://shangbi.irealweixin.com/index.php/Product/details/id/${goodId}.html`).then(res => res.data).catch(e => console.log(e));
     let data = parser.shangBi.tradeRecord(html, goodId);
     console.log(data);
-    return records;
+    return data;
 }
 
 module.exports = {

@@ -22,7 +22,7 @@ async function send(settings) {
         to: "nizhen.cbpc@gmail.com,realeve@qq.com",
         subject: settings.subject,
         generateTextFromHTML: true,
-        html: settings.html
+        html: `<div>${settings.html}</div>`
     }, function(err, response) {
         if (err) {
             console.log(err);

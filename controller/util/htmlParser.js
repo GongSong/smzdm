@@ -363,9 +363,9 @@ let shangBi = {
                 name: 'data',
                 formatter(el) {
                     return {
-                        user: el.eq(0).text(),
+                        buyer: el.eq(0).text(),
                         order_time: el.eq(1).text(),
-                        buyer: el.eq(2).text(),
+                        quantity: el.eq(2).text(),
                         item_id
                     };
                 }
