@@ -4,7 +4,8 @@ let settings = {
         goodList: 'https://h5.youzan.com/v2/showcase/tag?alias=8vcj4vsg',
         stockPage: 'https://h5.youzan.com/v2/showcase/goods?alias=1yjz9c3yy6z4r',
         saleDetail: 'https://h5.youzan.com/v2/showcase/goodsfast?alias=1yjz9c3yy6z4r',
-        newHomePage: 'http://shangbi.irealweixin.com/index.php/Product/index.html'
+        newHomePage: 'http://shangbi.irealweixin.com',
+        newGoodList: 'http://shangbi.irealweixin.com/index.php/Product/index.html'
     },
     shenyang: {
         // http://2022030.wxfenxiao.com/Shop/index/sid/2022030/pid/9746959.html
