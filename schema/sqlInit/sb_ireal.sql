@@ -27,7 +27,7 @@ INDEX `idx_ireal_stock_goodid` (`item_id`) USING BTREE ,
 INDEX `idx_ireal_stock_recdate` (`rec_date`) USING BTREE 
 );
 
-DROP TABLE IF EXISTS `sb_ireal_trade`;
+DROP TABLE IF EXISTS `sbireal_trade`;
 CREATE TABLE `sb_ireal_trade` (
 `id`  bigint NOT NULL AUTO_INCREMENT,
 `item_id`  bigint NOT NULL ,
