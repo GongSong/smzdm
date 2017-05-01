@@ -29,7 +29,7 @@ INDEX `idx_ireal_stock_recdate` (`rec_date`) USING BTREE
 
 DROP TABLE IF EXISTS `sb_ireal_trade`;
 CREATE TABLE `sb_ireal_trade` (
-`id`  bigint NOT NULL ,
+`id`  bigint NOT NULL AUTO_INCREMENT,
 `item_id`  bigint NOT NULL ,
 `buyer`  varchar(50) NULL ,
 `order_time`  datetime NULL ,
