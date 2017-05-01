@@ -51,13 +51,13 @@ var insert = {
     jd_comment_nlp: 'insert into jd_comment_nlp (commentId,negative,positive) values ?',
 
     // 艾睿上币
-    sbireal_goods:'insert into sbireal_good(item_id,title,price,storage,imgSrc,rec_date) values ?',
-    sbireal_stock:'insert into sbireal_stock(item_id,sales,storage,freight,rec_date) values ?',
-    sbireal_trade:'insert into sbireal_trade(item_id,buyer,order_time,quantity) values ?',
+    sbireal_goods: 'insert into sbireal_good(item_id,title,price,storage,imgSrc,rec_date) values ?',
+    sbireal_stock: 'insert into sbireal_stock(item_id,sales,storage,freight,rec_date) values ?',
+    sbireal_trade: 'insert into sbireal_trade(item_id,buyer,order_time,quantity) values ?',
 };
 
 var update = {
-    jd_goods_async_status: 'update jd_goods set isAsync = 1 where wareId = '
+    jd_goods_async_status: 'update jd_goods set isSync = 1 where wareId = '
 };
 
 var query = {
