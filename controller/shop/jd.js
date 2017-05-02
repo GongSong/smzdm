@@ -81,7 +81,7 @@ async function getGoodsListAndSave(shopId = '170564') {
     }
     let item = record.results;
     totalPage = item.totalPage;
-    if(typeof item.wareInfo == 'undefined'){
+    if (typeof item.wareInfo == 'undefined') {
       continue;
     }
     // 2017-04-20
@@ -331,20 +331,20 @@ async function splitComment(commentList) {
   for (let i = 0; i < maxNum; i++) {
     let item = commentList[i];
     let hasErr = false;
-    let segData = await segOneComment(item).catch(e=>{
+    let segData = await segOneComment(item).catch(e => {
       console.log(e);
       hasErr = true;
     })
-    if(hasErr){
+    if (hasErr) {
       continue;
     }
     // 处理数据/入库
     await handleSegData(segData);
-    let nlpData = await nlpOneComment(item).catch(e=>{
+    let nlpData = await nlpOneComment(item).catch(e => {
       console.log(e);
       hasErr = true;
     })
-    if(hasErr){
+    if (hasErr || typeof nlpData == 'undefined') {
       continue;
     }
     if (typeof nlpData.negative != 'undefined') {
