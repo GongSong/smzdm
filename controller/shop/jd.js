@@ -81,6 +81,9 @@ async function getGoodsListAndSave(shopId = '170564') {
     }
     let item = record.results;
     totalPage = item.totalPage;
+    if(typeof item.wareInfo == 'undefined'){
+      continue;
+    }
     // 2017-04-20
     // 此处可考虑将商品名称中属性信息分离存储
     let wareInfo = item.wareInfo.map(item => {
