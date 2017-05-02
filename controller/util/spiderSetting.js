@@ -18,7 +18,7 @@ let headers = {
   },
   tencent: {
     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-    'Cookie': 'pgv_pvi=2208498688; pgv_si=s9238280192',
+    'Cookie': 'pgv_pvi=8454788096; pgv_si=s2204665856',
     'Referer': 'http://nlp.qq.com/semantic.cgi'
   },
   cncoin: {
