@@ -330,11 +330,23 @@ async function splitComment(commentList) {
   let maxNum = commentList.length;
   for (let i = 0; i < maxNum; i++) {
     let item = commentList[i];
-    let segData = await segOneComment(item);
+    let hasErr = false;
+    let segData = await segOneComment(item).catch(e=>{
+      console.log(e);
+      hasErr = true;
+    })
+    if(hasErr){
+      continue;
+    }
     // 处理数据/入库
     await handleSegData(segData);
-
-    let nlpData = await nlpOneComment(item);
+    let nlpData = await nlpOneComment(item).catch(e=>{
+      console.log(e);
+      hasErr = true;
+    })
+    if(hasErr){
+      continue;
+    }
     if (typeof nlpData.negative != 'undefined') {
       let sqlStr = sqlParser.handleJDCommentNlp(nlpData);
       await query(sqlStr);

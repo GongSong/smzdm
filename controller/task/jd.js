@@ -9,13 +9,13 @@ async function init() {
     // await loadDefault();
 
     //  每日商品列表更新
-     await updateGoodsList();
+    // await updateGoodsList();
 
     // 评论列表更新
-    // updateComments();
+    updateComments();
 
-    // // 评论信息分词
-    // read.getCommentFromDb();
+    // 评论信息分词
+    read.getCommentFromDb();
 }
 
 async function updateGoodsList(localShopList) {
