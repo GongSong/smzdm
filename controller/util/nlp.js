@@ -1,6 +1,5 @@
-let crypto = require('crypto')
-let spider = require('./spiderSetting')
-
+let crypto = require('crypto');
+let headers = require('./nlpCookies').getCookies();
 let http = require('http');
 
 let appSecrect = {
@@ -69,7 +68,7 @@ function tencentNLPAnaly(postData, callback) {
         host: 'nlp.qq.com',
         method: 'post',
         path: '/public/wenzhi/api/common_api1469449716.php',
-        headers: spider.headers.tencent,
+        headers,
 		timeout: 10000
     };
 
