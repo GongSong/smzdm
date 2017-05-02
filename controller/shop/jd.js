@@ -335,7 +335,7 @@ async function splitComment(commentList) {
       console.log(e);
       hasErr = true;
     })
-    if (hasErr) {
+    if (hasErr || typeof segData == 'undefined') {
       continue;
     }
     // 处理数据/入库
