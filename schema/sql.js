@@ -110,7 +110,7 @@ var query = {
 
     jd_comment_distinct: 'select distinct commentId from jd_comment where commentId in ',
 
-    jd_comment_bypage: 'SELECT distinct a.commentId,a.commentData FROM jd_comment a where a.commentId not in (select commentId from jd_comment_nlp) order by id limit ',
+    jd_comment_bypage: 'SELECT distinct a.commentId,a.commentData FROM jd_comment a where a.commentId not in (select commentId from jd_comment_nlp) and length(commentData)<990 order by id limit ',
 
     // 数据统计任务全局SQL:查询需要更新的接口列表 更新接口状态
     static_need_update: "SELECT tbl_name,DATE_FORMAT(rec_date, '%Y%m%d') < DATE_FORMAT(CURDATE(), '%Y%m%d') AS need_update FROM crawler_list where tbl_name like 'static_%'",

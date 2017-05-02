@@ -38,7 +38,7 @@ function getCookies() {
     if (dateDiff > 80000) {
       return reloadCookies();
     }
-    return cookieJson.cookieStr;
+    return JSON.parse(cookieJson.cookieStr);
   } catch (e) {
     return reloadCookies();
   }
