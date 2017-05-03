@@ -194,6 +194,24 @@ async function getCommentById(shopId, goods) {
   return comments;
 }
 
+/**
+ * 
+ * @param {*} Cookie 
+ * @param {*} shopId 
+ * @param {*} goods 
+ * @param {*} currentPage 当前页
+ * @param {*} torward 搜寻方向，backword or forward
+ * @param {*} step 搜寻步长
+ * @param {*} acceleration 速度向量方向 speedup or slowdown
+ */
+async function testFirstPageOffset(Cookie,shopId,goods,currentPage,torward = 'backword',step,acceleration){
+  do{
+    
+  }
+  let comment = await getCommentByPage(Cookie, shopId, goods.wareId, currentPage);
+}
+
+
 async function getCommentAndSavedById(shopId, goods) {
   let Cookie = await jdCookies.getCookiesFromUrl(shopId);
   let startPage = Math.ceil(goods.totalCount / 10);
