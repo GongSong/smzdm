@@ -12,7 +12,7 @@ async function init() {
     // await updateGoodsList();
 
     // 评论列表更新
-    updateComments();
+    //updateComments();
 
     // 评论信息分词
     read.getCommentFromDb();
@@ -93,5 +93,6 @@ async function loadDefault() {
 
 module.exports = {
     init,
-    loadDefault
+    loadDefault,
+    updateComments
 };
