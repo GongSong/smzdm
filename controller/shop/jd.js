@@ -330,6 +330,7 @@ async function splitComment(commentList) {
   let maxNum = commentList.length;
   for (let i = 0; i < maxNum; i++) {
     let item = commentList[i];
+    item.commentData = item.commentData.replace(/&+|#|\$|\\|\r|\n|'/g, '');
     let hasErr = false;
     let segData = await segOneComment(item).catch(e => {
       console.log(e);
