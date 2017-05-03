@@ -16,8 +16,8 @@ async function init() {
         await db.setCrawlerStatus('sbireal_good');
     }
     console.log('上币商品列表同步完毕');
-    // flag = await db.needUpdate('sbireal_trade');
-    if (1) {
+    flag = await db.needUpdate('sbireal_trade');
+    if (flag) {
         goodsList = await read.getSaleInfo();
         await save.setSaleDetail(goodsList);
         await db.setCrawlerStatus('sbireal_trade');
