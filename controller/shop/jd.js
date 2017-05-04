@@ -81,10 +81,10 @@ async function getGoodsListAndSave(shopId = '170564') {
       continue;
     }
     let item = record.results;
-    totalPage = item.totalPage;
-    if (typeof item.wareInfo == 'undefined') {
+    if (typeof item.wareInfo == 'undefined' || typeof item.totalPage == 'undefined') {
       continue;
     }
+    totalPage = item.totalPage;
     // 2017-04-20
     // 此处可考虑将商品名称中属性信息分离存储
     let wareInfo = item.wareInfo.map(item => {
@@ -472,7 +472,7 @@ async function nlpOneComment(item) {
   return results;
 }
 
-async function getShopList(shops,id) {
+async function getShopList(shops, id) {
   let maxNum = shops.length;
   let shopList = [];
   for (let i = 0; i < maxNum; i++) {
