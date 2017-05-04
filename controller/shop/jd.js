@@ -406,10 +406,25 @@ async function nlpOneComment(item) {
   return results;
 }
 
+async function getShopList(shops){
+ let maxNum = shops.length;
+ let shopList =[];
+ for(let i=0;i<maxNum;i++){
+   let url = shops[i].url;
+   let html = await axios.get(url).then(res=>res.data);
+   let shopFromPage = parser.jd.getShopList(html);
+   shopList = [...shopList,...shopFromPage];
+   console.log(shopFromPage);
+   console.log(`${i+1}/${maxNum}家商铺信息读取完毕`);
+ }
+ return shopList;
+}
+
 module.exports = {
   getGoodsList,
   getComment,
   getShopTemplate,
   getGoodsListAndSave,
-  getCommentFromDb
+  getCommentFromDb,
+  getShopList
 };

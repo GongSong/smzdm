@@ -350,6 +350,17 @@ let jd = {
             expressScore,
             detailUrl
         }
+    },
+    getShopList(html){
+        let $ = cheerio.load(html);
+        let shopList = [];
+        $('.p-shop').each((i,item)=>{
+           let id = $(item).data('shopid');
+           if(typeof id !='undefined'){
+                shopList.push(id);
+           }           
+        });
+        return util.arrUnique(shopList);
     }
 }
 
