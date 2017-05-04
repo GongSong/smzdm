@@ -245,10 +245,13 @@ async function testFirstPageOffset(Cookie, shopId, goods, startPage = 0) {
     }
   } while (startPage >= _page);
 
-  // 再以每次速度减半向目标靠近
+  // 再以每次速度减半向目标靠近，当速度降至每页评论数量（10）之内时停止
   _idx = 1;
   let direction = 1;
   do {
+    if(_step < 10){
+      break;
+    }
     _step = Math.abs(_step) * direction / 2;
     _page += _step;
     let comment = await getCommentByPage(Cookie, shopId, goods.wareId, _page);
