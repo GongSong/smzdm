@@ -101,7 +101,7 @@ async function getGoodsListAndSave(shopId = '170564') {
 
 async function getShopTemplate(shopInfo) {
   let detailUrl = 'https://shop.m.jd.com/detail/detailInfo?shopId=' + shopInfo.id;
-  console.log(`正在采集【${shopInfo.name}】店铺信息,url:${detailUrl}`);
+  console.log(`正在采集【${shopInfo.id}】店铺信息,url:${detailUrl}`);
   let mainInfo = await axios.get('https://shop.m.jd.com/index/getShopTemplate.json?shopId=' + shopInfo.id).then(res => res.data.shopInfo);
   // let detailUrl = await axios.get('https://shop.m.jd.com/?shopId=' + shopId).then(res => parser.jd.getDetailUrl(res.data));
   let extraInfo = await axios.get(detailUrl).then(res => parser.jd.getShopDetail(res.data, detailUrl));
@@ -472,7 +472,7 @@ async function nlpOneComment(item) {
   return results;
 }
 
-async function getShopList(shops) {
+async function getShopList(shops,id) {
   let maxNum = shops.length;
   let shopList = [];
   for (let i = 0; i < maxNum; i++) {
@@ -483,7 +483,7 @@ async function getShopList(shops) {
     console.log(shopFromPage);
     console.log(`${i+1}/${maxNum}家商铺信息读取完毕`);
   }
-  let fileName = `${util.getMainContent()}/controller/data/jd_shopList_1.json`;
+  let fileName = `${util.getMainContent()}/controller/data/jd_shopList_${id}.json`;
   fs.writeFileSync(fileName, JSON.stringify(shopList), 'utf8');
   return shopList;
 }

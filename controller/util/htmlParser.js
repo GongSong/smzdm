@@ -331,7 +331,7 @@ let jd = {
         let commentScore = 0,
             serviceScore = 0,
             expressScore = 0;
-
+        let name = $('.shop-name').text().trim();
         let score = $('.score-num').text().split('分');
         if (score.length > 2) {
             commentScore = score[0].trim();
@@ -348,7 +348,8 @@ let jd = {
             commentScore,
             serviceScore,
             expressScore,
-            detailUrl
+            detailUrl,
+            name
         }
     },
     getShopList(html){
