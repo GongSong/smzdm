@@ -195,15 +195,37 @@ async function getCommentById(shopId, goods) {
   return comments;
 }
 
+async function updateCommentOffset(goodId, offset) {
+  let sqlStr = sql.update.jd_comment_updateOffset.replace(/\?1/, offset).replace(/\?2/, goodId);
+  await query(sqlStr);
+}
+
 /**
- * 
+ * @return 寻找断点，返回的是断点页序号。
  * @param {*} Cookie 
  * @param {*} shopId 
  * @param {*} goods 
  * @param {*} startPage 起始页
  */
-async function testFirstPageOffset(Cookie, shopId, goods, startPage) {
-  // 加速
+async function testFirstPageOffset(Cookie, shopId, goods, startPage = 0) {
+  let sqlStr = sql.query.jd_comment_count + goodId;
+  let commentProgress = await query(sqlStr);
+  if (startPage === 0) {
+    startPage = Math.ceil(commentProgress.totalCount / 10);
+  }
+  // 评论实际数量 = totalCount页数 - 偏移量（页）
+  // 在查找断点之前，先判断之前是否记录了实际评论数量和totalCount之间的偏移，如果有则略过后面的测试偏移量，直接返回实际数量与完工数量的差。
+  if (commentProgress.cmt_quantity_offset &&
+    commentProgress.cmt_quantity_offset > 0 &&
+    (commentProgress.totalCount - commentProgress.cmt_quantity_offset - commentProgress.cnt) > 0) {
+    return startPage - commentProgress.cmt_quantity_offset - Math.ceil(commentProgress.cnt / 10);
+  }
+  if ((commentProgress.totalCount - commentProgress.cmt_quantity_offset - Math.ceil(commentProgress.cnt / 10)) <= 0) {
+    return 0;
+  }
+  // 开始测试实际评论数量与totalCount之间的偏移
+  // 测试得到偏移量后需要更新商品清单中的偏移量数值
+  // 先以2的幂加速下探
   let _page = startPage;
   let _step = 0;
   let _idx = 1;
@@ -214,18 +236,16 @@ async function testFirstPageOffset(Cookie, shopId, goods, startPage) {
     _page -= _step;
     let comment = await getCommentByPage(Cookie, shopId, goods.wareId, _page);
     // let comment = blackBox(_page);
-    console.log(_idx + ':--' + comment + '--' + _page);
-    if (comment && comment > 0) {
-      if (comment < 10) {
-        console.log('over');
-        return _page;
+    if (comment.wareDetailComment && comment.wareDetailComment.commentInfoList.length > 0) {
+      if (comment.wareDetailComment.commentInfoList.length < 10) {
+        updateCommentOffset(goodId, (startPage - _page));
+        return startPage - _page;
       }
       break;
     }
-  } while (startPage >= _page && _idx++ < 100);
-  console.log('target is ' + _page);
+  } while (startPage >= _page);
 
-  // 减速
+  // 再以每次速度减半向目标靠近
   _idx = 1;
   let direction = 1;
   do {
@@ -233,10 +253,9 @@ async function testFirstPageOffset(Cookie, shopId, goods, startPage) {
     _page += _step;
     let comment = await getCommentByPage(Cookie, shopId, goods.wareId, _page);
     // let comment = blackBox(_page);
-    console.log(direction + ':' + _step + ':' + _page + ':' + comment);
-    if (comment && comment < 10) {
-      console.log('over');
-      return _page;
+    if (comment.wareDetailComment && comment.wareDetailComment.commentInfoList.length < 10) {
+      updateCommentOffset(goodId, (startPage - _page));
+      return startPage - _page;
     }
     if ((comment === undefined || comment === null) && Math.abs(_step) === 1) {
       _page -= 1;
@@ -244,8 +263,8 @@ async function testFirstPageOffset(Cookie, shopId, goods, startPage) {
     }
     direction = (comment === undefined || comment === null) ? -1 : 1;
   } while (Math.abs(_step) >= 1);
-  console.log('target is ' + _page);
-  return _page;
+  updateCommentOffset(goodId, (startPage - _page));
+  return startPage - _page;
 }
 
 function blackBox(page) {
@@ -481,7 +500,7 @@ async function getShopList(shops, id) {
     let shopFromPage = parser.jd.getShopList(html);
     shopList = [...shopList, ...shopFromPage];
     console.log(shopFromPage);
-    console.log(`${i+1}/${maxNum}家商铺信息读取完毕`);
+    console.log(`${i + 1}/${maxNum}家商铺信息读取完毕`);
   }
   let fileName = `${util.getMainContent()}/controller/data/jd_shopList_${id}.json`;
   fs.writeFileSync(fileName, JSON.stringify(shopList), 'utf8');
