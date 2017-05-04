@@ -8,6 +8,7 @@ let query = require('../../schema/mysql');
 let sql = require('../../schema/sql');
 let sqlParser = require('../util/sqlParser');
 let parser = require('../util/htmlParser');
+let fs = require('fs');
 
 let config = {
   method: 'POST',
@@ -189,9 +190,74 @@ async function getCommentById(shopId, goods) {
       return item;
     })
 
-    console.log(`jd:第${startPage-page}/${startPage}条商品评论信息读取并插入完毕`);
+    console.log(`jd:第${startPage - page}/${startPage}条商品评论信息读取并插入完毕`);
   }
   return comments;
+}
+
+/**
+ * 
+ * @param {*} Cookie 
+ * @param {*} shopId 
+ * @param {*} goods 
+ * @param {*} startPage 起始页
+ */
+async function testFirstPageOffset(Cookie, shopId, goods, startPage) {
+  // 加速
+  let _page = startPage;
+  let _step = 0;
+  let _idx = 1;
+  do {
+    if (_idx > 1) {
+      _step = Math.pow(2, _idx - 2);
+    }
+    _page -= _step;
+    let comment = await getCommentByPage(Cookie, shopId, goods.wareId, _page);
+    // let comment = blackBox(_page);
+    console.log(_idx + ':--' + comment + '--' + _page);
+    if (comment && comment > 0) {
+      if (comment < 10) {
+        console.log('over');
+        return _page;
+      }
+      break;
+    }
+  } while (startPage >= _page && _idx++ < 100);
+  console.log('target is ' + _page);
+
+  // 减速
+  _idx = 1;
+  let direction = 1;
+  do {
+    _step = Math.abs(_step) * direction / 2;
+    _page += _step;
+    let comment = await getCommentByPage(Cookie, shopId, goods.wareId, _page);
+    // let comment = blackBox(_page);
+    console.log(direction + ':' + _step + ':' + _page + ':' + comment);
+    if (comment && comment < 10) {
+      console.log('over');
+      return _page;
+    }
+    if ((comment === undefined || comment === null) && Math.abs(_step) === 1) {
+      _page -= 1;
+      break;
+    }
+    direction = (comment === undefined || comment === null) ? -1 : 1;
+  } while (Math.abs(_step) >= 1);
+  console.log('target is ' + _page);
+  return _page;
+}
+
+function blackBox(page) {
+  if (page === 945) {
+    return 9;
+  }
+  if (page < 945) {
+    return 10;
+  }
+  if (page > 945) {
+    return null;
+  }
 }
 
 async function getCommentAndSavedById(shopId, goods) {
@@ -254,7 +320,7 @@ async function getCommentAndSavedById(shopId, goods) {
         await query(url);
       }
     } else {
-      let html = `${util.getNow()},第${startPage-page+1}/${startPage}页无评论信息,url:https://item.m.jd.com/product/${goods.wareId}.html`;
+      let html = `${util.getNow()},第${startPage - page + 1}/${startPage}页无评论信息,url:https://item.m.jd.com/product/${goods.wareId}.html`;
       await util.mail.send({
         subject: '接口数据读取异常',
         html
@@ -263,7 +329,7 @@ async function getCommentAndSavedById(shopId, goods) {
     }
     // 下次读取至少等待2.5-3秒
     let sleepTimeLength = (2500 + Math.random() * 500).toFixed(0);
-    console.log(`${util.getNow()},id:${goods.wareId},第${startPage-page+1}/${startPage}条商品评论信息读取并插入完毕,休息${sleepTimeLength}ms 后继续`);
+    console.log(`${util.getNow()},id:${goods.wareId},第${startPage - page + 1}/${startPage}条商品评论信息读取并插入完毕,休息${sleepTimeLength}ms 后继续`);
     await util.sleep(sleepTimeLength);
   }
 }
@@ -283,7 +349,7 @@ async function getComment(shop) {
       continue;
     }
     await getCommentAndSavedById(shop.id, goodsList[i]);
-    console.log(`\n${shop.name}:${i+1}/${goodsList.length}评论信息获取完毕,${util.getNow()}.`);
+    console.log(`\n${shop.name}:${i + 1}/${goodsList.length}评论信息获取完毕,${util.getNow()}.`);
   }
 }
 
@@ -406,18 +472,20 @@ async function nlpOneComment(item) {
   return results;
 }
 
-async function getShopList(shops){
- let maxNum = shops.length;
- let shopList =[];
- for(let i=0;i<maxNum;i++){
-   let url = shops[i].url;
-   let html = await axios.get(url).then(res=>res.data);
-   let shopFromPage = parser.jd.getShopList(html);
-   shopList = [...shopList,...shopFromPage];
-   console.log(shopFromPage);
-   console.log(`${i+1}/${maxNum}家商铺信息读取完毕`);
- }
- return shopList;
+async function getShopList(shops) {
+  let maxNum = shops.length;
+  let shopList = [];
+  for (let i = 0; i < maxNum; i++) {
+    let url = shops[i].url;
+    let html = await axios.get(url).then(res => res.data);
+    let shopFromPage = parser.jd.getShopList(html);
+    shopList = [...shopList, ...shopFromPage];
+    console.log(shopFromPage);
+    console.log(`${i+1}/${maxNum}家商铺信息读取完毕`);
+  }
+  let fileName = `${util.getMainContent()}/controller/data/jd_shopList_1.json`;
+  fs.writeFileSync(fileName, JSON.stringify(shopList), 'utf8');
+  return shopList;
 }
 
 module.exports = {
@@ -426,5 +494,6 @@ module.exports = {
   getShopTemplate,
   getGoodsListAndSave,
   getCommentFromDb,
-  getShopList
+  getShopList,
+  testFirstPageOffset
 };
