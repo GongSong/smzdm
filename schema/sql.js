@@ -113,6 +113,7 @@ var query = {
     jd_comment_distinct: 'select distinct commentId from jd_comment where commentId in ',
 
     jd_comment_count: 'select g.wareId,g.totalCount,g.cmt_quantity_offset,completed.cnt from jd_goods g left join (select distinct wareid,count(1) as cnt from jd_comment where wareId=?) completed on g.wareId=completed.wareId  where g.wareId=? ',
+    // SELECT a.wareId,totalCount,curCount,ceil((totalCount-curCount)/10) lastPage FROM ( SELECT g.wareId, max(g.totalCount) totalCount, ( SELECT sum(1) FROM jd_comment WHERE wareId = ? ) curCount FROM jd_goods g WHERE g.wareId = ? ) a 
 
     jd_comment_bypage: 'SELECT distinct a.commentId,a.commentData FROM jd_comment a where a.commentId not in (select commentId from jd_comment_nlp) and length(commentData)<990 order by id limit ',
 

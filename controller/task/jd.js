@@ -11,8 +11,8 @@ async function init() {
     // 根据数组获取店铺列表信息，运行一次即可
     // await getShopList();
 
-    //  每日商品列表更新
-    await updateGoodsList();
+    //  每日商品列表更新,由于商品数量较多，以后不做日更新
+    // await updateGoodsList();
 
     // 评论列表更新
     //updateComments();

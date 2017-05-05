@@ -228,7 +228,7 @@ async function updateCommentOffset(goodId, offset) {
  * @param {*} startPage 起始页
  */
 async function testFirstPageOffset(Cookie, shopId, goods, startPage = 0) {
-    let sqlStr = sql.query.jd_comment_count + goodId;
+    let sqlStr = sql.query.jd_comment_count.replace(/?/g, goodId);
     let commentProgress = await query(sqlStr);
     if (startPage === 0) {
         startPage = Math.ceil(commentProgress.totalCount / 10);
