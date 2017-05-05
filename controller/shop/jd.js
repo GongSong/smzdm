@@ -67,11 +67,15 @@ async function getGoodsListAndSave(shopId = '170564') {
   let totalPage = 1;
 
   config.headers.Cookie = await jdCookies.getCookies(shopId);
-
-  for (let i = 1; i <= totalPage; i++) {
+  let startPage = 1;
+  // if(shopId ==206137){
+  //   startPage=376;
+  //   totalPage=376;
+  // }
+  for (let i = startPage; i <= totalPage; i++) {
     // console.log(config.headers.Cookie);
     let hasErr = false;
-    let sleepTimeLength = (Math.random() * 1000).toFixed(0);
+    let sleepTimeLength = (Math.random() * 1500).toFixed(0);
     let record = await getListByPage(i, shopId).catch(e => {
       console.log(e);
       hasErr = true;
