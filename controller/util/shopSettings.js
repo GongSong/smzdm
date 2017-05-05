@@ -79,6 +79,14 @@ let settings = {
         categoryGoodsList: 'https://chinagold.m.tmall.com/shop/shop_auction_search.do?scid=1149100462&sort=s&p=1',
         allGoodsList: 'https://chinagold.m.tmall.com/shop/shop_auction_search.do?sort=s&p=1',
         comment: 'https://rate.tmall.com/list_detail_rate.htm?itemId=36751327705&sellerId=1720024852&order=3&currentPage=1&pageSize=20'
+    },
+    // 周大福
+    ctfmall: {
+        home: 'https://www.ctfmall.com/c/'
+    },
+    // 周生生
+    chouss: {
+        home: 'http://cneshop.chowsangsang.com/eshop-cn/zh_CN/%E8%B4%A7%E5%93%81/c/CssCategories'
     }
 }
 module.exports = {
