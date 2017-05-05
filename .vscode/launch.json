@@ -7,8 +7,8 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "test2",
-            "program": "${workspaceRoot}/test/test2.js"
+            "name": "comment",
+            "program": "${workspaceRoot}/controller/task/pm2/comment.js"
         },
         {
             "type": "node",
