@@ -352,14 +352,14 @@ let jd = {
             name
         }
     },
-    getShopList(html){
+    getShopList(html) {
         let $ = cheerio.load(html);
         let shopList = [];
-        $('.p-shop').each((i,item)=>{
-           let id = $(item).data('shopid');
-           if(typeof id !='undefined'){
+        $('.p-shop').each((i, item) => {
+            let id = $(item).data('shopid');
+            if (typeof id != 'undefined') {
                 shopList.push(id);
-           }           
+            }
         });
         return util.arrUnique(shopList);
     }
@@ -388,11 +388,137 @@ let shangBi = {
     }
 }
 
+let ctf = {
+    goodsList(html) {
+        let $ = cheerio.load(html);
+        let options = {
+            html,
+            parentNode: '.pro-inner',
+            children: [{
+                node: 'img',
+                name: 'img_url',
+                formatter: el => el.attr('onload').match(/='(\S+)'/)[1]
+            }, {
+                node: '.proImg a',
+                name: 'goods_no',
+                formatter: el => el.attr('href').replace('/product/show.aspx?no=', '')
+            }, {
+                node: '.proTitle a',
+                name: 'goods_name'
+            }, {
+                node: '.proPrice1',
+                name: 'price',
+                formatter: el => el.text().match(/\w+.\w+/)[0].replace(',', '')
+            }, {
+                node: '.proInfo-wrap span',
+                name: 'sold_monthly',
+                formatter: el => el.text().match(/月销：(\w+)件/)[1]
+            }]
+        }
+        return util.parseHTML(options)
+    },
+    goodsDetail(html) {
+        let $ = cheerio.load(html);
+        let detail = {
+            goods_no: '',
+            spec_type: '',
+            spec_style: '',
+            spec_material: '',
+            spec_series: '',
+            spec_fineness: '',
+            spec_engrave: '',
+            spec_applicable: '',
+            spec_dimension: ''
+        };
+        $('.parameter li').each((i, item) => {
+            let text = $(item).text().split("：");
+            let name = text[0].replace(/\s+/g, '');
+            switch (name) {
+                case '模号':
+                    detail.goods_no = text[1];
+                    break;
+                case '类型':
+                    detail.spec_type = text[1];
+                    break;
+                case '款式':
+                    detail.spec_style = text[1];
+                    break;
+                case '材质':
+                    detail.spec_material = text[1];
+                    break;
+                case '系列':
+                    detail.spec_series = text[1];
+                    break;
+                case '镶法':
+                    detail.spec_proc = text[1];
+                    break;
+                case '成色':
+                    detail.spec_fineness = text[1];
+                    break;
+                case '可刻字':
+                    detail.spec_engrave = text[1];
+                    break;
+                case '适用人群':
+                    detail.spec_applicable = text[1];
+                    break;
+                case '尺寸':
+                    detail.spec_dimension = text[1];
+                    break;
+            }
+        });
+        return detail;
+    },
+    goodsWeight(html, goodsNo) {
+        var $ = cheerio.load(html);
+        let weightList = [];
+        // 优先按重量获取库存
+        $('#uc_select_product_detail_pnlGoldWeight a').each((i, item) => {
+            let param = {};
+            param.product_no = goodsNo;
+            param.weight = $(item).attr('gweight');
+            param.cost = $(item).attr('regularlabour');
+            param.price = $(item).attr('price1').replace(/¥|,/g, '');
+            param.rel = $(item).attr('rel');
+            param.Cmd = `CT=1|GW=${param.weight}|MN=${goodsNo}`;
+            weightList.push(param);
+        });
+        if (weightList.length == 0) {
+            $('#uc_select_product_detail_pnlLength a').each((i, item) => {
+                let param = {};
+                param.product_no = goodsNo;
+                let weight = html.match(/(\w+.\w+)克/);
+                param.weight = (weight != null) ? weight[0].replace('克', '') : 0;
+                param.cost = $(item).attr('regularlabour');
+                param.price = $(item).attr('price1').replace(/¥|,/g, '');
+                param.rel = $(item).attr('rel');
+                param.Cmd = `L=${$(item).attr('enlength')}|MN=${goodsNo}`;
+                weightList.push(param);
+            });
+        }
+        // 最后按价格获取库存（仅有一件商品)
+        if (weightList.length == 0) {
+            $('#uc_select_product_detail_pnlShopPrice a').each((i, item) => {
+                let param = {};
+                param.product_no = goodsNo;
+                let weight = html.match(/(\w+.\w+)克/);
+                param.weight = (weight != null) ? weight[0].replace('克', '') : 0;
+                param.cost = $(item).attr('regularlabour');
+                param.price = $(item).attr('price1').replace(/¥|,/g, '');
+                param.rel = $(item).attr('rel');
+                param.Cmd = `SP=${param.price}|MN=${goodsNo}`;
+                weightList.push(param);
+            });
+        }
+        return weightList;
+    }
+}
+
 module.exports = {
     youzan,
     wfx,
     ccgold,
     cncoin,
     jd,
-    shangBi
+    shangBi,
+    ctf
 }

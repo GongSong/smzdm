@@ -48,7 +48,7 @@ function handleGoodsDetail(html) {
     return goodsList;
 }
 
-async function getGoodsList(req, res) {
+async function getGoodsList() {
     let page = 1,
         isEnd = false;
     let goodsList = [];

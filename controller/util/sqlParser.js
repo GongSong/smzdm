@@ -309,6 +309,26 @@ function handleShCoinTrade(saleInfo) {
     return sqlStr.replace('?', sqlList.join(','));
 }
 
+function handleCtfGoods(goods) {
+    let sqlStr = sql.insert.ctf_goods;
+    let rec_date = getNow();
+    let sqlList = goods.map(item => `('${item.goods_no}','${item.goods_name}','${item.img_url}',${item.price},${item.sold_monthly},'${rec_date}')`);
+    return sqlStr.replace('?', sqlList.join(','));
+}
+
+function handleCtfGoodsDetail(item) {
+    let sqlStr = sql.insert.ctf_detail;
+    let rec_date = getNow();
+    return sqlStr.replace('?', `('${item.goods_no}','${item.spec_type}','${item.spec_style}','${item.spec_material}','${item.spec_series}','${item.spec_proc}','${item.spec_fineness}','${item.spec_engrave}','${item.spec_applicable}','${item.spec_dimension}','${rec_date}')`);
+}
+
+function handleCtfGoodsWeight(goods) {
+    let sqlStr = sql.insert.ctf_product;
+    let rec_date = getNow();
+    let sqlList = goods.map(item => `('${item.product_no}','${item.weight}','${item.cost}','${item.price}','${item.rel}','${item.inventory}','${rec_date}')`);
+    return sqlStr.replace('?', sqlList.join(',')).replace(/undefined/g, '0');
+}
+
 module.exports = {
     handleSaleDetailData,
     handleStockData,
@@ -349,4 +369,8 @@ module.exports = {
     //04-19 上币升级
     handleShCoinGoods,
     handleShCoinTrade,
+
+    handleCtfGoods,
+    handleCtfGoodsDetail,
+    handleCtfGoodsWeight,
 }

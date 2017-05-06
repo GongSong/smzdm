@@ -54,6 +54,10 @@ var insert = {
     sbireal_goods: 'insert into sbireal_good(item_id,title,price,imgSrc,storage,rec_date) values ?',
     sbireal_stock: 'insert into sbireal_stock(item_id,sales,storage,freight,rec_date) values ?',
     sbireal_trade: 'insert into sbireal_trade(item_id,buyer,order_time,quantity) values ?',
+
+    ctf_goods: 'insert into ctf_goods(goods_no,goods_name,img_url,price,sold_monthly,rec_date) values ?',
+    ctf_detail: 'insert into ctf_goods_detail(goods_no,spec_type,spec_style,spec_material,spec_series,spec_proc,spec_fineness,spec_engrave,spec_applicable,spec_dimension,rec_date) values ?',
+    ctf_product: 'insert into ctf_product(product_no,weight,cost,price,rel,inventory,rec_date) values ?',
 };
 
 var update = {
@@ -122,6 +126,8 @@ var query = {
     set_static_status: `insert into crawler_list (tbl_name,rec_date) values ('static_?','${rec_date()}')`,
 
     sb_ireal_goods: "select a.item_id,date_format(max(b.order_time),'%Y-%m-%d %H:%i:%s') order_time from sbireal_good a INNER JOIN sbireal_trade b on a.item_id=b.item_id where DATE_FORMAT(a.rec_date, '%Y%m%d') = DATE_FORMAT(NOW(), '%Y%m%d') group by b.item_id",
+
+    ctf_goods_no: "SELECT goods_no FROM `ctf_goods` order by id",
 }
 
 var static = {
