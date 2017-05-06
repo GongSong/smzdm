@@ -17,12 +17,11 @@ async function init() {
     console.log('1.自动化任务队伍已开始,你可以定位到此处添加自己的任务');
     console.log('2.此处需添加任务的定时器，如 setInterval()\n');
 
-    ctf.init();
 
     //jd.init();
 
     // 几个大爷单独传
-    // getCbpcData();
+    getCbpcData();
 
     // 每日接口统计内容更新
     // asyncAPI.setStaticData();
@@ -34,6 +33,7 @@ async function getCbpcData() {
     ccgold.init();
     wfx.init();
     shangBi.init();
+    ctf.init();
 
     // 上币有赞店
     // youzan.init();

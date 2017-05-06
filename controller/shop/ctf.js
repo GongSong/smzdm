@@ -62,15 +62,14 @@ async function getGoodsStorage(goods) {
 async function getGoodsDetail() {
     let goodsList = await db.getGoodsList();
     let len = goodsList.length;
-    len = 200;
-    for (let i = 46; i < len; i++) {
+    for (let i = 0; i < len; i++) {
         console.log(`正在抓取第${i+1}/${len}页商品属性`);
         let html = await getGoodsDetailByNo(goodsList[i].goods_no);
-        // let goodsDetail = parser.ctf.goodsDetail(html);
-        // console.log(goodsDetail);
-        // await db.setGoodsDetail(goodsDetail);
+        let goodsDetail = parser.ctf.goodsDetail(html);
+        console.log(goodsDetail);
         let goodsWeight = parser.ctf.goodsWeight(html, goodsList[i].goods_no);
         goodsWeight = await getGoodsStorage(goodsWeight);
+        await db.setGoodsDetail(goodsDetail);
         if (goodsWeight.length) {
             await db.setGoodsWeight(goodsWeight);
         }
