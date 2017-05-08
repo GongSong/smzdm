@@ -390,7 +390,7 @@ async function getComment(shop) {
         if (goodsList[i].wareId == '10294082739') {
             continue;
         }
-        await getCommentAndSavedById(shop.id, goodsList[i]);
+        await getCommentAndSavedById(shop.id, goodsList[i]).catch(e => console.log(e));
         console.log(`\n${shop.name}:${i + 1}/${goodsList.length}评论信息获取完毕,${util.getNow()}.`);
     }
 }
@@ -432,6 +432,7 @@ async function getCommentFromDb() {
         isEnd = commentList.length < perNum;
         await splitComment(commentList);
     }
+    console.log('全部评论分词处理完毕');
 }
 
 async function splitComment(commentList) {
