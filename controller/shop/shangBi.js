@@ -19,7 +19,7 @@ async function getGoodsByPage(page = 1) {
             PageSize: MAX_NUM
         })
     }
-    return await axios(config).then(res => handleGoodsDetail(res.data)).catch(e => console.log(e));
+    return await axios(config).then(res => handleGoodsDetail(res.data)); //.catch(e => console.log(e));
 }
 
 function handleGoodsDetail(html) {
@@ -30,7 +30,12 @@ function handleGoodsDetail(html) {
     nodes.each((i, item) => {
         let dom = $(item);
         let price = dom.find('h6 strong').text().split('￥')[1].replace(',', '');
-        let detail = dom.find('.car_ico').eq(0).attr('onclick').replace(/getDetails\(/, '').replace(/\)/, '').replace(/'/g, '').replace(/"/g, '').split(',');
+        // 05-10 增加限时购，无该属性，需做类型判断
+        let detail = dom.find('.car_ico').eq(0).attr('onclick');
+        if (typeof detail == 'undefined') {
+            return;
+        }
+        detail = detail.replace(/getDetails\(/, '').replace(/\)/, '').replace(/'/g, '').replace(/"/g, '').split(',');
         if (detail.length < 4) {
             console.log('ShangBi数据接口异常,id:');
             console.log(dom.html());
