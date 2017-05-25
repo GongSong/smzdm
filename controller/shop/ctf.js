@@ -20,7 +20,19 @@ async function getGoodsByPage(page = 1) {
             pageindex: page,
             pagesize: MAX_NUM,
             singledouble: 0
-        })
+        }),
+        headers: {
+            'Accept': '*/*',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Accept-Language': 'zh-CN,zh;q=0.8',
+            'Connection': 'keep-alive',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Host': 'm.ctfmall.com',
+            'Origin': 'https://m.ctfmall.com',
+            'Referer': 'https://m.ctfmall.com/product/product_list.aspx',
+            'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1',
+            'X-Requested-With': 'XMLHttpRequest'
+        }
     }
     return await axios(config).then(res => parser.ctf.goodsList(res.data.state)).catch(e => console.log(e));
 }

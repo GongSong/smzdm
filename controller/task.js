@@ -18,7 +18,7 @@ async function init() {
     console.log('2.此处需添加任务的定时器，如 setInterval()\n');
 
 
-    //jd.init();
+    // jd.init();
 
     // 几个大爷单独传
     getCbpcData();

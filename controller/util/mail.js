@@ -18,7 +18,7 @@ let transport = mailer.createTransport({
 async function send(settings) {
     settings.subject = '【什么值得卖】 ' + settings.subject;
     await transport.sendMail({
-        from: '"什么值得卖" <smzdmai@qq.com>',
+        from: '"什么值得卖" <realeve@qq.com>',
         to: "nizhen.cbpc@gmail.com,realeve@qq.com",
         subject: settings.subject,
         generateTextFromHTML: true,
