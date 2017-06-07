@@ -397,7 +397,8 @@ let ctf = {
             children: [{
                 node: 'img',
                 name: 'img_url',
-                formatter: el => el.attr('onload').match(/='(\S+)'/)[1]
+                //formatter: el => el.attr('onload').match(/='(\S+)'/)[1]
+                formatter: el => el.attr('data-original')
             }, {
                 node: '.proImg a',
                 name: 'goods_no',
